@@ -4,13 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 var PRODUCTION  = process.env.NODE_ENV === 'production';
 
 var plugins = [
-    new ExtractTextPlugin({ filename: 'css/[name].css' }),
-    new webpack.optimize.CommonsChunkPlugin({
-        name: 'common',
-        filename: '__common__.js',
-        //chunks: ["main", "utils"],
-        deepChildren: true
-    })
+    new ExtractTextPlugin({ filename: 'css/[name].css' })
 ];
 
 var productionPlugins = [
@@ -48,7 +42,7 @@ function postCSSLoader() {
 module.exports = {
     entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'lib'),
         filename: 'openstack-uicore-foundation.js',
         library: 'openstack-uicore-foundation',
         libraryTarget: 'umd',

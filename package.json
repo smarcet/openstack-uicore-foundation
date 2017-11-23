@@ -1,14 +1,14 @@
 {
   "name": "openstack-uicore-foundation",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "ui reactjs components for openstack marketing site",
-  "main": "src/index.js",
+  "main": "lib/openstack-uicore-foundation.js",
   "scripts": {
     "build-dev": "./node_modules/.bin/webpack --config webpack.config.js",
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.js"
   },
   "author": "smarcet@gmail.com",
-  "license": "ISC",
+  "license": "APACHE 2.0",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
