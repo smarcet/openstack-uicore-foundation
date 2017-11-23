@@ -98,11 +98,4 @@ module.exports = {
     plugins: PRODUCTION
         ? plugins.concat(productionPlugins)
         : plugins.concat(devPlugins),
-    resolve: {
-        alias: {
-            '~core': path.join(__dirname, './src'),
-            '~core-components': path.join(__dirname, './src/components'),
-            '~core-utils': path.join(__dirname, './src/utils')
-        }
-    }
 };
