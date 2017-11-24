@@ -1,6 +1,6 @@
 {
   "name": "openstack-uicore-foundation",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "ui reactjs components for openstack marketing site",
   "main": "lib/openstack-uicore-foundation.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "style-loader": "^0.19.0",
     "superagent": "^3.8.1",
     "sweetalert2": "^7.0.3",
+    "uglifyjs-webpack-plugin": "^1.1.1",
     "urijs": "^1.19.0",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1"

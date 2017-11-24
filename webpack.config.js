@@ -1,6 +1,8 @@
-const path     = require('path');
-const webpack  = require('webpack');
+const path              = require('path');
+const webpack           = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJSPlugin    = require('uglifyjs-webpack-plugin')
+
 var PRODUCTION  = process.env.NODE_ENV === 'production';
 
 var plugins = [
@@ -8,7 +10,7 @@ var plugins = [
 ];
 
 var productionPlugins = [
-    new webpack.optimize.UglifyJsPlugin({minimize: true}),
+    new UglifyJSPlugin(),
     new webpack.DefinePlugin({
         'process.env': {
             'NODE_ENV': JSON.stringify('production')
@@ -50,25 +52,23 @@ module.exports = {
     },
     module: {
         rules: [
-            {   test: /\.js$/,
+            {
+                test: /\.js$/,
                 exclude: /node_modules/,
-                loader: "babel-loader",
-                query: {
-                    presets: ["env", "flow", "react"]
-                }},
+                use: {
+                    loader: "babel-loader",
+                }
+            },
             {
                 test: /\.css$/,
-                exclude: /\.module\.css$/,
                 use: styleLoader(['css-loader', postCSSLoader()])
             },
             {
                 test: /\.less/,
-                exclude: /\.module\.less/,
                 use: styleLoader(['css-loader', postCSSLoader(), 'less-loader'])
             },
             {
                 test: /\.scss/,
-                exclude: /\.module\.scss/,
                 use: styleLoader(['css-loader', postCSSLoader(), 'sass-loader'])
             },
             {
