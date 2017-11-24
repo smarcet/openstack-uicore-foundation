@@ -16,7 +16,7 @@ let http = request;
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
 
-export const defaultErrorHandler = (err, res) => {
+export const defaultErrorHandler = (err, res) => (dispatch) => {
     let text = res.body;
     if(res.body != null && res.body.messages instanceof Array) {
         let messages = res.body.messages.map( m => {
@@ -29,8 +29,7 @@ export const defaultErrorHandler = (err, res) => {
 }
 
 const GENERIC_ERROR        = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
-export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
-export const SHOW_MESSAGE  = 'SHOW_MESSAGE';
+
 export const STOP_LOADING  = 'STOP_LOADING';
 
 export const createAction = type => payload => ({
@@ -38,8 +37,6 @@ export const createAction = type => payload => ({
     payload
 });
 
-export const clearMessage = createAction(CLEAR_MESSAGE);
-export const showMessage  = createAction(SHOW_MESSAGE);
 export const stopLoading  = createAction(STOP_LOADING);
 
 const xhrs = {};
@@ -94,19 +91,19 @@ export const getRequest =
             responseHandler(
                 dispatch,
                 json => {
-                if(typeof receiveActionCreator === 'function') {
-        dispatch(receiveActionCreator({
-            response: json
-        }));
-        return resolve();
-    }
-    dispatch(receiveActionCreator);
-    return resolve();
-},
-    errorHandler
-)
-)
-});
+                    if(typeof receiveActionCreator === 'function') {
+                        dispatch(receiveActionCreator({
+                            response: json
+                        }));
+                        return resolve();
+                    }
+                    dispatch(receiveActionCreator);
+                    return resolve();
+                },
+                errorHandler
+            )
+        )
+    });
 };
 
 export const putRequest = (
@@ -229,10 +226,10 @@ export const responseHandler = (dispatch, success, errorHandler) => {
         dispatch(stopLoading());
         if (err || !res.ok) {
             if(errorHandler) {
-                errorHandler(err, res);
+                errorHandler(err, res)(dispatch);
             }
             console.log(err, res);
-            dispatch(showMessage({msg:GENERIC_ERROR, msg_type:'error'}));
+            dispatch(stopLoading({msg:GENERIC_ERROR, msg_type:'error'}));
         }
         else if(typeof success === 'function') {
             success(res.body);
