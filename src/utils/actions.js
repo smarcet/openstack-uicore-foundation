@@ -40,7 +40,6 @@ export const createAction = type => payload => ({
 export const startLoading = createAction(START_LOADING);
 export const stopLoading  = createAction(STOP_LOADING);
 
-
 const xhrs = {};
 
 const cancel = (key) => {
