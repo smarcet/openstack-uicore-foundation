@@ -28,8 +28,8 @@ export const defaultErrorHandler = (err, res) => (dispatch) => {
     swal(res.statusText, text, "error");
 }
 
-const GENERIC_ERROR        = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
-
+export const GENERIC_ERROR = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
+export const START_LOADING = 'START_LOADING';
 export const STOP_LOADING  = 'STOP_LOADING';
 
 export const createAction = type => payload => ({
@@ -37,7 +37,9 @@ export const createAction = type => payload => ({
     payload
 });
 
+export const startLoading = createAction(START_LOADING);
 export const stopLoading  = createAction(STOP_LOADING);
+
 
 const xhrs = {};
 
@@ -58,22 +60,17 @@ const isObjectEmpty = (obj) => {
     return Object.keys(obj).length === 0 && obj.constructor === Object ;
 }
 
-export const getRequest =
-    (
-        requestActionCreator,
-            receiveActionCreator,
-            endpoint,
-            errorHandler
-    ) => (params = {}) => dispatch => {
-
-    console.log(`endpoint ${endpoint}`);
+export const getRequest =(
+    requestActionCreator,
+    receiveActionCreator,
+    endpoint,
+    errorHandler = defaultErrorHandler
+) => (params = {}) => dispatch => {
 
     let url = URI(endpoint);
 
     if(!isObjectEmpty(params))
         url = url.query(params);
-
-    console.log(`url ${url.toString()}`);
 
     if(requestActionCreator && typeof requestActionCreator === 'function')
         dispatch(requestActionCreator(params));
@@ -108,20 +105,16 @@ export const getRequest =
 
 export const putRequest = (
     requestActionCreator,
-        receiveActionCreator,
-        endpoint,
-        payload,
-        errorHandler
-
+    receiveActionCreator,
+    endpoint,
+    payload,
+    errorHandler = defaultErrorHandler
 ) => (params = {}) => dispatch => {
-    console.log(`endpoint ${endpoint}`);
 
     let url = URI(endpoint);
 
     if(!isObjectEmpty(params))
         url = url.query(params);
-
-    console.log(`url ${url.toString()}`);
 
     if(requestActionCreator && typeof requestActionCreator === 'function')
         dispatch(requestActionCreator(params));
@@ -137,27 +130,25 @@ export const putRequest = (
             responseHandler(
                 dispatch,
                 json => {
-                if(typeof receiveActionCreator === 'function') {
-        dispatch(receiveActionCreator({
-            response: json
-        }));
-        return resolve();
-    }
-    dispatch(receiveActionCreator);
-    return resolve();
-},
-    errorHandler
-)
-)
-});
+                    if(typeof receiveActionCreator === 'function') {
+                        dispatch(receiveActionCreator({response: json}));
+                        return resolve();
+                    }
+                    dispatch(receiveActionCreator);
+                    return resolve();
+                },
+                errorHandler
+            )
+        )
+    });
 };
 
 export const deleteRequest = (
     requestActionCreator,
-        receiveActionCreator,
-        endpoint,
-        payload,
-        errorHandler
+    receiveActionCreator,
+    endpoint,
+    payload,
+    errorHandler  = defaultErrorHandler
 ) => (params) => (dispatch) => {
     let url = URI(endpoint).toString();
 
@@ -171,27 +162,25 @@ export const deleteRequest = (
             responseHandler(
                 dispatch,
                 json => {
-                if (typeof receiveActionCreator === 'function') {
-        dispatch(receiveActionCreator({
-            response: json
-        }));
-        return resolve();
-    }
-    dispatch(receiveActionCreator);
-    return resolve();
-},
-    errorHandler
-)
-)
-});
+                    if (typeof receiveActionCreator === 'function') {
+                        dispatch(receiveActionCreator({response: json}));
+                        return resolve();
+                    }
+                    dispatch(receiveActionCreator);
+                    return resolve();
+                },
+                errorHandler
+            )
+        )
+    });
 };
 
 export const postRequest = (
-    requestActionCreator,
+        requestActionCreator,
         receiveActionCreator,
         endpoint,
         payload,
-        errorHandler
+        errorHandler = defaultErrorHandler
 ) => (params = {}) => dispatch => {
 
     let url = URI(endpoint);
@@ -199,37 +188,36 @@ export const postRequest = (
     if(!isObjectEmpty(params))
         url = url.query(params);
 
-    console.log(`url ${url.toString()}`);
-
     if(requestActionCreator && typeof requestActionCreator === 'function')
         dispatch(requestActionCreator(params));
-    const req = http.post(url)
-        .send(payload)
-        .end(
-            responseHandler(
-                dispatch,
-                json => {
-                if(typeof receiveActionCreator === 'function') {
-        dispatch(receiveActionCreator({
-            response: json
-        }));
-    }
-    dispatch(receiveActionCreator);
-},
-    errorHandler
-)
-)
+    return new Promise((resolve, reject) => {
+        http.post(url)
+            .send(payload)
+            .end(
+                responseHandler(
+                    dispatch,
+                    json => {
+                        if(typeof receiveActionCreator === 'function') {
+                            dispatch(receiveActionCreator({response: json}));
+                            return resolve();
+                        }
+                        dispatch(receiveActionCreator);
+                        return resolve();
+                    },
+                    errorHandler
+                )
+            )
+    });
+
 };
 
 export const responseHandler = (dispatch, success, errorHandler) => {
     return (err, res) => {
-        dispatch(stopLoading());
         if (err || !res.ok) {
             if(errorHandler) {
                 errorHandler(err, res)(dispatch);
             }
             console.log(err, res);
-            dispatch(stopLoading({msg:GENERIC_ERROR, msg_type:'error'}));
         }
         else if(typeof success === 'function') {
             success(res.body);
