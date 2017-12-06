@@ -71,14 +71,15 @@ export const getRequest =(
     if(!isObjectEmpty(params))
         url = url.query(params);
 
+    let key = url.toString();
+
     if(requestActionCreator && typeof requestActionCreator === 'function')
         dispatch(requestActionCreator(params));
 
-    const key = `${requestActionCreator().type}_${JSON.stringify(params || {})}`;
     cancel(key);
 
     return new Promise((resolve, reject) => {
-        http.get(url.toString())
+        let req = http.get(url.toString())
         .timeout({
             response: 60000,
             deadline: 60000,
@@ -99,6 +100,8 @@ export const getRequest =(
                 errorHandler
             )
         )
+
+        schedule(key, req);
     });
 };
 
@@ -157,9 +160,7 @@ export const deleteRequest = (
     return new Promise((resolve, reject) => {
         http.delete(url)
         .send(payload)
-        .end(
-            responseHandler(
-                dispatch,
+        .end(responseHandler(dispatch,
                 json => {
                     if (typeof receiveActionCreator === 'function') {
                         dispatch(receiveActionCreator({response: json}));

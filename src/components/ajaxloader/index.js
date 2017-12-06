@@ -63,14 +63,14 @@ export const AjaxLoader =  ({
     };
 
     return (
-        <div style={styles}>
-        <div style={styleSpinnerContainer}>
-        <i className="fa fa-spinner fa-spin" style={styleSpinner}></i>
-        <div>
-        {children}
-        </div>
-        </div>
-        <div style={styleBackground} className="loader-background"></div>
+        <div className="ajax-loader-container" style={styles}>
+            <div style={styleSpinnerContainer}>
+                <i className="fa fa-spinner fa-spin" style={styleSpinner}></i>
+                <div>
+                {children}
+                </div>
+            </div>
+            <div style={styleBackground} className="loader-background"></div>
         </div>
 );
 };
