@@ -84,22 +84,7 @@ export const getRequest =(
             response: 60000,
             deadline: 60000,
         })
-        .end(
-            responseHandler(
-                dispatch,
-                json => {
-                    if(typeof receiveActionCreator === 'function') {
-                        dispatch(receiveActionCreator({
-                            response: json
-                        }));
-                        return resolve();
-                    }
-                    dispatch(receiveActionCreator);
-                    return resolve();
-                },
-                errorHandler
-            )
-        )
+        .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
 
         schedule(key, req);
     });
@@ -128,20 +113,7 @@ export const putRequest = (
             deadline: 60000,
         })
         .send(payload)
-        .end(
-            responseHandler(
-                dispatch,
-                json => {
-                    if(typeof receiveActionCreator === 'function') {
-                        dispatch(receiveActionCreator({response: json}));
-                        return resolve();
-                    }
-                    dispatch(receiveActionCreator);
-                    return resolve();
-                },
-                errorHandler
-            )
-        )
+        .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
     });
 };
 
@@ -160,18 +132,7 @@ export const deleteRequest = (
     return new Promise((resolve, reject) => {
         http.delete(url)
         .send(payload)
-        .end(responseHandler(dispatch,
-                json => {
-                    if (typeof receiveActionCreator === 'function') {
-                        dispatch(receiveActionCreator({response: json}));
-                        return resolve();
-                    }
-                    dispatch(receiveActionCreator);
-                    return resolve();
-                },
-                errorHandler
-            )
-        )
+        .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
     });
 };
 
@@ -193,34 +154,25 @@ export const postRequest = (
     return new Promise((resolve, reject) => {
         http.post(url)
             .send(payload)
-            .end(
-                responseHandler(
-                    dispatch,
-                    json => {
-                        if(typeof receiveActionCreator === 'function') {
-                            dispatch(receiveActionCreator({response: json}));
-                            return resolve();
-                        }
-                        dispatch(receiveActionCreator);
-                        return resolve();
-                    },
-                    errorHandler
-                )
-            )
+            .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
     });
 
 };
 
-export const responseHandler = (dispatch, success, errorHandler) => {
-    return (err, res) => {
-        if (err || !res.ok) {
-            if(errorHandler) {
-                errorHandler(err, res)(dispatch);
-            }
-            console.log(err, res);
+const responseHandler =
+    ( dispatch, receiveActionCreator, errorHandler, resolve, reject ) =>
+    (err, res) => {
+    if (err || !res.ok) {
+        if(errorHandler) {
+            errorHandler(err, res)(dispatch);
         }
-        else if(typeof success === 'function') {
-            success(res.body);
-        }
-    };
-};
+        return reject({ err, res, dispatch })
+    }
+    let json = res.body;
+    if(typeof receiveActionCreator === 'function') {
+        dispatch(receiveActionCreator({response: json}));
+        return resolve({response: json});
+    }
+    dispatch(receiveActionCreator);
+    return resolve({response: json});
+}
