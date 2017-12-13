@@ -63,7 +63,8 @@ export const getRequest =(
     requestActionCreator,
     receiveActionCreator,
     endpoint,
-    errorHandler = defaultErrorHandler
+    errorHandler = defaultErrorHandler,
+    requestActionPayload = {}
 ) => (params = {}) => dispatch => {
 
     let url = URI(endpoint);
@@ -74,7 +75,7 @@ export const getRequest =(
     let key = url.toString();
 
     if(requestActionCreator && typeof requestActionCreator === 'function')
-        dispatch(requestActionCreator(params));
+        dispatch(requestActionCreator(requestActionPayload));
 
     cancel(key);
 
@@ -95,7 +96,8 @@ export const putRequest = (
     receiveActionCreator,
     endpoint,
     payload,
-    errorHandler = defaultErrorHandler
+    errorHandler = defaultErrorHandler,
+    requestActionPayload = {}
 ) => (params = {}) => dispatch => {
 
     let url = URI(endpoint);
@@ -104,14 +106,10 @@ export const putRequest = (
         url = url.query(params);
 
     if(requestActionCreator && typeof requestActionCreator === 'function')
-        dispatch(requestActionCreator(params));
+        dispatch(requestActionCreator(requestActionPayload));
 
     return new Promise((resolve, reject) => {
         http.put(url.toString())
-        .timeout({
-            response: 60000,
-            deadline: 60000,
-        })
         .send(payload)
         .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
     });
@@ -122,12 +120,16 @@ export const deleteRequest = (
     receiveActionCreator,
     endpoint,
     payload,
-    errorHandler  = defaultErrorHandler
+    errorHandler  = defaultErrorHandler,
+    requestActionPayload = {}
 ) => (params) => (dispatch) => {
-    let url = URI(endpoint).toString();
+    let url = URI(endpoint);
+
+    if(!isObjectEmpty(params))
+        url = url.query(params);
 
     if(requestActionCreator && typeof requestActionCreator === 'function')
-        dispatch(requestActionCreator(params));
+        dispatch(requestActionCreator(requestActionPayload));
 
     return new Promise((resolve, reject) => {
         http.delete(url)
@@ -141,7 +143,8 @@ export const postRequest = (
         receiveActionCreator,
         endpoint,
         payload,
-        errorHandler = defaultErrorHandler
+        errorHandler = defaultErrorHandler,
+        requestActionPayload = {}
 ) => (params = {}) => dispatch => {
 
     let url = URI(endpoint);
@@ -150,7 +153,8 @@ export const postRequest = (
         url = url.query(params);
 
     if(requestActionCreator && typeof requestActionCreator === 'function')
-        dispatch(requestActionCreator(params));
+        dispatch(requestActionCreator(requestActionPayload));
+
     return new Promise((resolve, reject) => {
         http.post(url)
             .send(payload)
