@@ -160,7 +160,40 @@ export const postRequest = (
             .send(payload)
             .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
     });
+};
 
+export const postFile = (
+    requestActionCreator,
+    receiveActionCreator,
+    endpoint,
+    file,
+    fileMetadata = {},
+    errorHandler = defaultErrorHandler,
+    requestActionPayload = {}
+) => (params = {}) => dispatch => {
+
+    let url = URI(endpoint);
+
+    if(!isObjectEmpty(params))
+        url = url.query(params);
+
+    if(requestActionCreator && typeof requestActionCreator === 'function')
+        dispatch(requestActionCreator(requestActionPayload));
+
+    return new Promise((resolve, reject) => {
+
+        const req = http.post(url)
+                    .attach('file', file);
+
+        if(!isObjectEmpty(fileMetadata)) {
+            Object.keys(fileMetadata).forEach(function (key) {
+                let value = fileMetadata[key];
+                req.field(key, value);
+            });
+        }
+
+        req.end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject));
+    });
 };
 
 const responseHandler =
