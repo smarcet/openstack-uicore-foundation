@@ -196,6 +196,43 @@ export const postFile = (
     });
 };
 
+export const updateFile = (
+    requestActionCreator,
+    receiveActionCreator,
+    endpoint,
+    file = null,
+    fileMetadata = {},
+    errorHandler = defaultErrorHandler,
+    requestActionPayload = {}
+) => (params = {}) => dispatch => {
+
+    let url = URI(endpoint);
+
+    if(!isObjectEmpty(params))
+        url = url.query(params);
+
+    if(requestActionCreator && typeof requestActionCreator === 'function')
+        dispatch(requestActionCreator(requestActionPayload));
+
+    return new Promise((resolve, reject) => {
+
+        const req = http.put(url);
+
+        if(file != null){
+            req.attach('file', file);
+        }
+
+        if(!isObjectEmpty(fileMetadata)) {
+            Object.keys(fileMetadata).forEach(function (key) {
+                let value = fileMetadata[key];
+                req.field(key, value);
+            });
+        }
+
+        req.end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject));
+    });
+};
+
 const responseHandler =
     ( dispatch, receiveActionCreator, errorHandler, resolve, reject ) =>
     (err, res) => {
