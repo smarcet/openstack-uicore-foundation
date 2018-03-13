@@ -196,7 +196,7 @@ export const postFile = (
     });
 };
 
-export const updateFile = (
+export const putFile = (
     requestActionCreator,
     receiveActionCreator,
     endpoint,
