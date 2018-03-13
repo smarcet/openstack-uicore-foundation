@@ -4,4 +4,4 @@ import { responseHandler, defaultErrorHandler, createAction, getRequest, putRequ
 import {AjaxLoader } from './components/ajaxloader';
 import { genericReducers } from './utils/reducers';
 
-export {  startLoading, stopLoading, START_LOADING, STOP_LOADING, responseHandler, getRequest, putRequest, deleteRequest, postRequest, defaultErrorHandler, createAction, genericReducers, AjaxLoader};
+export {  startLoading, stopLoading, START_LOADING, STOP_LOADING, responseHandler, getRequest, putRequest, deleteRequest, postRequest, postFile, putFile, defaultErrorHandler, createAction, genericReducers, AjaxLoader};
