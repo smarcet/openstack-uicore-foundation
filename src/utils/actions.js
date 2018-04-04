@@ -17,13 +17,11 @@ import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
 
 export const defaultErrorHandler = (err, res) => (dispatch) => {
-    let text = res.body;
-    if(res.body != null && res.body.messages instanceof Array) {
-        let messages = res.body.messages.map( m => {
-            if (m instanceof Object) return m.message
-    else return m;
-    })
-        text = messages.join('\n');
+    let body = res.body;
+    let text = '';
+    if(body instanceof Object){
+        if(body.hasOwnProperty('message'))
+            text = body.message;
     }
     swal(res.statusText, text, "error");
 }
