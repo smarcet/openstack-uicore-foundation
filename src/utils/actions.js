@@ -107,9 +107,11 @@ export const putRequest = (
         dispatch(requestActionCreator(requestActionPayload));
 
     return new Promise((resolve, reject) => {
+        if(payload == null)
+            payload = {};
         http.put(url.toString())
-        .send(payload)
-        .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
+            .send(payload)
+            .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
     });
 };
 
@@ -130,9 +132,12 @@ export const deleteRequest = (
         dispatch(requestActionCreator(requestActionPayload));
 
     return new Promise((resolve, reject) => {
+        if(payload == null)
+            payload = {};
+
         http.delete(url)
-        .send(payload)
-        .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
+            .send(payload)
+            .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject));
     });
 };
 
@@ -154,9 +159,15 @@ export const postRequest = (
         dispatch(requestActionCreator(requestActionPayload));
 
     return new Promise((resolve, reject) => {
-        http.post(url)
-            .send(payload)
-            .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
+
+        let request = http.post(url);
+
+        if(payload != null)
+            request.send(payload);
+        else // to be a simple CORS request
+            request.set('Content-Type', 'text/plain');
+
+        request.end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject));
     });
 };
 
