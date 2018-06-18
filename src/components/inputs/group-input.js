@@ -14,7 +14,7 @@
 import React from 'react';
 import 'react-select/dist/react-select.css';
 import Select from 'react-select';
-import {queryGroups} from '../../actions/base-actions';
+import {queryGroups} from '../../utils/query-actions';
 
 export default class GroupInput extends React.Component {
 

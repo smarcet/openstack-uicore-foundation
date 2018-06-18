@@ -14,7 +14,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dropdown from './dropdown';
-import {getCountryList} from '../../actions/base-actions';
+import {getCountryList} from '../../utils/query-actions';
 
 class CountryDropdown extends React.Component {
 

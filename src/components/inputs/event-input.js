@@ -14,7 +14,7 @@
 import React from 'react';
 import 'react-select/dist/react-select.css';
 import Select from 'react-select';
-import {queryEvents} from '../../actions/base-actions';
+import {queryEvents} from '../../utils/query-actions';
 
 export default class EventInput extends React.Component {
 

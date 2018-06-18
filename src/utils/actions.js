@@ -10,21 +10,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
+
 import request from 'superagent';
 import URI from "urijs";
 let http = request;
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
+import T from "i18n-react/dist/i18n-react";
+import {objectToQueryString} from './methods';
 
-export const defaultErrorHandler = (err, res) => (dispatch) => {
-    let body = res.body;
-    let text = '';
-    if(body instanceof Object){
-        if(body.hasOwnProperty('message'))
-            text = body.message;
-    }
-    swal(res.statusText, text, "error");
-}
 
 export const GENERIC_ERROR = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
 export const START_LOADING = 'START_LOADING';
@@ -242,6 +236,16 @@ export const putFile = (
     });
 };
 
+export const defaultErrorHandler = (err, res) => (dispatch) => {
+    let body = res.body;
+    let text = '';
+    if(body instanceof Object){
+        if(body.hasOwnProperty('message'))
+            text = body.message;
+    }
+    swal(res.statusText, text, "error");
+}
+
 const responseHandler =
     ( dispatch, receiveActionCreator, errorHandler, resolve, reject ) =>
     (err, res) => {
@@ -259,3 +263,78 @@ const responseHandler =
     dispatch(receiveActionCreator);
     return resolve({response: json});
 }
+
+
+export const fetchErrorHandler = (response) => {
+    let code = response.status;
+    let msg = response.statusText;
+
+    switch (code) {
+        case 403:
+            swal("ERROR", T.translate("errors.user_not_authz"), "warning");
+            break;
+        case 401:
+            swal("ERROR", T.translate("errors.session_expired"), "error");
+            break;
+        case 412:
+            swal("ERROR", msg, "warning");
+        case 500:
+            swal("ERROR", T.translate("errors.server_error"), "error");
+    }
+}
+
+export const fetchResponseHandler = (response) => {
+    if (!response.ok) {
+        throw response;
+    } else {
+        return response.json();
+    }
+}
+
+export const showMessage = (settings, callback = {}) => (dispatch) => {
+    dispatch(stopLoading());
+
+    swal(settings).then((result) => {
+        if (result.value && typeof callback === 'function') {
+            callback();
+        }
+    });
+}
+
+export const showSuccessMessage = (html) => (dispatch) => {
+    dispatch(stopLoading());
+    swal({
+        title: T.translate("general.done"),
+        html: html,
+        type: 'success'
+    });
+}
+
+export const getCSV = (url, params, filename) => (dispatch) => {
+
+    let queryString = objectToQueryString(params);
+    let apiUrl = `${url}?${queryString}`;
+
+    dispatch(startLoading());
+
+    return fetch(apiUrl)
+        .then((response) => {
+            if (!response.ok) {
+                throw response;
+            } else {
+                return response.text();
+            }
+        })
+        .then((csv) => {
+            dispatch(stopLoading());
+
+            let link = document.createElement('a');
+            link.textContent = 'download';
+            link.download = filename;
+            link.href = 'data:text/csv;charset=utf-8,'+ encodeURI(csv);
+            document.body.appendChild(link); // Required for FF
+            link.click();
+            document.body.removeChild(link);
+        })
+        .catch(fetchErrorHandler);
+};
