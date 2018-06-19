@@ -12,7 +12,7 @@
  **/
 
 import React from 'react';
-import RichTextEditor from 'react-rte';
+import RichTextEditor from 'react-rte-ref-fix';
 
 
 export default class TextEditor extends React.Component {
@@ -80,12 +80,14 @@ export default class TextEditor extends React.Component {
 
     render() {
 
-        let {onChange, value, error, className, ...rest} = this.props;
+        let {onChange, value, error, className, id, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
+        let editor;
 
         return (
             <div>
                 <RichTextEditor
+                    ref={inst => { editor = inst;}}
                     className={className + ' ' + (has_error ? 'error' : '')}
                     value={this.state.editorValue}
                     onChange={this.handleChange}
