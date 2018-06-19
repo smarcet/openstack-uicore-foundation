@@ -2,6 +2,7 @@
   "name": "openstack-uicore-foundation",
   "version": "1.0.23",
   "description": "ui reactjs components for openstack marketing site",
+  "private": true,
   "main": "lib/openstack-uicore-foundation.js",
   "scripts": {
     "build-dev": "./node_modules/.bin/webpack --config webpack.config.js",
@@ -20,9 +21,6 @@
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
-    "font-awesome": "^4.7.0",
-    "i18n-react": "^0.6.4",
-    "immutability-helper": "^2.6.6",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "postcss-loader": "^2.0.8",
@@ -36,6 +34,9 @@
     "webpack": "^3.8.1"
   },
   "dependencies": {
+    "font-awesome": "^4.7.0",
+    "i18n-react": "^0.6.4",
+    "immutability-helper": "^2.6.6",
     "moment-timezone": "^0.5.14",
     "react-datetime": "^2.14.0",
     "react-dnd": "^2.6.0",
