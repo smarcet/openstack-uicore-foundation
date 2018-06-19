@@ -25,27 +25,27 @@
     "immutability-helper": "^2.6.6",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
-    "moment-timezone": "^0.5.14",
     "postcss-loader": "^2.0.8",
     "react": "^16.3.1",
-    "react-datetime": "^2.14.0",
-    "react-dnd": "^2.6.0",
-    "react-dnd-html5-backend": "^2.6.0",
     "react-dom": "^16.1.1",
-    "react-dropzone": "^4.2.9",
-    "react-google-maps": "^9.4.5",
     "react-redux": "^5.0.7",
-    "react-select": "^1.2.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
     "superagent": "^3.8.1",
-    "sweetalert2": "^7.0.3",
     "uglifyjs-webpack-plugin": "^1.1.1",
-    "urijs": "^1.19.0",
-    "url-loader": "^0.6.2",
     "webpack": "^3.8.1"
   },
   "dependencies": {
-    "react-rte-ref-fix": "^0.16.2"
+    "moment-timezone": "^0.5.14",
+    "react-datetime": "^2.14.0",
+    "react-dnd": "^2.6.0",
+    "react-dnd-html5-backend": "^2.6.0",
+    "react-dropzone": "^4.2.9",
+    "react-google-maps": "^9.4.5",
+    "react-rte-ref-fix": "^0.16.2",
+    "react-select": "^1.2.1",
+    "sweetalert2": "^7.0.3",
+    "urijs": "^1.19.0",
+    "url-loader": "^0.6.2"
   }
 }
