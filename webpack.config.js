@@ -42,10 +42,15 @@ function postCSSLoader() {
 }
 
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        'components': './src/components.js',
+        'methods': './src/methods.js',
+        'actions': './src/actions.js',
+        'reducers': './src/reducers.js'
+    },
     output: {
         path: path.resolve(__dirname, 'lib'),
-        filename: 'openstack-uicore-foundation.js',
+        filename: '[name].js',
         library: 'openstack-uicore-foundation',
         libraryTarget: 'umd',
         umdNamedDefine: true

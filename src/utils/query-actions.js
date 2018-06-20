@@ -14,7 +14,6 @@
 import {fetchErrorHandler, fetchResponseHandler} from "./actions";
 export const RECEIVE_COUNTRIES  = 'RECEIVE_COUNTRIES';
 
-const apiBaseUrl = process.env['API_BASE_URL'];
 
 export const queryMembers = (input) => {
 
@@ -23,7 +22,7 @@ export const queryMembers = (input) => {
     let filters = `first_name=@${input},last_name=@${input},email=@${input}`;
     let expand = `tickets,rsvp,schedule_summit_events,all_affiliations`
 
-    return fetch(`${apiBaseUrl}/api/v1/members?filter=${filters}&expand=${expand}&access_token=${accessToken}`)
+    return fetch(`${window.apiBaseUrl}/api/v1/members?filter=${filters}&expand=${expand}&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = json.data.map((m) =>
@@ -41,7 +40,7 @@ export const querySpeakers = (summitId, input) => {
 
     let accessToken = window.accessToken;
     let filters = `first_name=@${input},last_name=@${input},email=@${input}`;
-    let apiUrl = `${apiBaseUrl}/api/v1`;
+    let apiUrl = `${window.apiBaseUrl}/api/v1`;
 
     if (summitId) {
         apiUrl += `/summits/${summitId}`;
@@ -67,7 +66,7 @@ export const queryTags = (input, summitId = null) => {
 
     let accessToken = window.accessToken;
 
-    return fetch(`${apiBaseUrl}/api/v1/tags?filter=tag=@${input}&order=tag&access_token=${accessToken}`)
+    return fetch(`${window.apiBaseUrl}/api/v1/tags?filter=tag=@${input}&order=tag&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = json.data.map((t) => ({tag: t.tag, id: t.id}) );
@@ -83,7 +82,7 @@ export const queryTracks = (summitId, input) => {
 
     let accessToken = window.accessToken;
 
-    return fetch(`${apiBaseUrl}/api/v1/summits/${summitId}/tracks?filter=name=@${input}&order=name&access_token=${accessToken}`)
+    return fetch(`${window.apiBaseUrl}/api/v1/summits/${summitId}/tracks?filter=name=@${input}&order=name&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
@@ -99,7 +98,7 @@ export const queryTrackGroups = (summitId, input) => {
 
     let accessToken = window.accessToken;
 
-    return fetch(`${apiBaseUrl}/api/v1/summits/${summitId}/track-groups?filter=name=@${input}&order=name&access_token=${accessToken}`)
+    return fetch(`${window.apiBaseUrl}/api/v1/summits/${summitId}/track-groups?filter=name=@${input}&order=name&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
@@ -114,7 +113,7 @@ export const queryTrackGroups = (summitId, input) => {
 export const queryEvents = (summitId, input, onlyPublished = false) => {
 
     let accessToken = window.accessToken;
-    let baseUrl = `${apiBaseUrl}/api/v1/summits/${summitId}/events` + (onlyPublished ? '/published' : '');
+    let baseUrl = `${window.apiBaseUrl}/api/v1/summits/${summitId}/events` + (onlyPublished ? '/published' : '');
 
     return fetch(`${baseUrl}?filter=title=@${input}&order=title&access_token=${accessToken}`)
         .then(fetchResponseHandler)
@@ -134,7 +133,7 @@ export const queryGroups = (input) => {
     let accessToken = window.accessToken;
     let filters = `title=@${input},code=@${input}`;
 
-    return fetch(`${apiBaseUrl}/api/v1/groups?filter=${filters}&access_token=${accessToken}`)
+    return fetch(`${window.apiBaseUrl}/api/v1/groups?filter=${filters}&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
@@ -151,7 +150,7 @@ export const queryCompanies = (input) => {
     let accessToken = window.accessToken;
     let filters = `name=@${input}`;
 
-    return fetch(`${apiBaseUrl}/api/v1/companies?filter=${filters}&access_token=${accessToken}`)
+    return fetch(`${window.apiBaseUrl}/api/v1/companies?filter=${filters}&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = json.data.map((c) => ({id: c.id, name: c.name}) );

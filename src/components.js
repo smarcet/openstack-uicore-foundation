@@ -1,50 +1,5 @@
 import React from 'react';
-import 'font-awesome/css/font-awesome.css';
-
-import {
-    createAction,
-    getRequest,
-    putRequest,
-    deleteRequest,
-    postRequest,
-    postFile,
-    putFile,
-    defaultErrorHandler,
-    responseHandler,
-    fetchErrorHandler,
-    fetchResponseHandler,
-    showMessage,
-    showSuccessMessage,
-    getCSV,
-    startLoading,
-    stopLoading,
-    START_LOADING,
-    STOP_LOADING
-} from './utils/actions';
-
-import {
-    queryMembers,
-    querySpeakers,
-    queryTags,
-    queryTracks,
-    queryTrackGroups,
-    queryEvents,
-    queryGroups,
-    queryCompanies,
-    getCountryList,
-    geoCodeAddress,
-    geoCodeLatLng,
-    RECEIVE_COUNTRIES
-} from './utils/query-actions';
-
-import {
-    findElementPos,
-    epochToMoment,
-    epochToMomentTimeZone,
-    formatEpoch,
-    objectToQueryString,
-    getBackURL
-} from './utils/methods'
+import T from 'i18n-react';
 
 import { AjaxLoader } from './components/ajaxloader';
 import RawHTML from './components/raw-html/index';
@@ -68,48 +23,28 @@ import SimpleLinkList from './components/simple-link-list/index'
 import SummitDropdown from './components/summit-dropdown/index'
 import Table from './components/table/Table'
 import SortableTable from './components/table-sortable/SortableTable'
+import SimpleForm from './components/forms/simple-form'
 
 
 import { genericReducers } from './utils/reducers';
 
+let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
+
+// language would be something like es-ES or es_ES
+// However we store our files with format es.json or en.json
+// therefore retrieve only the first 2 digits
+
+if (language.length > 2) {
+    language = language.split("-")[0];
+    language = language.split("_")[0];
+}
+
+console.log(`user language is ${language}`);
+
+T.setTexts(require(`./i18n/${language}.json`));
+
+
 export {
-    startLoading,
-    stopLoading,
-    START_LOADING,
-    STOP_LOADING,
-    RECEIVE_COUNTRIES,
-    responseHandler,
-    fetchErrorHandler,
-    fetchResponseHandler,
-    showMessage,
-    showSuccessMessage,
-    getCSV,
-    getRequest,
-    putRequest,
-    deleteRequest,
-    postRequest,
-    postFile,
-    putFile,
-    defaultErrorHandler,
-    createAction,
-    queryMembers,
-    querySpeakers,
-    queryTags,
-    queryTracks,
-    queryTrackGroups,
-    queryEvents,
-    queryGroups,
-    queryCompanies,
-    getCountryList,
-    geoCodeAddress,
-    geoCodeLatLng,
-    genericReducers,
-    findElementPos,
-    epochToMoment,
-    epochToMomentTimeZone,
-    formatEpoch,
-    objectToQueryString,
-    getBackURL,
     AjaxLoader,
     RawHTML,
     FreeTextSearch,
@@ -131,5 +66,6 @@ export {
     SimpleLinkList,
     SummitDropdown,
     Table,
-    SortableTable
+    SortableTable,
+    SimpleForm
 };

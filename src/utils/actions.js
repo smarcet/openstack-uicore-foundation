@@ -14,7 +14,6 @@
 import request from 'superagent';
 import URI from "urijs";
 let http = request;
-import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
 import T from "i18n-react/dist/i18n-react";
 import {objectToQueryString} from './methods';
