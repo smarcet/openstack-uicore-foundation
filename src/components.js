@@ -24,6 +24,7 @@ import SummitDropdown from './components/summit-dropdown/index'
 import Table from './components/table/Table'
 import SortableTable from './components/table-sortable/SortableTable'
 import SimpleForm from './components/forms/simple-form'
+import RadioList from './components/inputs/radio-list'
 
 
 import { genericReducers } from './utils/reducers';
@@ -67,5 +68,6 @@ export {
     SummitDropdown,
     Table,
     SortableTable,
-    SimpleForm
+    SimpleForm,
+    RadioList
 };
