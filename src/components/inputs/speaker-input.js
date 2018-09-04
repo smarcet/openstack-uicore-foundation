@@ -65,38 +65,17 @@ export default class SpeakerInput extends React.Component {
         }
     }
 
-    getSpeakers (input) {
+    getSpeakers (input, callback) {
         if (!input) {
             return Promise.resolve({ options: [] });
         }
 
         let summitId = (this.props.hasOwnProperty('queryAll')) ? null : this.props.summitId;
 
-        return querySpeakers(summitId, input);
+        querySpeakers(summitId, input, callback);
     }
 
-    processTagValues(new_values) {
-        if (this.props.multi) {
-            if (!new_values) return [];
-            new_values = Array.isArray(new_values) ? new_values : [new_values];
 
-            return new_values.map(v => {
-                if (v.hasOwnProperty('name'))
-                    return {id: v.id, name: v.name};
-                else
-                    return {id: v.id, name: v.first_name + ' ' + v.last_name + ' (' + v.id + ')'};
-            });
-
-        } else {
-            let value = {};
-            if (!new_values || !new_values.hasOwnProperty('id')) return value;
-
-            let label = new_values.hasOwnProperty('name') ? new_values.name : new_values.first_name + ' ' + new_values.last_name + ' (' + new_values.id + ')';
-
-            return {id: new_values.id, name: label};
-        }
-
-    }
 
     render() {
         let {value, onChange, history, summitId, error, id, ...rest} = this.props;
@@ -105,13 +84,14 @@ export default class SpeakerInput extends React.Component {
         return (
             <div>
                 <Select.Async
-                    value={this.processTagValues(this.state.value)}
+                    value={this.state.value}
                     onChange={this.handleChange}
                     loadOptions={this.getSpeakers}
                     onValueClick={this.handleClick}
                     backspaceRemoves={true}
                     valueKey="id"
-                    labelKey="name"
+                    optionRenderer={(op) => (`${op.first_name} ${op.last_name} (${op.id})`)}
+                    valueRenderer={(op) => (`${op.first_name} ${op.last_name} (${op.id})`)}
                     filterOptions={this.filterOptions}
                     {...rest}
                 />

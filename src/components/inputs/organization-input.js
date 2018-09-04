@@ -14,9 +14,9 @@
 import React from 'react';
 import 'react-select/dist/react-select.css';
 import Select from 'react-select';
-import {queryTags} from '../../utils/query-actions';
+import {queryOrganizations} from '../../utils/query-actions';
 
-export default class TagInput extends React.Component {
+export default class OrganizationInput extends React.Component {
 
     constructor(props) {
         super(props);
@@ -26,52 +26,58 @@ export default class TagInput extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.getTags = this.getTags.bind(this);
+        this.handleNew = this.handleNew.bind(this);
+        this.getOrganizations = this.getOrganizations.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.hasOwnProperty('value') && this.state.value != nextProps.value) {
-            let nextValue = nextProps.value.map((t) => ({tag: t.tag}));
-
-            this.setState({value: nextValue});
+            this.setState({value: nextProps.value});
         }
     }
 
     handleChange(value) {
         let ev = {target: {
-            id: this.props.id,
-            value: value,
-            type: 'taginput'
-        }};
+                id: this.props.id,
+                value: value,
+                type: 'organizationinput'
+            }};
 
         this.props.onChange(ev);
     }
 
-    getTags (input, callback) {
+    handleNew(value) {
+        this.props.onCreate(value.id, this.handleChange);
+    }
+
+    getOrganizations (input, callback) {
         if (!input) {
             return Promise.resolve({ options: [] });
         }
 
-        queryTags(input, callback);
+        queryOrganizations(input, callback);
     }
 
     render() {
-        let {className, error, ...rest} = this.props;
+        let {error, value, id, onChange,  ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
+        let allowCreate = this.props.hasOwnProperty('allowCreate');
 
-        let orderedTags = this.state.value.sort((a, b) => (a.tag > b.tag ? 1 : (a.tag < b.tag ? -1 : 0)));
+        const AsyncComponent = allowCreate
+            ? Select.AsyncCreatable
+            : Select.Async;
 
         return (
             <div>
-                <Select.Async
-                    className={className + ' ' + (has_error ? 'error' : '')}
-                    multi={true}
-                    value={orderedTags}
+                <AsyncComponent
+                    value={this.state.value}
                     onChange={this.handleChange}
-                    loadOptions={this.getTags}
+                    loadOptions={this.getOrganizations}
                     backspaceRemoves={true}
-                    valueKey="tag"
-                    labelKey="tag"
+                    valueKey="id"
+                    labelKey="name"
+                    onNewOptionClick={this.handleNew}
+                    {...rest}
                 />
                 {has_error &&
                 <p className="error-label">{error}</p>
@@ -81,3 +87,6 @@ export default class TagInput extends React.Component {
 
     }
 }
+
+
+

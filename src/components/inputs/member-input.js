@@ -50,36 +50,14 @@ export default class MemberInput extends React.Component {
         return options;
     }
 
-    getMembers (input) {
+    getMembers (input, callback) {
         if (!input) {
             return Promise.resolve({ options: [] });
         }
 
-        return queryMembers(input);
+        queryMembers(input, callback);
     }
 
-    processTagValues(new_values) {
-        if (this.props.multi) {
-            if (!new_values) return [];
-            new_values = Array.isArray(new_values) ? new_values : [new_values];
-
-            return new_values.map(v => {
-                if (v.hasOwnProperty('name'))
-                    return {id: v.id, name: v.name};
-                else
-                    return {id: v.id, name: v.first_name + ' ' + v.last_name + ' (' + v.id + ')'};
-            });
-
-        } else {
-            let value = {};
-            if (!new_values || !new_values.hasOwnProperty('id')) return value;
-
-            let label = new_values.hasOwnProperty('name') ? new_values.name : new_values.first_name + ' ' + new_values.last_name + ' (' + new_values.id + ')';
-
-            return {id: new_values.id, name: label};
-        }
-
-    }
 
     render() {
         let {error} = this.props;
@@ -89,13 +67,15 @@ export default class MemberInput extends React.Component {
             <div>
                 <Select.Async
                     multi={this.props.multi}
-                    value={this.processTagValues(this.state.value)}
+                    value={this.state.value}
                     onChange={this.handleChange}
                     loadOptions={this.getMembers}
                     backspaceRemoves={true}
                     valueKey="id"
                     labelKey="name"
                     filterOptions={this.filterOptions}
+                    optionRenderer={(op) => (`${op.first_name} ${op.last_name} (${op.id})`)}
+                    valueRenderer={(op) => (`${op.first_name} ${op.last_name} (${op.id})`)}
                 />
                 {has_error &&
                 <p className="error-label">{error}</p>

@@ -9,6 +9,7 @@ import DateTimePicker from './components/inputs/datetimepicker/index'
 import GroupedDropdown from './components/inputs/grouped-dropdown/index'
 import UploadInput from './components/inputs/upload-input/index'
 import CompanyInput from './components/inputs/company-input'
+import OrganizationInput from './components/inputs/organization-input'
 import CountryDropdown from './components/inputs/country-dropdown'
 import Dropdown from './components/inputs/dropdown'
 import TextEditor from './components/inputs/editor-input'
@@ -27,8 +28,6 @@ import SimpleForm from './components/forms/simple-form'
 import RadioList from './components/inputs/radio-list'
 
 
-import { genericReducers } from './utils/reducers';
-
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
 
 // language would be something like es-ES or es_ES
@@ -39,8 +38,6 @@ if (language.length > 2) {
     language = language.split("-")[0];
     language = language.split("_")[0];
 }
-
-console.log(`user language is ${language}`);
 
 T.setTexts(require(`./i18n/${language}.json`));
 
@@ -54,6 +51,7 @@ export {
     GroupedDropdown,
     UploadInput,
     CompanyInput,
+    OrganizationInput,
     CountryDropdown,
     Dropdown,
     EventInput,

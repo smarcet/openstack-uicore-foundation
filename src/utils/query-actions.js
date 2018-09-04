@@ -12,10 +12,12 @@
  **/
 
 import {fetchErrorHandler, fetchResponseHandler} from "./actions";
+import _ from 'lodash';
 export const RECEIVE_COUNTRIES  = 'RECEIVE_COUNTRIES';
+const callDelay = 500; //miliseconds
 
 
-export const queryMembers = (input) => {
+export const queryMembers = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
     input       = encodeURIComponent(input);
@@ -25,18 +27,18 @@ export const queryMembers = (input) => {
     return fetch(`${window.apiBaseUrl}/api/v1/members?filter=${filters}&expand=${expand}&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
-            let options = json.data.map((m) =>
-                ({id: m.id, name: m.first_name + ' ' + m.last_name + ' (' + m.id + ')', ...m})
-            );
+            let options = [...json.data];
 
             return {
                 options: options
             };
         })
         .catch(fetchErrorHandler);
-};
+}, callDelay);
 
-export const querySpeakers = (summitId, input) => {
+
+
+export const querySpeakers = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
     let filters = `first_name=@${input},last_name=@${input},email=@${input}`;
@@ -48,119 +50,132 @@ export const querySpeakers = (summitId, input) => {
 
     apiUrl += `/speakers?filter=${filters}&access_token=${accessToken}`;
 
-    return fetch(apiUrl)
-        .then(fetchResponseHandler)
-        .then((json) => {
-            let options = json.data.map((s) =>
-                ({id: s.id, name: s.first_name + ' ' + s.last_name + ' (' + s.id + ')'})
-            );
-
-            return {
-                options: options
-            };
-        })
-        .catch(fetchErrorHandler);
-};
-
-export const queryTags = (input, summitId = null) => {
-
-    let accessToken = window.accessToken;
-
-    return fetch(`${window.apiBaseUrl}/api/v1/tags?filter=tag=@${input}&order=tag&access_token=${accessToken}`)
-        .then(fetchResponseHandler)
-        .then((json) => {
-            let options = json.data.map((t) => ({tag: t.tag, id: t.id}) );
-
-            return {
-                options: options
-            };
-        })
-        .catch(fetchErrorHandler);
-};
-
-export const queryTracks = (summitId, input) => {
-
-    let accessToken = window.accessToken;
-
-    return fetch(`${window.apiBaseUrl}/api/v1/summits/${summitId}/tracks?filter=name=@${input}&order=name&access_token=${accessToken}`)
+    fetch(apiUrl)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
 
-            return {
-                options: options
-            };
+            callback(null, { options: options });
         })
         .catch(fetchErrorHandler);
-};
+}, callDelay);
 
-export const queryTrackGroups = (summitId, input) => {
+
+
+export const queryTags = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
 
-    return fetch(`${window.apiBaseUrl}/api/v1/summits/${summitId}/track-groups?filter=name=@${input}&order=name&access_token=${accessToken}`)
+    fetch(`${window.apiBaseUrl}/api/v1/tags?filter=tag=@${input}&order=tag&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
 
-            return {
-                options: options
-            };
+            callback(null, { options: options });
         })
         .catch(fetchErrorHandler);
-};
+}, callDelay);
 
-export const queryEvents = (summitId, input, onlyPublished = false) => {
+
+
+export const queryTracks = _.debounce((summitId, input, callback) => {
+
+    let accessToken = window.accessToken;
+
+    fetch(`${window.apiBaseUrl}/api/v1/summits/${summitId}/tracks?filter=name=@${input}&order=name&access_token=${accessToken}`)
+        .then(fetchResponseHandler)
+        .then((json) => {
+            let options = [...json.data];
+
+            callback(null, { options: options });
+        })
+        .catch(fetchErrorHandler);
+}, callDelay);
+
+
+
+export const queryTrackGroups = _.debounce((summitId, input, callback) => {
+
+    let accessToken = window.accessToken;
+
+    fetch(`${window.apiBaseUrl}/api/v1/summits/${summitId}/track-groups?filter=name=@${input}&order=name&access_token=${accessToken}`)
+        .then(fetchResponseHandler)
+        .then((json) => {
+            let options = [...json.data];
+
+            callback(null, { options: options });
+        })
+        .catch(fetchErrorHandler);
+}, callDelay);
+
+
+
+export const queryEvents = _.debounce((summitId, input, onlyPublished = false, callback) => {
 
     let accessToken = window.accessToken;
     let baseUrl = `${window.apiBaseUrl}/api/v1/summits/${summitId}/events` + (onlyPublished ? '/published' : '');
 
-    return fetch(`${baseUrl}?filter=title=@${input}&order=title&access_token=${accessToken}`)
+    fetch(`${baseUrl}?filter=title=@${input}&order=title&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
 
-            return {
-                options: options
-            };
+            callback(null, { options: options });
         })
         .catch(fetchErrorHandler);
-};
+}, callDelay);
 
 
-export const queryGroups = (input) => {
+
+export const queryGroups = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
     let filters = `title=@${input},code=@${input}`;
 
-    return fetch(`${window.apiBaseUrl}/api/v1/groups?filter=${filters}&access_token=${accessToken}`)
+    fetch(`${window.apiBaseUrl}/api/v1/groups?filter=${filters}&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
 
-            return {
-                options: options
-            };
+            callback(null, { options: options });
         })
         .catch(fetchErrorHandler);
-};
+}, callDelay);
 
-export const queryCompanies = (input) => {
+
+
+export const queryCompanies = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
     let filters = `name=@${input}`;
 
-    return fetch(`${window.apiBaseUrl}/api/v1/companies?filter=${filters}&access_token=${accessToken}`)
+    fetch(`${window.apiBaseUrl}/api/v1/companies?filter=${filters}&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
-            let options = json.data.map((c) => ({id: c.id, name: c.name}) );
+            let options = [...json.data];
 
-            return {
-                options: options
-            };
+            callback(null, { options: options });
         })
         .catch(fetchErrorHandler);
-};
+}, callDelay);
+
+
+
+export const queryOrganizations = _.debounce((input, callback) => {
+
+    let accessToken = window.accessToken;
+    let filters = `name=@${input}`;
+
+    fetch(`${window.apiBaseUrl}/api/v1/organizations?filter=${filters}&access_token=${accessToken}`)
+        .then(fetchResponseHandler)
+        .then((json) => {
+            let options = [...json.data];
+
+            callback(null, { options: options });
+        })
+        .catch(fetchErrorHandler);
+}, callDelay);
+
 
 export const getCountryList = () => (dispatch) => {
 
@@ -173,6 +188,8 @@ export const getCountryList = () => (dispatch) => {
         })
         .catch(fetchErrorHandler);
 };
+
+
 
 var geocoder;
 
@@ -212,3 +229,5 @@ export const geoCodeLatLng = (lat, lng) => {
         });
     });
 };
+
+

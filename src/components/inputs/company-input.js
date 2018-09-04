@@ -45,12 +45,12 @@ export default class CompanyInput extends React.Component {
         this.props.onChange(ev);
     }
 
-    getCompanies (input) {
+    getCompanies (input, callback) {
         if (!input) {
             return Promise.resolve({ options: [] });
         }
 
-        return queryCompanies(input);
+        queryCompanies(input, callback);
     }
 
     render() {

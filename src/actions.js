@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
     START_LOADING,
     STOP_LOADING

@@ -78,7 +78,7 @@ export default class DateTimePicker extends React.Component {
                         dateFormat={format.date}
                         timeFormat={format.time}
                         value={this.state.value}
-                        inputProps={{...inputProps, id: id, className: className, disabled: inputDisabled}}
+                        inputProps={{...inputProps, id: id, className: className, disabled: inputDisabled, autoComplete: 'off'}}
                         {...rest}
                     />
                 ) : (
@@ -87,7 +87,7 @@ export default class DateTimePicker extends React.Component {
                         dateFormat={format.date}
                         timeFormat={format.time}
                         value={this.state.value}
-                        inputProps={{...inputProps, id: id, className: className, disabled: inputDisabled}}
+                        inputProps={{...inputProps, id: id, className: className, disabled: inputDisabled, autoComplete: 'off'}}
                         {...rest}
                     />
                 )}

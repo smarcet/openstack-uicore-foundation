@@ -29,6 +29,7 @@ export default class SimpleLinkList extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.filterOptions = this.filterOptions.bind(this);
         this.getOptions = this.getOptions.bind(this);
         this.handleLink = this.handleLink.bind(this);
@@ -41,12 +42,12 @@ export default class SimpleLinkList extends React.Component {
         } );
     }
 
-    getOptions(input) {
+    getOptions(input, callback) {
         if (!input) {
             return Promise.resolve({ options: [] });
         }
 
-        return this.props.queryOptions(input);
+        this.props.queryOptions(input, callback);
     }
 
     handleChange(value) {
@@ -66,6 +67,7 @@ export default class SimpleLinkList extends React.Component {
     render() {
 
         let {title, values, columns, valueKey, labelKey, onEdit} = this.props;
+        let disabledAdd = (!this.state.value);
 
         let options = {
             className: "dataTable",
@@ -93,7 +95,7 @@ export default class SimpleLinkList extends React.Component {
                         loadOptions={this.getOptions}
                         filterOptions={this.filterOptions}
                     />
-                    <button type="button" className="btn btn-default" onClick={this.handleLink}>
+                    <button type="button" className="btn btn-default" onClick={this.handleLink} disabled={disabledAdd}>
                         {T.translate("general.add")}
                     </button>
                 </div>
@@ -110,4 +112,3 @@ export default class SimpleLinkList extends React.Component {
 
     }
 }
-

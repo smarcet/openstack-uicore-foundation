@@ -46,12 +46,12 @@ export default class GroupInput extends React.Component {
         this.props.onChange(ev);
     }
 
-    getGroups (input) {
+    getGroups (input, callback) {
         if (!input) {
             return Promise.resolve({ options: [] });
         }
 
-        return queryGroups(input);
+        queryGroups(input, callback);
     }
 
     render() {
