@@ -24,14 +24,12 @@ export const queryMembers = _.debounce((input, callback) => {
     let filters = `first_name=@${input},last_name=@${input},email=@${input}`;
     let expand = `tickets,rsvp,schedule_summit_events,all_affiliations`
 
-    return fetch(`${window.apiBaseUrl}/api/v1/members?filter=${filters}&expand=${expand}&access_token=${accessToken}`)
+    fetch(`${window.apiBaseUrl}/api/v1/members?filter=${filters}&expand=${expand}&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
 
-            return {
-                options: options
-            };
+            callback(null, { options: options });
         })
         .catch(fetchErrorHandler);
 }, callDelay);
