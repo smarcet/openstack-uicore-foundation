@@ -52,7 +52,9 @@ export default class TagInput extends React.Component {
             return Promise.resolve({ options: [] });
         }
 
-        queryTags(input, callback);
+        let summitId = (this.props.hasOwnProperty('summitId')) ? this.props.summitId : null;
+
+        queryTags(summitId, input, callback);
     }
 
     render() {

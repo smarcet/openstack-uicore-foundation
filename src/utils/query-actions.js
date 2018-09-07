@@ -60,14 +60,27 @@ export const querySpeakers = _.debounce((summitId, input, callback) => {
 
 
 
-export const queryTags = _.debounce((input, callback) => {
+export const queryTags = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
+    let apiUrl = `${window.apiBaseUrl}/api/v1`;
 
-    fetch(`${window.apiBaseUrl}/api/v1/tags?filter=tag=@${input}&order=tag&access_token=${accessToken}`)
+    if (summitId) {
+        apiUrl += `/summits/${summitId}/track-tag-groups/all/allowed-tags?filter=tag=@${input}&expand=tag,track_tag_group`;
+    } else {
+        apiUrl += `/tags?filter=tag=@${input}`;
+    }
+
+    apiUrl += `&order=tag&page=1&per_page=50&access_token=${accessToken}`;
+
+    fetch(apiUrl)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
+
+            if (summitId) {
+                options = options.map(t => t.tag);
+            }
 
             callback(null, { options: options });
         })

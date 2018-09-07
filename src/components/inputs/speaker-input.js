@@ -48,7 +48,7 @@ export default class SpeakerInput extends React.Component {
     }
 
     handleClick(value) {
-        let {history, summitId} = this.props;
+        let {history} = this.props;
 
         history.push(`/app/speakers/${value.id}`);
     }
@@ -70,7 +70,7 @@ export default class SpeakerInput extends React.Component {
             return Promise.resolve({ options: [] });
         }
 
-        let summitId = (this.props.hasOwnProperty('queryAll')) ? null : this.props.summitId;
+        let summitId = (this.props.hasOwnProperty('summitId')) ? this.props.summitId : null;
 
         querySpeakers(summitId, input, callback);
     }
