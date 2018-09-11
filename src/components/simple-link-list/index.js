@@ -12,6 +12,7 @@
  **/
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import 'react-select/dist/react-select.css';
 import './simple-link-list.less';
 import Select from 'react-select';
@@ -19,7 +20,7 @@ import Table from "../table/Table";
 import T from 'i18n-react/dist/i18n-react';
 
 
-export default class SimpleLinkList extends React.Component {
+class SimpleLinkList extends React.Component {
 
     constructor(props) {
         super(props);
@@ -29,11 +30,9 @@ export default class SimpleLinkList extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
         this.filterOptions = this.filterOptions.bind(this);
         this.getOptions = this.getOptions.bind(this);
         this.handleLink = this.handleLink.bind(this);
-        this.handleUnLink = this.handleUnLink.bind(this);
     }
 
     filterOptions(options, filterString, values) {
@@ -47,7 +46,7 @@ export default class SimpleLinkList extends React.Component {
             return Promise.resolve({ options: [] });
         }
 
-        this.props.queryOptions(input, callback);
+        this.props.options.actions.search(input, callback);
     }
 
     handleChange(value) {
@@ -56,29 +55,43 @@ export default class SimpleLinkList extends React.Component {
 
     handleLink(ev) {
         ev.preventDefault();
-        this.props.onLink(this.state.value);
+        this.props.options.actions.add.onClick(this.state.value);
+        this.setState({value: ''});
     }
 
-    handleUnLink(value, ev) {
-        ev.preventDefault();
-        this.props.onUnLink(value);
-    }
 
     render() {
 
-        let {title, values, columns, valueKey, labelKey, onEdit} = this.props;
+        let {options, values, columns} = this.props;
         let disabledAdd = (!this.state.value);
 
-        let options = {
-            className: "dataTable",
+        let title = options.hasOwnProperty('title') ? options.title : 'Table';
+
+        let tableOptions = {
+            className: 'dataTable',
             actions: {
-                delete: { onClick: this.handleUnLink }
+                delete: options.actions.delete
             }
         };
 
-        if (this.props.hasOwnProperty('onEdit')) {
-            options.actions.edit = { onClick: onEdit };
+        if (options.hasOwnProperty('className')) {
+            tableOptions.className = options.className;
         }
+
+        if (options.actions.hasOwnProperty('edit')) {
+            tableOptions.actions.edit = options.actions.edit;
+        }
+
+        if (options.actions.hasOwnProperty('custom')) {
+            tableOptions.actions.custom = options.actions.custom;
+        }
+
+        if (options.hasOwnProperty('sortCol')) {
+            values = values.sort(
+                (a, b) => (a[options.sortCol] > b[options.sortCol] ? 1 : (a[options.sortCol] < b[options.sortCol] ? -1 : 0))
+            );
+        }
+
 
         return (
             <div className="row simple-link-list">
@@ -89,8 +102,8 @@ export default class SimpleLinkList extends React.Component {
                     <Select.Async
                         className="link-select btn-group text-left"
                         value={this.state.value}
-                        valueKey={valueKey}
-                        labelKey={labelKey}
+                        valueKey={options.valueKey}
+                        labelKey={options.labelKey}
                         onChange={this.handleChange}
                         loadOptions={this.getOptions}
                         filterOptions={this.filterOptions}
@@ -102,7 +115,7 @@ export default class SimpleLinkList extends React.Component {
                 <div className="col-md-12">
                     <Table
                         className="dataTable"
-                        options={options}
+                        options={tableOptions}
                         data={values}
                         columns={columns}
                     />
@@ -112,3 +125,27 @@ export default class SimpleLinkList extends React.Component {
 
     }
 }
+
+SimpleLinkList.propTypes = {
+    data: PropTypes.array.isRequired,
+    options: PropTypes.shape({
+        title: PropTypes.string,
+        sortCol: PropTypes.string,
+        valueKey: PropTypes.string.isRequired,
+        labelKey: PropTypes.string.isRequired,
+        className: PropTypes.string,
+        actions: PropTypes.shape({
+            search: PropTypes.func.isRequired,
+            delete: PropTypes.func.isRequired,
+            add: PropTypes.func.isRequired,
+            edit: PropTypes.func,
+            custom: PropTypes.func,
+        }).isRequired
+    }).isRequired,
+    columns: PropTypes.shape({
+        columnKey: PropTypes.string.isRequired,
+        value: PropTypes.any.isRequired
+    }).isRequired
+}
+
+export default SimpleLinkList;
