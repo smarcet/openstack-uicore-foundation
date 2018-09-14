@@ -4,7 +4,7 @@ import TableCell from './TableCell';
 import TableRow from './TableRow';
 import ActionsTableCell from './ActionsTableCell';
 
-import './datatables.css';
+import './table.css';
 
 const defaults = {
     sortFunc: (a,b) => (a < b ? -1 : (a > b ? 1 : 0)),
@@ -19,14 +19,14 @@ const createRow = (row, columns, actions) => {
     var action_buttons = '';
     var cells = columns.map((col,i) => {
         return (
-            <TableCell key={'cell_'+i}>
+            <TableCell key={'cell_'+i} >
                 {row[col.columnKey]}
             </TableCell>
         );
     });
 
     if (actions) {
-        cells.push(<ActionsTableCell key='actions_cell' id={row['id']} actions={actions}/>);
+        cells.push(<ActionsTableCell key='actions_cell' id={row['id']} actions={actions} />);
     }
 
     return cells;
@@ -44,9 +44,10 @@ const getSortDir = (columnKey, columnIndex, sortCol, sortDir) => {
 
 const Table = (props) => {
     let {options, columns} = props;
+    let tableClass = options.hasOwnProperty('className') ? options.className : '';
 
     return (
-        <table className={"table table-striped table-hover " + options.className}>
+        <table className={"table table-striped table-hover dataTable " + tableClass}>
             <thead>
                 <tr>
 			    {columns.map((col,i) => {
@@ -87,7 +88,7 @@ const Table = (props) => {
                     }
 
                     return (
-                        <TableRow even={i%2 === 0} key={'row_'+i}>
+                        <TableRow even={i%2 === 0} key={'row_'+i} id={row['id']} actions={options.actions}>
                             {createRow(row, columns, options.actions)}
                         </TableRow>
                     );

@@ -8,7 +8,7 @@ import SortableTableCell from './SortableTableCell';
 import SortableActionsTableCell from './SortableActionsTableCell';
 import SortableTableRow from './SortableTableRow';
 import T from 'i18n-react/dist/i18n-react';
-import './datatables.css';
+import './table-sortable.css';
 
 const defaults = {
     colWidth: ''

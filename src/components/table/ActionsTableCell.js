@@ -21,14 +21,9 @@ export default class ActionsTableCell extends React.Component {
         let {actions, id} = this.props;
         return (
             <td className="actions" key="actions">
-                {actions.hasOwnProperty('edit') && this.shouldDisplayAction(actions.edit) &&
-                    <a href="" onClick={actions.edit.onClick.bind(this, id)} >
-                        <i className="fa fa-pencil-square-o"></i>
-                    </a>
-                }
                 {actions.hasOwnProperty('delete') && this.shouldDisplayAction(actions.delete)  &&
                     <a href="" onClick={actions.delete.onClick.bind(this, id)} >
-                        <i className="fa fa-trash-o"></i>
+                        <i className="fa fa-trash-o delete-icon"></i>
                     </a>
                 }
                 {'custom' in actions && actions.custom.map(a =>
