@@ -45,9 +45,10 @@ const getSortDir = (columnKey, columnIndex, sortCol, sortDir) => {
 const Table = (props) => {
     let {options, columns} = props;
     let tableClass = options.hasOwnProperty('className') ? options.className : '';
+    tableClass += (options.actions.hasOwnProperty('edit')) ? ' table-hover' : '';
 
     return (
-        <table className={"table table-striped table-hover dataTable " + tableClass}>
+        <table className={"table table-striped dataTable " + tableClass}>
             <thead>
                 <tr>
 			    {columns.map((col,i) => {

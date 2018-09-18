@@ -5,6 +5,7 @@ export default class TableRow extends React.Component {
     constructor(props) {
         super(props);
 
+        this.handleEdit = this.handleEdit.bind(this);
     }
 
     shouldDisplayAction(action) {
@@ -17,6 +18,13 @@ export default class TableRow extends React.Component {
         }
     }
 
+    handleEdit(id, ev) {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        this.props.actions.edit.onClick(id);
+    }
+
     render() {
         let {even, actions, id, children} = this.props;
         let canEdit = (actions.hasOwnProperty('edit') && this.shouldDisplayAction(actions.edit));
@@ -24,7 +32,7 @@ export default class TableRow extends React.Component {
 
         if (canEdit) {
             return (
-                <tr role="row" className={rowClass + " can-edit"} onClick={actions.edit.onClick.bind(this, id)}>
+                <tr role="row" className={rowClass + " can-edit"} onClick={this.handleEdit.bind(this, id)}>
                     {children}
                 </tr>
             );

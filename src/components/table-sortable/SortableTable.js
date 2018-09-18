@@ -82,6 +82,7 @@ class SortableTable extends React.Component {
 
     render() {
         let {options, columns, orderField} = this.props;
+        let tableClass = options.hasOwnProperty('className') ? options.className : '';
 
         let rows = this.state.rows.sort(
             (a, b) => (a[orderField] > b[orderField] ? 1 : (a[orderField] < b[orderField] ? -1 : 0))
@@ -90,7 +91,7 @@ class SortableTable extends React.Component {
         return (
             <div className="sortable-table-box">
                 <i>{T.translate("general.drag_and_drop")}</i>
-                <table className={"table table-striped table-hover " + options.className}>
+                <table className={"table table-striped table-hover sortableTable " + tableClass}>
                     <thead>
                     <tr>
                         {columns.map((col,i) => {

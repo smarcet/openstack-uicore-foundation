@@ -24,8 +24,10 @@ import SimpleLinkList from './components/simple-link-list/index'
 import SummitDropdown from './components/summit-dropdown/index'
 import Table from './components/table/Table'
 import SortableTable from './components/table-sortable/SortableTable'
+import EditableTable from './components/table-editable/EditableTable'
 import SimpleForm from './components/forms/simple-form'
 import RadioList from './components/inputs/radio-list'
+import ActionDropdown from './components/inputs/action-dropdown'
 
 
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
@@ -66,6 +68,8 @@ export {
     SummitDropdown,
     Table,
     SortableTable,
+    EditableTable,
     SimpleForm,
-    RadioList
+    RadioList,
+    ActionDropdown
 };

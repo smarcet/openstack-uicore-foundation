@@ -130,7 +130,11 @@ table.dataTable .actions a {
     margin-left: 10px;
 }
 table.dataTable .actions a .delete-icon:hover {
-    color: #da0000;
+    color: #da0000 !important;
+}
+
+table.dataTable .actions a .fa:hover {
+    color: #024c85;
 }
 
 
