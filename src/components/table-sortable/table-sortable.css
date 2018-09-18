@@ -137,5 +137,8 @@ table.sortableTable .actions a .fa:hover {
     color: #024c85;
 }
 
+.sortable-table-box {
+    margin-top: 20px;
+}
 
 

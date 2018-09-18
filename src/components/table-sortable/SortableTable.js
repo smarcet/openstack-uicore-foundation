@@ -81,12 +81,8 @@ class SortableTable extends React.Component {
     }
 
     render() {
-        let {options, columns, orderField} = this.props;
+        let {options, columns} = this.props;
         let tableClass = options.hasOwnProperty('className') ? options.className : '';
-
-        let rows = this.state.rows.sort(
-            (a, b) => (a[orderField] > b[orderField] ? 1 : (a[orderField] < b[orderField] ? -1 : 0))
-        );
 
         return (
             <div className="sortable-table-box">
@@ -110,7 +106,7 @@ class SortableTable extends React.Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {columns.length > 0 && rows.map((row,i) => {
+                    {columns.length > 0 && this.state.rows.map((row,i) => {
                         if(Array.isArray(row) && row.length !== columns.length) {
                             console.warn(`Data at row ${i} is ${row.length}. It should be ${columns.length}.`);
                             return <tr />
@@ -134,10 +130,10 @@ SortableTable.propTypes = {
         className: PropTypes.string,
         actions: PropTypes.object
     }).isRequired,
-    columns: PropTypes.shape({
+    columns: PropTypes.arrayOf(PropTypes.shape({
         columnKey: PropTypes.string.isRequired,
         value: PropTypes.any.isRequired
-    }).isRequired,
+    })).isRequired,
     orderField: PropTypes.string.isRequired,
     dropCallback: PropTypes.func.isRequired
 }
