@@ -13,6 +13,9 @@
     "search"              : "Search",
     "save"                : "Save",
     "done"                : "Done!",
-    "drag_and_drop"       : "Drag and Drop to sort items."
+    "drag_and_drop"       : "Drag and Drop to sort items.",
+    "are_you_sure"        : "Are you sure?",
+    "yes_delete"          : "Yes, delete.",
+    "remove_warning"      : "Are you sure you want to delete this?"
   }
 }

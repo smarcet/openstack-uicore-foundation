@@ -700,6 +700,9 @@ td.rdtYear:hover {
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
+.simple-link-list {
+  margin-top: 40px;
+}
 .simple-link-list .link-select {
   width: 200px;
 }
