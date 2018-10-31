@@ -54,19 +54,19 @@ export default class CompanyInput extends React.Component {
     }
 
     render() {
-        let {error} = this.props;
+        let {error, value, onChange, id, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
 
         return (
             <div>
                 <Select.Async
-                    multi={this.props.multi}
                     value={this.state.value}
                     onChange={this.handleChange}
                     loadOptions={this.getCompanies}
                     backspaceRemoves={true}
                     valueKey="id"
                     labelKey="name"
+                    {...rest}
                 />
                 {has_error &&
                 <p className="error-label">{error}</p>

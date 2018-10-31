@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 OpenStack Foundation
+ * Copyright 2018 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,10 +12,11 @@
  **/
 
 import React from 'react';
-import Dropdown from './dropdown';
-import {getCountryList} from '../../utils/query-actions';
+import 'react-select/dist/react-select.css';
+import Select from 'react-select';
+import {getLanguageList} from '../../utils/query-actions';
 
-export default class CountryDropdown extends React.Component {
+export default class LanguageInput extends React.Component {
 
     constructor(props) {
         super(props);
@@ -29,11 +30,11 @@ export default class CountryDropdown extends React.Component {
         this.abortController = new AbortController();
     }
 
-    componentDidMount () {
+    componentWillMount () {
         let {options} = this.state;
 
         if(options.length == 0){
-            getCountryList(this.setOptions, this.abortController.signal);
+            getLanguageList(this.setOptions, this.abortController.signal);
         }
     }
 
@@ -41,28 +42,35 @@ export default class CountryDropdown extends React.Component {
         this.abortController.abort();
     }
 
+    setOptions(response) {
+        this.setState({options: response});
+    }
+
     handleChange(value) {
 
         let ev = {target: {
                 id: this.props.id,
                 value: value,
-                type: 'countryddl'
+                type: 'laguageinput'
             }};
 
         this.props.onChange(ev);
     }
 
-    setOptions(response) {
-        let countryList = response.map(c => ({label: c.name, value: c.iso_code}));
-        this.setState({options: countryList});
-    }
-
     render() {
-
+        let {value, onChange, id, ...rest} = this.props;
         let {options} = this.state;
 
         return (
-            <Dropdown options={options} {...this.props} />
+            <Select
+                onChange={this.handleChange}
+                options={options}
+                backspaceRemoves={true}
+                value={value}
+                valueKey="id"
+                labelKey="name"
+                {...rest}
+            />
         );
 
     }

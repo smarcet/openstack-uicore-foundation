@@ -27,7 +27,11 @@ import SortableTable from './components/table-sortable/SortableTable'
 import EditableTable from './components/table-editable/EditableTable'
 import SimpleForm from './components/forms/simple-form'
 import RadioList from './components/inputs/radio-list'
+import CheckboxList from './components/inputs/checkbox-list'
 import ActionDropdown from './components/inputs/action-dropdown'
+import CountryInput from './components/inputs/country-input'
+import LanguageInput from './components/inputs/language-input'
+import FreeMultiTextInput from "./components/inputs/free-multi-text-input";
 
 
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
@@ -53,6 +57,8 @@ export {
     GroupedDropdown,
     UploadInput,
     CompanyInput,
+    CountryInput,
+    LanguageInput,
     OrganizationInput,
     CountryDropdown,
     Dropdown,
@@ -71,5 +77,7 @@ export {
     EditableTable,
     SimpleForm,
     RadioList,
-    ActionDropdown
+    CheckboxList,
+    ActionDropdown,
+    FreeMultiTextInput
 };

@@ -188,14 +188,25 @@ export const queryOrganizations = _.debounce((input, callback) => {
 }, callDelay);
 
 
-export const getCountryList = () => (dispatch) => {
+export const getLanguageList = (callback, signal) => {
+    let accessToken = window.accessToken;
 
-    let apiUrl = 'https://restcountries.eu/rest/v2/all?fields=name;alpha2Code';
-
-    return fetch(apiUrl)
+    return fetch(`${window.apiBaseUrl}/api/public/v1/languages?access_token=${accessToken}`, {signal})
         .then(fetchResponseHandler)
-        .then((json) => {
-            dispatch(createAction(RECEIVE_COUNTRIES)(json));
+        .then((response) => {
+            callback(response.data);
+        })
+        .catch(fetchErrorHandler);
+};
+
+
+export const getCountryList = (callback, signal) => {
+    let accessToken = window.accessToken;
+
+    return fetch(`${window.apiBaseUrl}/api/public/v1/countries?access_token=${accessToken}`, {signal})
+        .then(fetchResponseHandler)
+        .then((response) => {
+            callback(response.data);
         })
         .catch(fetchErrorHandler);
 };

@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 OpenStack Foundation
+ * Copyright 2018 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,10 +12,11 @@
  **/
 
 import React from 'react';
-import Dropdown from './dropdown';
+import 'react-select/dist/react-select.css';
+import Select from 'react-select';
 import {getCountryList} from '../../utils/query-actions';
 
-export default class CountryDropdown extends React.Component {
+export default class CountryInput extends React.Component {
 
     constructor(props) {
         super(props);
@@ -26,30 +27,14 @@ export default class CountryDropdown extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.setOptions = this.setOptions.bind(this);
-        this.abortController = new AbortController();
     }
 
-    componentDidMount () {
+    componentWillMount () {
         let {options} = this.state;
 
         if(options.length == 0){
-            getCountryList(this.setOptions, this.abortController.signal);
+            getCountryList(this.setOptions);
         }
-    }
-
-    componentWillUnmount(){
-        this.abortController.abort();
-    }
-
-    handleChange(value) {
-
-        let ev = {target: {
-                id: this.props.id,
-                value: value,
-                type: 'countryddl'
-            }};
-
-        this.props.onChange(ev);
     }
 
     setOptions(response) {
@@ -57,12 +42,29 @@ export default class CountryDropdown extends React.Component {
         this.setState({options: countryList});
     }
 
-    render() {
+    handleChange(value) {
 
+        let ev = {target: {
+                id: this.props.id,
+                value: value,
+                type: 'countryinput'
+            }};
+
+        this.props.onChange(ev);
+    }
+
+    render() {
+        let {value, onChange, id, ...rest} = this.props;
         let {options} = this.state;
 
         return (
-            <Dropdown options={options} {...this.props} />
+            <Select
+                onChange={this.handleChange}
+                options={options}
+                backspaceRemoves={true}
+                value={value}
+                {...rest}
+            />
         );
 
     }
