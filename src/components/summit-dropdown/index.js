@@ -12,7 +12,6 @@
  **/
 
 import React from 'react';
-import 'react-select/dist/react-select.css';
 import './summit-dropdown.less';
 import Select from 'react-select';
 import T from 'i18n-react/dist/i18n-react';
@@ -59,7 +58,7 @@ export default class SummitDropdown extends React.Component {
                     options={summitOptions}
                     placeholder={T.translate("general.select_summit")}
                     className={"btn-group summit-select text-left" + smallDdl}
-                    clearable={false}
+                    isClearable={false}
                 />
                 <button type="button" className="btn btn-default" onClick={this.handleClick}>
                     {actionLabel}

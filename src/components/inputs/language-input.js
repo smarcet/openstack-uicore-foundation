@@ -12,7 +12,6 @@
  **/
 
 import React from 'react';
-import 'react-select/dist/react-select.css';
 import Select from 'react-select';
 import {getLanguageList} from '../../utils/query-actions';
 
@@ -58,17 +57,18 @@ export default class LanguageInput extends React.Component {
     }
 
     render() {
-        let {value, onChange, id, ...rest} = this.props;
+        let {value, onChange, id, multi, ...rest} = this.props;
         let {options} = this.state;
+        let isMulti = (this.props.hasOwnProperty('multi'));
 
         return (
             <Select
                 onChange={this.handleChange}
                 options={options}
-                backspaceRemoves={true}
                 value={value}
-                valueKey="id"
-                labelKey="name"
+                getOptionValue={option => option.id}
+                getOptionLabel={option => option.name}
+                isMulti={isMulti}
                 {...rest}
             />
         );

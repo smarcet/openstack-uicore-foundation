@@ -12,8 +12,8 @@
  **/
 
 import React from 'react';
-import 'react-select/dist/react-select.css';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
+import AsyncCreatableSelect from 'react-select/lib/AsyncCreatable';
 import {queryOrganizations} from '../../utils/query-actions';
 
 export default class OrganizationInput extends React.Component {
@@ -21,25 +21,18 @@ export default class OrganizationInput extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            value: props.value
-        };
-
         this.handleChange = this.handleChange.bind(this);
         this.handleNew = this.handleNew.bind(this);
         this.getOrganizations = this.getOrganizations.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.hasOwnProperty('value') && this.state.value != nextProps.value) {
-            this.setState({value: nextProps.value});
-        }
-    }
-
     handleChange(value) {
+        // we need to map into value/label because of a bug in react-select 2
+        // https://github.com/JedWatson/react-select/issues/2998
+
         let ev = {target: {
                 id: this.props.id,
-                value: value,
+                value: {id: value.value, name: value.label},
                 type: 'organizationinput'
             }};
 
@@ -47,7 +40,14 @@ export default class OrganizationInput extends React.Component {
     }
 
     handleNew(value) {
-        this.props.onCreate(value.id, this.handleChange);
+        // we need to map into value/label because of a bug in react-select 2
+        // https://github.com/JedWatson/react-select/issues/2998
+
+        const translateValue = (newValue) => {
+            this.handleChange({value: newValue.id, label: newValue.name});
+        }
+
+        this.props.onCreate(value, translateValue);
     }
 
     getOrganizations (input, callback) {
@@ -55,28 +55,37 @@ export default class OrganizationInput extends React.Component {
             return Promise.resolve({ options: [] });
         }
 
-        queryOrganizations(input, callback);
+        // we need to map into value/label because of a bug in react-select 2
+        // https://github.com/JedWatson/react-select/issues/2998
+
+        const translateOptions = (options) => {
+            let newOptions = options.map(org => ({value: org.id.toString(), label: org.name}));
+            callback(newOptions);
+        }
+
+        queryOrganizations(input, translateOptions);
     }
 
     render() {
-        let {error, value, id, onChange,  ...rest} = this.props;
+        let {error, value, id, onChange, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
         let allowCreate = this.props.hasOwnProperty('allowCreate');
 
+        // we need to map into value/label because of a bug in react-select 2
+        // https://github.com/JedWatson/react-select/issues/2998
+        let theValue = value ? {value: value.id.toString(), label: value.name} : null;
+
         const AsyncComponent = allowCreate
-            ? Select.AsyncCreatable
-            : Select.Async;
+            ? AsyncCreatableSelect
+            : AsyncSelect;
 
         return (
             <div>
                 <AsyncComponent
-                    value={this.state.value}
+                    value={theValue}
                     onChange={this.handleChange}
                     loadOptions={this.getOrganizations}
-                    backspaceRemoves={true}
-                    valueKey="id"
-                    labelKey="name"
-                    onNewOptionClick={this.handleNew}
+                    onCreateOption={this.handleNew}
                     {...rest}
                 />
                 {has_error &&

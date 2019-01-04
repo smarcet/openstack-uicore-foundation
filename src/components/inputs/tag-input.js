@@ -12,8 +12,7 @@
  **/
 
 import React from 'react';
-import 'react-select/dist/react-select.css';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
 import {queryTags} from '../../utils/query-actions';
 
 export default class TagInput extends React.Component {
@@ -39,10 +38,10 @@ export default class TagInput extends React.Component {
 
     handleChange(value) {
         let ev = {target: {
-            id: this.props.id,
-            value: value,
-            type: 'taginput'
-        }};
+                id: this.props.id,
+                value: value,
+                type: 'taginput'
+            }};
 
         this.props.onChange(ev);
     }
@@ -65,15 +64,14 @@ export default class TagInput extends React.Component {
 
         return (
             <div>
-                <Select.Async
+                <AsyncSelect
                     className={className + ' ' + (has_error ? 'error' : '')}
-                    multi={true}
+                    isMulti
                     value={orderedTags}
                     onChange={this.handleChange}
                     loadOptions={this.getTags}
-                    backspaceRemoves={true}
-                    valueKey="tag"
-                    labelKey="tag"
+                    getOptionLabel={option => option.tag}
+                    getOptionValue={option => option.tag}
                 />
                 {has_error &&
                 <p className="error-label">{error}</p>

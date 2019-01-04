@@ -52,7 +52,7 @@ export default class ActionDropdown extends React.Component {
                     options={options}
                     placeholder={placeholder}
                     className={"btn-group action-select text-left" + smallDdl}
-                    clearable={false}
+                    isClearable={false}
                 />
                 <button type="button" className="btn btn-default" onClick={this.handleClick}>
                     {actionLabel}

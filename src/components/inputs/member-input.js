@@ -12,8 +12,7 @@
  **/
 
 import React from 'react';
-import 'react-select/dist/react-select.css';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
 import {queryMembers} from '../../utils/query-actions';
 
 export default class MemberInput extends React.Component {
@@ -27,7 +26,6 @@ export default class MemberInput extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.getMembers = this.getMembers.bind(this);
-        this.filterOptions = this.filterOptions.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -46,10 +44,6 @@ export default class MemberInput extends React.Component {
         this.props.onChange(ev);
     }
 
-    filterOptions(options, filterString, values) {
-        return options;
-    }
-
     getMembers (input, callback) {
         if (!input) {
             return Promise.resolve({ options: [] });
@@ -60,22 +54,19 @@ export default class MemberInput extends React.Component {
 
 
     render() {
-        let {error} = this.props;
+        let {value, error, onChange, id, multi, ...rest} = this.props;
+        let isMulti = (this.props.hasOwnProperty('multi'));
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
 
         return (
             <div>
-                <Select.Async
-                    multi={this.props.multi}
-                    value={this.state.value}
+                <AsyncSelect
+                    value={value}
                     onChange={this.handleChange}
                     loadOptions={this.getMembers}
-                    backspaceRemoves={true}
-                    valueKey="id"
-                    labelKey="name"
-                    filterOptions={this.filterOptions}
-                    optionRenderer={(op) => (`${op.first_name} ${op.last_name} (${op.id})`)}
-                    valueRenderer={(op) => (`${op.first_name} ${op.last_name} (${op.id})`)}
+                    getOptionValue={op => op.id}
+                    getOptionLabel={op => (`${op.first_name} ${op.last_name} (${op.id})`)}
+                    isMulti={isMulti}
                 />
                 {has_error &&
                 <p className="error-label">{error}</p>

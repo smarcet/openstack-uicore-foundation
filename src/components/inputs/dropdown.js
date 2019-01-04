@@ -12,7 +12,6 @@
  **/
 
 import React from 'react';
-import 'react-select/dist/react-select.css';
 import Select from 'react-select';
 
 export default class Dropdown extends React.Component {
@@ -20,17 +19,7 @@ export default class Dropdown extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            value: props.value,
-        };
-
         this.handleChange = this.handleChange.bind(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.hasOwnProperty('value') &&  this.state.value != nextProps.value) {
-            this.setState({value: nextProps.value});
-        }
     }
 
     handleChange(selection) {
@@ -47,15 +36,20 @@ export default class Dropdown extends React.Component {
 
     render() {
 
-        let {onChange, value, className, error, ...rest} = this.props;
+        let {onChange, value, className, error, clearable, disabled, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
+        let isClearable = (this.props.hasOwnProperty('clearable'));
+        let isDisabled = (this.props.hasOwnProperty('disabled') && disabled == true);
+        let theValue = (value instanceof Object) ? value : this.props.options.find(opt => opt.value == value);
 
         return (
             <div>
                 <Select
                     className={className + ' ' + (has_error ? 'error' : '')}
-                    value={this.state.value}
+                    value={theValue}
                     onChange={this.handleChange}
+                    isClearable={isClearable}
+                    isDisabled={isDisabled}
                     {...rest}
                 />
                 {has_error &&

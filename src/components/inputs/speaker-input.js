@@ -12,8 +12,8 @@
  **/
 
 import React from 'react';
-import 'react-select/dist/react-select.css';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
+import {components} from 'react-select/lib/components'
 import {querySpeakers} from '../../utils/query-actions';
 
 export default class SpeakerInput extends React.Component {
@@ -21,48 +21,25 @@ export default class SpeakerInput extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            value: props.value
-        };
-
         this.handleChange = this.handleChange.bind(this);
         this.getSpeakers = this.getSpeakers.bind(this);
         this.handleClick = this.handleClick.bind(this);
-        this.filterOptions = this.filterOptions.bind(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.hasOwnProperty('value') && this.state.value != nextProps.value) {
-            this.setState({value: nextProps.value});
-        }
     }
 
     handleChange(value) {
         let ev = {target: {
-            id: this.props.id,
-            value: value,
-            type: 'speakerinput'
-        }};
+                id: this.props.id,
+                value: value,
+                type: 'speakerinput'
+            }};
 
         this.props.onChange(ev);
     }
 
-    handleClick(value) {
+    handleClick(speakerId) {
         let {history} = this.props;
 
-        history.push(`/app/speakers/${value.id}`);
-    }
-
-    filterOptions(options, filterString, values) {
-        if (this.props.multi) {
-            let filtered_options = options.filter( op => {
-                return values.map(val => val.id).indexOf( op.id ) < 0;
-            } );
-
-            return filtered_options;
-        } else {
-            return options;
-        }
+        history.push(`/app/speakers/${speakerId}`);
     }
 
     getSpeakers (input, callback) {
@@ -76,23 +53,29 @@ export default class SpeakerInput extends React.Component {
     }
 
 
-
     render() {
-        let {value, onChange, history, summitId, error, id, ...rest} = this.props;
+        let {value, onChange, history, summitId, error, id, multi, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
+        let isMulti = (this.props.hasOwnProperty('multi'));
+
+        const MultiValueLabel = (props) => {
+            return (
+                <a onClick={() => this.handleClick(props.data.id)} style={{cursor: 'pointer'}}>
+                    <components.MultiValueLabel {...props} />
+                </a>
+            );
+        };
 
         return (
             <div>
-                <Select.Async
-                    value={this.state.value}
+                <AsyncSelect
+                    value={value}
                     onChange={this.handleChange}
                     loadOptions={this.getSpeakers}
-                    onValueClick={this.handleClick}
-                    backspaceRemoves={true}
-                    valueKey="id"
-                    optionRenderer={(op) => (`${op.first_name} ${op.last_name} (${op.id})`)}
-                    valueRenderer={(op) => (`${op.first_name} ${op.last_name} (${op.id})`)}
-                    filterOptions={this.filterOptions}
+                    components={{ MultiValueLabel }}
+                    getOptionValue={op => op.id}
+                    getOptionLabel={op => (`${op.first_name} ${op.last_name} (${op.id})`)}
+                    isMulti={isMulti}
                     {...rest}
                 />
                 {has_error &&

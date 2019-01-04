@@ -12,8 +12,7 @@
  **/
 
 import React from 'react';
-import 'react-select/dist/react-select.css';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
 import {queryCompanies} from '../../utils/query-actions';
 
 export default class CompanyInput extends React.Component {
@@ -21,18 +20,8 @@ export default class CompanyInput extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            value: props.value
-        };
-
         this.handleChange = this.handleChange.bind(this);
         this.getCompanies = this.getCompanies.bind(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.hasOwnProperty('value') && this.state.value != nextProps.value) {
-            this.setState({value: nextProps.value});
-        }
     }
 
     handleChange(value) {
@@ -54,18 +43,19 @@ export default class CompanyInput extends React.Component {
     }
 
     render() {
-        let {error, value, onChange, id, ...rest} = this.props;
+        let {error, value, onChange, id, multi, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
+        let isMulti = (this.props.hasOwnProperty('multi'));
 
         return (
             <div>
-                <Select.Async
-                    value={this.state.value}
+                <AsyncSelect
+                    value={value}
                     onChange={this.handleChange}
                     loadOptions={this.getCompanies}
-                    backspaceRemoves={true}
-                    valueKey="id"
-                    labelKey="name"
+                    getOptionValue={option => option.id}
+                    getOptionLabel={option => option.name}
+                    isMulti={isMulti}
                     {...rest}
                 />
                 {has_error &&

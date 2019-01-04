@@ -29,7 +29,7 @@ export const queryMembers = _.debounce((input, callback) => {
         .then((json) => {
             let options = [...json.data];
 
-            callback(null, { options: options });
+            callback(options);
         })
         .catch(fetchErrorHandler);
 }, callDelay);
@@ -53,7 +53,7 @@ export const querySpeakers = _.debounce((summitId, input, callback) => {
         .then((json) => {
             let options = [...json.data];
 
-            callback(null, { options: options });
+            callback(options);
         })
         .catch(fetchErrorHandler);
 }, callDelay);
@@ -82,7 +82,7 @@ export const queryTags = _.debounce((summitId, input, callback) => {
                 options = options.map(t => t.tag);
             }
 
-            callback(null, { options: options });
+            callback(options);
         })
         .catch(fetchErrorHandler);
 }, callDelay);
@@ -98,7 +98,7 @@ export const queryTracks = _.debounce((summitId, input, callback) => {
         .then((json) => {
             let options = [...json.data];
 
-            callback(null, { options: options });
+            callback(options);
         })
         .catch(fetchErrorHandler);
 }, callDelay);
@@ -114,7 +114,7 @@ export const queryTrackGroups = _.debounce((summitId, input, callback) => {
         .then((json) => {
             let options = [...json.data];
 
-            callback(null, { options: options });
+            callback(options);
         })
         .catch(fetchErrorHandler);
 }, callDelay);
@@ -131,7 +131,7 @@ export const queryEvents = _.debounce((summitId, input, onlyPublished = false, c
         .then((json) => {
             let options = [...json.data];
 
-            callback(null, { options: options });
+            callback(options);
         })
         .catch(fetchErrorHandler);
 }, callDelay);
@@ -148,7 +148,7 @@ export const queryGroups = _.debounce((input, callback) => {
         .then((json) => {
             let options = [...json.data];
 
-            callback(null, { options: options });
+            callback(options);
         })
         .catch(fetchErrorHandler);
 }, callDelay);
@@ -165,7 +165,7 @@ export const queryCompanies = _.debounce((input, callback) => {
         .then((json) => {
             let options = [...json.data];
 
-            callback(null, { options: options });
+            callback(options);
         })
         .catch(fetchErrorHandler);
 }, callDelay);
@@ -182,7 +182,7 @@ export const queryOrganizations = _.debounce((input, callback) => {
         .then((json) => {
             let options = [...json.data];
 
-            callback(null, { options: options });
+            callback(options);
         })
         .catch(fetchErrorHandler);
 }, callDelay);

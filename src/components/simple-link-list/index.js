@@ -13,9 +13,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import 'react-select/dist/react-select.css';
 import './simple-link-list.less';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
 import Table from "../table/Table";
 import T from 'i18n-react/dist/i18n-react';
 
@@ -30,15 +29,8 @@ class SimpleLinkList extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.filterOptions = this.filterOptions.bind(this);
         this.getOptions = this.getOptions.bind(this);
         this.handleLink = this.handleLink.bind(this);
-    }
-
-    filterOptions(options, filterString, values) {
-        return options.filter( op => {
-            return this.props.values.map(val => val.id).indexOf( op.id ) < 0;
-        } );
     }
 
     getOptions(input, callback) {
@@ -99,14 +91,13 @@ class SimpleLinkList extends React.Component {
                     <h4>{title}</h4>
                 </div>
                 <div className="col-md pull-right btn-group">
-                    <Select.Async
+                    <AsyncSelect
                         className="link-select btn-group text-left"
                         value={this.state.value}
-                        valueKey={options.valueKey}
-                        labelKey={options.labelKey}
+                        getOptionValue={option => option.valueKey}
+                        getOptionLabel={option => option.labelKey}
                         onChange={this.handleChange}
                         loadOptions={this.getOptions}
-                        filterOptions={this.filterOptions}
                     />
                     <button type="button" className="btn btn-default" onClick={this.handleLink} disabled={disabledAdd}>
                         {T.translate("general.add")}

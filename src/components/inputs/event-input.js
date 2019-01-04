@@ -12,8 +12,7 @@
  **/
 
 import React from 'react';
-import 'react-select/dist/react-select.css';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
 import {queryEvents} from '../../utils/query-actions';
 
 export default class EventInput extends React.Component {
@@ -21,18 +20,8 @@ export default class EventInput extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            value: props.value
-        };
-
         this.handleChange = this.handleChange.bind(this);
         this.getEvents = this.getEvents.bind(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.hasOwnProperty('value') && this.state.value != nextProps.value) {
-            this.setState({value: nextProps.value});
-        }
     }
 
     handleChange(value) {
@@ -57,16 +46,18 @@ export default class EventInput extends React.Component {
     }
 
     render() {
+        let {value, onChange, id, multi, ...rest} = this.props;
+        let isMulti = (this.props.hasOwnProperty('multi'));
 
         return (
-            <Select.Async
-                multi={this.props.multi}
-                value={this.state.value}
+            <AsyncSelect
+                value={value}
                 onChange={this.handleChange}
                 loadOptions={this.getEvents}
-                backspaceRemoves={true}
-                valueKey="id"
-                labelKey="title"
+                getOptionValue={option => option.id}
+                getOptionLabel={option => option.title}
+                isMulti={isMulti}
+                {...rest}
             />
         );
 
