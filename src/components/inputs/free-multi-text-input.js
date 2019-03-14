@@ -64,7 +64,7 @@ export default class FreeMultiTextInput extends React.Component {
                 components={{DropdownIndicator: null}}
                 inputValue={inputValue}
                 clearable
-                multi
+                isMulti
                 menuContainerStyle={{display: 'none'}}
                 onChange={this.handleChange}
                 onInputChange={this.handleInputChange}
