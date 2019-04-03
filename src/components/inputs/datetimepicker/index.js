@@ -37,13 +37,20 @@ export default class DateTimePicker extends React.Component {
     handleChange(date) {
         let { timezone } = this.props;
 
-        let ev = {target: {
-            id: this.props.id,
-            value: date != null && moment.isMoment(date)? moment.tz(date.format('YYYY-MM-DD HH:mm:ss'), timezone) : '',
-            type: 'datetime'
-        }};
+        if (date && moment.isMoment(date)) {
+            date = moment.tz(date.format('YYYY-MM-DD HH:mm:ss'), timezone)
+        }
 
-        this.props.onChange(ev);
+        let ev = {target: {
+                id: this.props.id,
+                value: date,
+                type: 'datetime'
+            }};
+
+        if (date && moment.isMoment(date)) {
+            this.props.onChange(ev);
+        }
+
     }
 
     isValidDate(compareDateAfter, compareDateBefore, selectedDate, currentDate) {
