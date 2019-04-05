@@ -32,7 +32,7 @@ import ActionDropdown from './components/inputs/action-dropdown'
 import CountryInput from './components/inputs/country-input'
 import LanguageInput from './components/inputs/language-input'
 import FreeMultiTextInput from "./components/inputs/free-multi-text-input";
-
+import OPSessionChecker from "./components/security/session-checker/op-session-checker";
 
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
 
@@ -46,7 +46,6 @@ if (language.length > 2) {
 }
 
 T.setTexts(require(`./i18n/${language}.json`));
-
 
 export {
     AjaxLoader,
@@ -79,5 +78,6 @@ export {
     RadioList,
     CheckboxList,
     ActionDropdown,
-    FreeMultiTextInput
+    FreeMultiTextInput,
+    OPSessionChecker,
 };

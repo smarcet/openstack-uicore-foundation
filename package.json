@@ -24,7 +24,10 @@
     "react-redux": "^5.0.7",
     "superagent": "^3.8.1",
     "uglifyjs-webpack-plugin": "^1.1.1",
-    "webpack": "^3.8.1"
+    "webpack": "^3.8.1",
+    "history": "^4.7.2",
+    "i18n-react": "^0.6.4",
+    "urijs": "^1.19.1"
   },
   "dependencies": {
     "awesome-bootstrap-checkbox": "^1.0.1",

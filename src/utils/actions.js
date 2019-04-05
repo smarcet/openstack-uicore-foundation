@@ -22,6 +22,7 @@ import {objectToQueryString} from './methods';
 export const GENERIC_ERROR = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
 export const START_LOADING = 'START_LOADING';
 export const STOP_LOADING  = 'STOP_LOADING';
+export const VALIDATE      = 'VALIDATE';
 
 export const createAction = type => payload => ({
     type,
@@ -48,6 +49,54 @@ const schedule = (key, req) => {
 
 const isObjectEmpty = (obj) => {
     return Object.keys(obj).length === 0 && obj.constructor === Object ;
+}
+
+export const authErrorHandler = (err, res) => (dispatch) => {
+    let code = err.status;
+    let msg = '';
+
+    dispatch(stopLoading());
+
+    switch (code) {
+        case 403:
+            let error_message = {
+                title: 'ERROR',
+                html: T.translate("errors.user_not_authz"),
+                type: 'error'
+            };
+
+            dispatch(showMessage( error_message, initLogOut ));
+            break;
+        case 401:
+            doLogin(window.location.pathname);
+            break;
+        case 404:
+            msg = "";
+
+            if (err.response.body && err.response.body.message) msg = err.response.body.message;
+            else if (err.response.error && err.response.error.message) msg = err.response.error.message;
+            else msg = err.message;
+
+            swal("Not Found", msg, "warning");
+
+            break;
+        case 412:
+            for (var [key, value] of Object.entries(err.response.body.errors)) {
+                if (isNaN(key)) {
+                    msg += key + ': ';
+                }
+
+                msg += value + '<br>';
+            }
+            swal("Validation error", msg, "warning");
+            dispatch({
+                type: VALIDATE,
+                payload: {errors: err.response.body.errors}
+            });
+            break;
+        default:
+            swal("ERROR", T.translate("errors.server_error"), "error");
+    }
 }
 
 export const getRequest =(
