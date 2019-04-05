@@ -117,7 +117,8 @@ export const doLogout = (backUrl) => (dispatch, getState) => {
 
 export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
 
-    let AllowedUserGroups       = window.ALLOWED_USER_GROUPS.split(' ');
+    let AllowedUserGroups       = window.ALLOWED_USER_GROUPS || '';
+    AllowedUserGroups           = AllowedUserGroups != '' ? AllowedUserGroups.split(' ') : [];
     let { loggedUserState }     = getState();
     let { accessToken, member } = loggedUserState;
     if(member != null){
@@ -148,18 +149,21 @@ export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
 
             }
 
-            let allowedGroups = member.groups.filter((group, idx) => {
-                return AllowedUserGroups.includes(group.code);
-            })
+            // check user groups ( if defined )
+            if(AllowedUserGroups.length > 0 ) {
+                let allowedGroups = member.groups.filter((group, idx) => {
+                    return AllowedUserGroups.includes(group.code);
+                })
 
-            if(allowedGroups.length == 0){
-                let error_message = {
-                    title: 'ERROR',
-                    html: T.translate("errors.user_not_authz"),
-                    type: 'error'
-                };
+                if (allowedGroups.length == 0) {
+                    let error_message = {
+                        title: 'ERROR',
+                        html: T.translate("errors.user_not_authz"),
+                        type: 'error'
+                    };
 
-                dispatch(showMessage( error_message, initLogOut ));
+                    dispatch(showMessage(error_message, initLogOut));
+                }
             }
 
             history.push(backUrl);
