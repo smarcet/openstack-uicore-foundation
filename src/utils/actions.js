@@ -17,7 +17,7 @@ let http = request;
 import swal from 'sweetalert2';
 import T from "i18n-react/dist/i18n-react";
 import {objectToQueryString} from './methods';
-import {doLogin} from '../components/security/actions';
+import {doLogin, initLogOut} from '../components/security/actions';
 
 
 export const GENERIC_ERROR = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
