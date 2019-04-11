@@ -21,6 +21,7 @@ import {doLogin, initLogOut} from '../components/security/actions';
 
 
 export const GENERIC_ERROR = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
+export const RESET_LOADING = 'RESET_LOADING';
 export const START_LOADING = 'START_LOADING';
 export const STOP_LOADING  = 'STOP_LOADING';
 export const VALIDATE      = 'VALIDATE';
@@ -30,6 +31,7 @@ export const createAction = type => payload => ({
     payload
 });
 
+export const resetLoading = createAction(RESET_LOADING);
 export const startLoading = createAction(START_LOADING);
 export const stopLoading  = createAction(STOP_LOADING);
 

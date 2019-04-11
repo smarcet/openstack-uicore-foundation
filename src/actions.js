@@ -1,4 +1,5 @@
 import {
+    RESET_LOADING,
     START_LOADING,
     STOP_LOADING,
     VALIDATE
@@ -18,6 +19,7 @@ import {
 } from './components/security/actions';
 
 export {
+    RESET_LOADING,
     START_LOADING,
     STOP_LOADING,
     RECEIVE_COUNTRIES,

@@ -16,6 +16,7 @@ import {
     showMessage,
     showSuccessMessage,
     getCSV,
+    resetLoading,
     startLoading,
     stopLoading,
     authErrorHandler,
@@ -74,6 +75,7 @@ T.setTexts(require(`./i18n/${language}.json`));
 
 
 export {
+    resetLoading,
     startLoading,
     stopLoading,
     responseHandler,
