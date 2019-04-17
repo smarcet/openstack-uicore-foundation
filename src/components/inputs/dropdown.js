@@ -40,12 +40,12 @@ export default class Dropdown extends React.Component {
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
         let isClearable = (this.props.hasOwnProperty('clearable'));
         let isDisabled = (this.props.hasOwnProperty('disabled') && disabled == true);
-        let theValue = (value instanceof Object) ? value : this.props.options.find(opt => opt.value == value);
+        let theValue = (value instanceof Object || value == null) ? value : this.props.options.find(opt => opt.value == value);
 
         return (
             <div>
                 <Select
-                    className={className + ' ' + (has_error ? 'error' : '')}
+                    className={'dropdown ' + className + ' ' + (has_error ? 'error' : '')}
                     value={theValue}
                     onChange={this.handleChange}
                     isClearable={isClearable}
