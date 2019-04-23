@@ -46,10 +46,18 @@ export default class LanguageInput extends React.Component {
     }
 
     handleChange(value) {
+        let isMulti = (this.props.hasOwnProperty('multi'));
+        let theValue = null;
+
+        if (isMulti) {
+            theValue = value.map(v => v.id);
+        } else {
+            theValue = value.id;
+        }
 
         let ev = {target: {
                 id: this.props.id,
-                value: value,
+                value: theValue,
                 type: 'laguageinput'
             }};
 
@@ -60,12 +68,19 @@ export default class LanguageInput extends React.Component {
         let {value, onChange, id, multi, ...rest} = this.props;
         let {options} = this.state;
         let isMulti = (this.props.hasOwnProperty('multi'));
+        let theValue = null;
+
+        if (isMulti) {
+            theValue = options.filter(op => value.includes(op.id));
+        } else {
+            theValue = (value instanceof Object || value == null) ? value : options.find(opt => opt.id == value);
+        }
 
         return (
             <Select
                 onChange={this.handleChange}
                 options={options}
-                value={value}
+                value={theValue}
                 getOptionValue={option => option.id}
                 getOptionLabel={option => option.name}
                 isMulti={isMulti}

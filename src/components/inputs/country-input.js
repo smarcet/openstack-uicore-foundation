@@ -42,10 +42,18 @@ export default class CountryInput extends React.Component {
     }
 
     handleChange(value) {
+        let isMulti = (this.props.hasOwnProperty('multi'));
+        let theValue = null;
+
+        if (isMulti) {
+            theValue = value.map(v => v.value);
+        } else {
+            theValue = value.value;
+        }
 
         let ev = {target: {
                 id: this.props.id,
-                value: value,
+                value: theValue,
                 type: 'countryinput'
             }};
 
@@ -56,12 +64,19 @@ export default class CountryInput extends React.Component {
         let {value, onChange, id, multi, ...rest} = this.props;
         let {options} = this.state;
         let isMulti = (this.props.hasOwnProperty('multi'));
+        let theValue = null;
+
+        if (isMulti) {
+            theValue = options.filter(op => value.includes(op.value));
+        } else {
+            theValue = (value instanceof Object || value == null) ? value : options.find(opt => opt.value == value);
+        }
 
         return (
             <Select
                 onChange={this.handleChange}
                 options={options}
-                value={value}
+                value={theValue}
                 isMulti={isMulti}
                 {...rest}
             />

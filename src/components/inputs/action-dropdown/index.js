@@ -40,14 +40,18 @@ export default class ActionDropdown extends React.Component {
     render() {
 
         let {options, actionLabel, placeholder, ...rest} = this.props;
+        let {value} = this.state;
 
         let smallDdl = this.props.hasOwnProperty('small') ? 'small' : '';
         let smallBtn = this.props.hasOwnProperty('small') ? 'btn-group-sm' : 'normal';
 
+        let theValue = (value instanceof Object || value == null) ? value : options.find(opt => opt.value == value);
+
+
         return (
             <div className={"action-dropdown btn-group " + smallBtn}>
                 <Select
-                    value={this.state.value}
+                    value={theValue}
                     onChange={this.handleChange}
                     options={options}
                     placeholder={placeholder}

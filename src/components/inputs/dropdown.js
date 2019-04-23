@@ -40,7 +40,13 @@ export default class Dropdown extends React.Component {
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
         let isClearable = (this.props.hasOwnProperty('clearable'));
         let isDisabled = (this.props.hasOwnProperty('disabled') && disabled == true);
-        let theValue = (value instanceof Object || value == null) ? value : this.props.options.find(opt => opt.value == value);
+        let theValue = null;
+
+        if (this.props.isMulti) {
+            theValue = this.props.options.filter(op => value.includes(op.value));
+        } else {
+            theValue = (value instanceof Object || value == null) ? value : this.props.options.find(opt => opt.value == value);
+        }
 
         return (
             <div>
