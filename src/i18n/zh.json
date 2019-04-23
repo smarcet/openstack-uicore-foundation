@@ -1,0 +1,23 @@
+{
+  "errors": {
+    "user_not_authz"            : "坚持，稍等。您的用户未经授权！",
+    "session_expired"           : "坚持，稍等。你的会话已经过期了！",
+    "server_error"              : "我们的服务器出现问题，请联系管理员。"
+  },
+  "general": {
+    "select_summit"       : "选择峰会...",
+    "add"                 : "加",
+    "clear"               : "明确",
+    "remove"              : "去掉",
+    "drop_files"          : "删除图像或单击以选择要上载的文件。",
+    "search"              : "搜索",
+    "save"                : "保存",
+    "done"                : "完成！",
+    "drag_and_drop"       : "拖放以对项目进行排序。",
+    "other"               : "其他",
+    "type_something"      : "输入内容并按Tab键或输入。",
+    "are_you_sure"        : "你确定吗？",
+    "yes_delete"          : "是的，删除。",
+    "remove_warning"      : "你确定要删除这个吗？"
+  }
+}
