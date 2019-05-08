@@ -74,6 +74,7 @@ export default class CountryInput extends React.Component {
 
         return (
             <Select
+                className="dropdown"
                 onChange={this.handleChange}
                 options={options}
                 value={theValue}
