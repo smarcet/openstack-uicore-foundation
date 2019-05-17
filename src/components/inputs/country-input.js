@@ -61,10 +61,11 @@ export default class CountryInput extends React.Component {
     }
 
     render() {
-        let {value, onChange, id, multi, ...rest} = this.props;
+        let {value, onChange, id, multi, error, ...rest} = this.props;
         let {options} = this.state;
         let isMulti = (this.props.hasOwnProperty('multi'));
         let theValue = null;
+        let has_error = ( this.props.hasOwnProperty('error') && error != '' );
 
         if (isMulti) {
             theValue = options.filter(op => value.includes(op.value));
@@ -73,15 +74,19 @@ export default class CountryInput extends React.Component {
         }
 
         return (
-            <Select
-                className="dropdown"
-                onChange={this.handleChange}
-                options={options}
-                value={theValue}
-                isMulti={isMulti}
-                {...rest}
-            />
+            <div>
+                <Select
+                    className={"dropdown" + (has_error ? ' error' : '')}
+                    onChange={this.handleChange}
+                    options={options}
+                    value={theValue}
+                    isMulti={isMulti}
+                    {...rest}
+                />
+                {has_error &&
+                    <p className="error-label">{error}</p>
+                }
+            </div>
         );
-
     }
 }

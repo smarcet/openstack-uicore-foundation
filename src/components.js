@@ -13,6 +13,7 @@ import OrganizationInput from './components/inputs/organization-input'
 import CountryDropdown from './components/inputs/country-dropdown'
 import Dropdown from './components/inputs/dropdown'
 import TextEditor from './components/inputs/editor-input'
+import TextArea from './components/inputs/textarea-input'
 import EventInput from './components/inputs/event-input'
 import GroupInput from './components/inputs/group-input'
 import MemberInput from './components/inputs/member-input'
@@ -71,6 +72,7 @@ export {
     SpeakerInput,
     TagInput,
     TextEditor,
+    TextArea,
     Input,
     Panel,
     SimpleLinkList,

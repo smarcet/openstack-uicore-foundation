@@ -59,12 +59,13 @@ export default class CheckboxList extends React.Component {
 
     render() {
 
-        let {onChange, value, className, options, id, children, ...rest} = this.props;
+        let {onChange, value, className, options, id, children, error, ...rest} = this.props;
         let { otherChecked } = this.state;
 
         let inline = ( this.props.hasOwnProperty('inline') );
         let allowOther = ( this.props.hasOwnProperty('allowOther') );
         let otherValue = value.find( v => !options.map(op => op.value).includes(v) ) ;
+        let has_error = ( this.props.hasOwnProperty('error') && error != '' );
 
 
         let style, label;
@@ -85,36 +86,41 @@ export default class CheckboxList extends React.Component {
         }
 
         return (
-            <div className="checkboxes-div">
-                { options.map(op => {
-                    let checked = value.includes(op.value);
-                    return (
-                        <div className="form-check abc-checkbox" key={"radio_key_" + op.value} style={style}>
-                            <input type="checkbox" id={"cb_" + op.value} checked={checked}
-                                   onChange={this.handleChange} className="form-check-input" value={op.value} />
-                            <label className="form-check-label" htmlFor={"cb_" + op.value}>
-                                {op.label}
-                            </label>
-                        </div>
-                    )
-                })}
+            <div>
+                <div className={"checkboxes-div" + (has_error ? ' error' : '') }>
+                    { options.map(op => {
+                        let checked = value.includes(op.value);
+                        return (
+                            <div className="form-check abc-checkbox" key={"radio_key_" + op.value} style={style}>
+                                <input type="checkbox" id={"cb_" + op.value} checked={checked}
+                                       onChange={this.handleChange} className="form-check-input" value={op.value} />
+                                <label className="form-check-label" htmlFor={"cb_" + op.value}>
+                                    {op.label}
+                                </label>
+                            </div>
+                        )
+                    })}
 
-                {allowOther &&
-                <div className="form-check abc-checkbox" style={style}>
-                    <input type="checkbox" id={"cb_other" + id} checked={otherChecked}
-                           onChange={this.handleOtherCBChange} className="form-check-input" value="other" />
-                    <label className="form-check-label" htmlFor={"cb_other" + id}>
-                        {T.translate("general.other")}
-                    </label>
+                    {allowOther &&
+                    <div className="form-check abc-checkbox" style={style}>
+                        <input type="checkbox" id={"cb_other" + id} checked={otherChecked}
+                               onChange={this.handleOtherCBChange} className="form-check-input" value="other" />
+                        <label className="form-check-label" htmlFor={"cb_other" + id}>
+                            {T.translate("general.other")}
+                        </label>
+                    </div>
+                    }
+
+                    {allowOther && otherChecked &&
+                    <div style={{paddingLeft: '22px', width: '50%'}}>
+                        <input className="form-control" onChange={this.handleChange} value={otherValue} />
+                    </div>
+                    }
+
                 </div>
+                {has_error &&
+                <p className="error-label">{error}</p>
                 }
-
-                {allowOther && otherChecked &&
-                <div style={{paddingLeft: '22px', width: '50%'}}>
-                    <input className="form-control" onChange={this.handleChange} value={otherValue} />
-                </div>
-                }
-
             </div>
         );
 
