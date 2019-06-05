@@ -63,9 +63,9 @@ export const getAuthUrl = (backUrl = null, prompt = null, tokenIdHint = null) =>
 }
 
 export const getLogoutUrl = (idToken) => {
-    let baseUrl     = window.IDP_BASE_URL;
-    let url         = URI(`${baseUrl}/oauth2/end-session`);
-    let state       = createNonce(NONCE_LEN);
+    let baseUrl       = window.IDP_BASE_URL;
+    let url           = URI(`${baseUrl}/oauth2/end-session`);
+    let state         = createNonce(NONCE_LEN);
     let postLogOutUri = window.location.origin + '/auth/logout';
     // store nonce to check it later
     window.localStorage.setItem('post_logout_state', state);
@@ -94,7 +94,11 @@ export const doLogin = (backUrl = null) => {
     if(backUrl)
         console.log(`doLogin - backUrl ${backUrl} `);
     let url = getAuthUrl(backUrl);
-    window.location = url.toString();
+    let location =  window.location;
+    // check if we are on iframe
+    if(window.top)
+        location = window.top.location;
+    location.replace(url.toString());
 }
 
 export const onUserAuth = (accessToken, idToken, sessionState) => (dispatch) => {
@@ -105,7 +109,11 @@ export const onUserAuth = (accessToken, idToken, sessionState) => (dispatch) => 
 }
 
 export const initLogOut = () => {
-    window.location = getLogoutUrl(window.idToken).toString();
+    let location =  window.location;
+    // check if we are on iframe
+    if(window.top)
+        location = window.top.location;
+    location.replace(getLogoutUrl(window.idToken).toString());
 }
 
 export const doLogout = (backUrl) => (dispatch, getState) => {

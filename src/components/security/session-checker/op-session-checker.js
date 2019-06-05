@@ -13,7 +13,7 @@
 
 import React from 'react';
 import {connect} from "react-redux";
-import {doLogout, onStartSessionStateCheck, onFinishSessionStateCheck, getAuthUrl}
+import {doLogout, onStartSessionStateCheck, onFinishSessionStateCheck, getAuthUrl, initLogOut}
 from "../actions";
 import URI from "urijs"
 const CHECK_SESSION_INTERVAL = 1000 * 10;
@@ -53,15 +53,15 @@ class OPSessionChecker extends React.Component {
         // this is called bc we set the RP frame to check the session state with promp=none
         //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad");
         this.props.onFinishSessionStateCheck();
-        let resultUrl = new URI(event.target.contentDocument.URL);
+        let resultUrl = new URI(event.target.baseURI);
         // test the result Url
         //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - resultUrl "+resultUrl);
         if(resultUrl.hasQuery("error")){
             let error = resultUrl.query(true).error;
-            //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - error "+error);
-            // check session state with prompt none failed do logout
-            let backUrl = new URI(window.location);
-            this.props.doLogout(backUrl.pathname());
+            console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - error "+error);
+            // check session state with prompt none failed do logoutdebugger;
+            console.log('OPSessionChecker::rpCheckSessionStateFrameOnLoad - initiating logout');
+            initLogOut();
             return;
         }
         // no error we still logged so re init the checking
@@ -176,5 +176,5 @@ const mapStateToProps = ({ loggedUserState }) => ({
 export default connect(mapStateToProps, {
     doLogout,
     onStartSessionStateCheck,
-    onFinishSessionStateCheck,
+    onFinishSessionStateCheck
 })(OPSessionChecker)
