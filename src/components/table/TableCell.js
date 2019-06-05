@@ -2,12 +2,19 @@ import React from 'react';
 import RawHTML from '../raw-html';
 
 const TableCell = (props) => {
-
-	let value = (props.children) ? props.children.toString() : '';
+    let {children} = props;
+	let value = '';
+	if(children) {
+	    if (React.isValidElement(children)) {
+	        value = children;
+        } else {
+	        value = <RawHTML>{children.toString()}</RawHTML>
+        }
+    }
 
 	return (
 		<td {...props}>
-			<RawHTML>{value}</RawHTML>
+            {value}
 		</td>
 	);
 };

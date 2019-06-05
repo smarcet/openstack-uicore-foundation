@@ -17,6 +17,7 @@ import './simple-link-list.less';
 import AsyncSelect from 'react-select/lib/Async';
 import Table from "../table/Table";
 import T from 'i18n-react/dist/i18n-react';
+import AsyncCreatableSelect from "react-select/lib/AsyncCreatable";
 
 
 class SimpleLinkList extends React.Component {
@@ -31,6 +32,8 @@ class SimpleLinkList extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.getOptions = this.getOptions.bind(this);
         this.handleLink = this.handleLink.bind(this);
+        this.handleNew = this.handleNew.bind(this);
+        this.getNewOptionData = this.getNewOptionData.bind(this);
     }
 
     getOptions(input, callback) {
@@ -51,6 +54,14 @@ class SimpleLinkList extends React.Component {
         this.setState({value: ''});
     }
 
+    getNewOptionData(inputValue, optionLabel) {
+        return {tag: optionLabel, id:inputValue};
+    }
+
+    handleNew(value) {
+        this.props.options.onCreateTag(value, this.handleChange);
+    }
+
 
     render() {
 
@@ -58,6 +69,9 @@ class SimpleLinkList extends React.Component {
         let disabledAdd = (!this.state.value);
 
         let title = options.hasOwnProperty('title') ? options.title : 'Table';
+        let valueKey = options.hasOwnProperty('valueKey') ? options.valueKey : 'value';
+        let labelKey = options.hasOwnProperty('labelKey') ? options.labelKey : 'label';
+        let allowCreate = options.hasOwnProperty('onCreateTag');
 
         let tableOptions = {
             className: 'dataTable',
@@ -84,6 +98,9 @@ class SimpleLinkList extends React.Component {
             );
         }
 
+        const AsyncComponent = allowCreate
+            ? AsyncCreatableSelect
+            : AsyncSelect;
 
         return (
             <div className="row simple-link-list">
@@ -91,15 +108,17 @@ class SimpleLinkList extends React.Component {
                     <h4>{title}</h4>
                 </div>
                 <div className="col-md pull-right btn-group">
-                    <AsyncSelect
+                    <AsyncComponent
                         className="link-select btn-group text-left"
                         value={this.state.value}
-                        getOptionValue={option => option.valueKey}
-                        getOptionLabel={option => option.labelKey}
+                        getOptionValue={option => option[valueKey]}
+                        getOptionLabel={option => option[labelKey]}
                         onChange={this.handleChange}
                         loadOptions={this.getOptions}
+                        onCreateOption={this.handleNew}
+                        getNewOptionData={this.getNewOptionData}
                     />
-                    <button type="button" className="btn btn-default" onClick={this.handleLink} disabled={disabledAdd}>
+                    <button type="button" className="btn btn-default add-button" onClick={this.handleLink} disabled={disabledAdd}>
                         {T.translate("general.add")}
                     </button>
                 </div>
@@ -118,7 +137,7 @@ class SimpleLinkList extends React.Component {
 }
 
 SimpleLinkList.propTypes = {
-    data: PropTypes.array.isRequired,
+    values: PropTypes.array.isRequired,
     options: PropTypes.shape({
         title: PropTypes.string,
         sortCol: PropTypes.string,
@@ -127,16 +146,13 @@ SimpleLinkList.propTypes = {
         className: PropTypes.string,
         actions: PropTypes.shape({
             search: PropTypes.func.isRequired,
-            delete: PropTypes.func.isRequired,
-            add: PropTypes.func.isRequired,
+            delete: PropTypes.shape({onClick:PropTypes.func.isRequired}),
+            add: PropTypes.shape({onClick:PropTypes.func.isRequired}),
             edit: PropTypes.func,
-            custom: PropTypes.func,
+            custom: PropTypes.array,
         }).isRequired
     }).isRequired,
-    columns: PropTypes.shape({
-        columnKey: PropTypes.string.isRequired,
-        value: PropTypes.any.isRequired
-    }).isRequired
+    columns: PropTypes.array.isRequired
 }
 
 export default SimpleLinkList;

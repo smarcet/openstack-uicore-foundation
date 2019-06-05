@@ -289,6 +289,10 @@ td.rdtYear:hover {
 .simple-link-list .link-select .Select-control .Select-input {
   height: 32px;
 }
+.simple-link-list .add-button {
+  height: 38px;
+  border-color: #afafaf;
+}
 .simple-link-list :not(.panel .simple-link-list) {
   padding: 10px;
   border: 1px solid #cccccc;
@@ -1037,21 +1041,21 @@ label .was-validated .form-check-input:invalid .abc-checkbox:before, label
 .action-dropdown .action-select .Select-control .Select-input {
   height: 32px;
 }
-.action-dropdown .small .Select-control {
+.action-dropdown.small .Select-control {
   height: 30px;
 }
-.action-dropdown .small .Select-placeholder {
+.action-dropdown.small .Select-placeholder {
   line-height: 20px;
 }
-.action-dropdown .small .Select-value {
+.action-dropdown.small .Select-value {
   line-height: 26px !important;
 }
-.action-dropdown .small .Select-value-label {
+.action-dropdown.small .Select-value-label {
   line-height: 26px;
 }
-.action-dropdown .small .Select-input {
+.action-dropdown.small .Select-input {
   height: 26px;
 }
-.action-dropdown .normal .btn {
-  height: 36px;
+.action-dropdown.normal .btn {
+  height: 38px;
 }
