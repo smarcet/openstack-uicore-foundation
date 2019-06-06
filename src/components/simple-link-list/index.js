@@ -32,8 +32,10 @@ class SimpleLinkList extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.getOptions = this.getOptions.bind(this);
         this.handleLink = this.handleLink.bind(this);
+        this.filterOption = this.filterOption.bind(this);
         this.handleNew = this.handleNew.bind(this);
         this.getNewOptionData = this.getNewOptionData.bind(this);
+        this.isValidNewOption = this.isValidNewOption.bind(this);
     }
 
     getOptions(input, callback) {
@@ -58,8 +60,27 @@ class SimpleLinkList extends React.Component {
         return {tag: optionLabel, id:inputValue};
     }
 
+    isValidNewOption(inputValue, selectValue, selectOptions) {
+        let {options} = this.props;
+        let labelKey = options.hasOwnProperty('labelKey') ? options.labelKey : 'label';
+        let optionFound = selectOptions.find(op => op[labelKey] == inputValue);
+        return (!inputValue || optionFound) ? false : true;
+    }
+
     handleNew(value) {
         this.props.options.onCreateTag(value, this.handleChange);
+    }
+
+    filterOption(candidate, inputValue) {
+        let {options, values} = this.props;
+        let allowDuplicates = this.props.hasOwnProperty('allowDuplicates');
+        let labelKey = options.hasOwnProperty('labelKey') ? options.labelKey : 'label';
+
+        if (allowDuplicates) return true;
+
+        let optionFound = values.find(val => val[labelKey] === candidate.label);
+
+        return (inputValue && optionFound) ? false : true;
     }
 
 
@@ -115,8 +136,10 @@ class SimpleLinkList extends React.Component {
                         getOptionLabel={option => option[labelKey]}
                         onChange={this.handleChange}
                         loadOptions={this.getOptions}
+                        filterOption={this.filterOption}
                         onCreateOption={this.handleNew}
                         getNewOptionData={this.getNewOptionData}
+                        isValidNewOption={this.isValidNewOption}
                     />
                     <button type="button" className="btn btn-default add-button" onClick={this.handleLink} disabled={disabledAdd}>
                         {T.translate("general.add")}
