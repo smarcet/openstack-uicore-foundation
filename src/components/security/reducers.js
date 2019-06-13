@@ -13,7 +13,7 @@
 
 import {
     LOGOUT_USER, SET_LOGGED_USER, RECEIVE_USER_INFO, START_SESSION_STATE_CHECK,
-    END_SESSION_STATE_CHECK
+    END_SESSION_STATE_CHECK, CLEAR_SESSION_STATE
 } from './actions';
 
 const DEFAULT_STATE = {
@@ -37,6 +37,13 @@ export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
             window.sessionState = sessionState;
             return {...state, isLoggedUser:true, accessToken, idToken, sessionState, backUrl : null };
         }
+        case CLEAR_SESSION_STATE:
+        {
+            window.accessToken = null;
+            window.idToken = null;
+            window.sessionState = null;
+            return {...state, isLoggedUser:false, accessToken:null, idToken:null, sessionState:null, backUrl : null };
+        }
         case LOGOUT_USER : {
             window.accessToken = null;
             window.idToken = null;
@@ -48,11 +55,9 @@ export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
             return {...state, member: response};
         }
         case START_SESSION_STATE_CHECK:{
-            console.log('loggedUserReducer.START_SESSION_STATE_CHECK');
             return {...state, checkingSessionState: true };
         }
         case END_SESSION_STATE_CHECK:{
-            console.log('loggedUserReducer.END_SESSION_STATE_CHECK');
             return {...state, checkingSessionState: false };
         }
         default:

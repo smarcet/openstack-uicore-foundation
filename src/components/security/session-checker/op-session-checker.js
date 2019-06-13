@@ -58,9 +58,9 @@ class OPSessionChecker extends React.Component {
         //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - resultUrl "+resultUrl);
         if(resultUrl.hasQuery("error")){
             let error = resultUrl.query(true).error;
-            console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - error "+error);
+            //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - error "+error);
             // check session state with prompt none failed do logoutdebugger;
-            console.log('OPSessionChecker::rpCheckSessionStateFrameOnLoad - initiating logout');
+            //console.log('OPSessionChecker::rpCheckSessionStateFrameOnLoad - initiating logout');
             initLogOut();
             return;
         }

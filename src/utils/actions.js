@@ -17,7 +17,7 @@ let http = request;
 import swal from 'sweetalert2';
 import T from "i18n-react/dist/i18n-react";
 import {objectToQueryString} from './methods';
-import {doLogin, initLogOut} from '../components/security/actions';
+import {doLogin, initLogOut, CLEAR_SESSION_STATE, LOGOUT_USER} from '../components/security/actions';
 
 
 export const GENERIC_ERROR = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
@@ -54,7 +54,7 @@ const isObjectEmpty = (obj) => {
     return Object.keys(obj).length === 0 && obj.constructor === Object ;
 }
 
-export const authErrorHandler = (err, res) => (dispatch) => {
+export const authErrorHandler = (err, res) => (dispatch, state) => {
     let code = err.status;
     let msg = '';
 
@@ -71,7 +71,18 @@ export const authErrorHandler = (err, res) => (dispatch) => {
             dispatch(showMessage( error_message, initLogOut ));
             break;
         case 401:
-            doLogin(window.location.pathname);
+            let clearing_session_state = window.clearing_session_state || false;
+
+            dispatch({
+                type: CLEAR_SESSION_STATE,
+                payload: {}
+            });
+
+            if(!clearing_session_state) {
+                window.clearing_session_state = true;
+                console.log('authErrorHandler 401 - re login');
+                doLogin(window.location.pathname);
+            }
             break;
         case 404:
             msg = "";
