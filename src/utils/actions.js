@@ -119,7 +119,7 @@ export const getRequest =(
     endpoint,
     errorHandler = defaultErrorHandler,
     requestActionPayload = {}
-) => (params = {}) => dispatch => {
+) => (params = {}) => (dispatch, state) => {
 
     let url = URI(endpoint);
 
@@ -139,7 +139,7 @@ export const getRequest =(
             response: 60000,
             deadline: 60000,
         })
-        .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
+        .end(responseHandler(dispatch, state, receiveActionCreator, errorHandler, resolve, reject))
 
         schedule(key, req);
     });
@@ -152,7 +152,7 @@ export const putRequest = (
     payload,
     errorHandler = defaultErrorHandler,
     requestActionPayload = {}
-) => (params = {}) => dispatch => {
+) => (params = {}) => ( dispatch, state) => {
 
     let url = URI(endpoint);
 
@@ -167,7 +167,7 @@ export const putRequest = (
             payload = {};
         http.put(url.toString())
             .send(payload)
-            .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject))
+            .end(responseHandler(dispatch, state, receiveActionCreator, errorHandler, resolve, reject))
     });
 };
 
@@ -178,7 +178,7 @@ export const deleteRequest = (
     payload,
     errorHandler  = defaultErrorHandler,
     requestActionPayload = {}
-) => (params) => (dispatch) => {
+) => (params) => (dispatch, state) => {
     let url = URI(endpoint);
 
     if(!isObjectEmpty(params))
@@ -193,7 +193,7 @@ export const deleteRequest = (
 
         http.delete(url)
             .send(payload)
-            .end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject));
+            .end(responseHandler(dispatch, state, receiveActionCreator, errorHandler, resolve, reject));
     });
 };
 
@@ -204,7 +204,7 @@ export const postRequest = (
         payload,
         errorHandler = defaultErrorHandler,
         requestActionPayload = {}
-) => (params = {}) => dispatch => {
+) => (params = {}) => (dispatch, state) => {
 
     let url = URI(endpoint);
 
@@ -223,7 +223,7 @@ export const postRequest = (
         else // to be a simple CORS request
             request.set('Content-Type', 'text/plain');
 
-        request.end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject));
+        request.end(responseHandler(dispatch, state, receiveActionCreator, errorHandler, resolve, reject));
     });
 };
 
@@ -235,7 +235,7 @@ export const postFile = (
     fileMetadata = {},
     errorHandler = defaultErrorHandler,
     requestActionPayload = {}
-) => (params = {}) => dispatch => {
+) => (params = {}) => (dispatch, state) => {
 
     let url = URI(endpoint);
 
@@ -257,7 +257,7 @@ export const postFile = (
             });
         }
 
-        req.end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject));
+        req.end(responseHandler(dispatch, state, receiveActionCreator, errorHandler, resolve, reject));
     });
 };
 
@@ -269,7 +269,7 @@ export const putFile = (
     fileMetadata = {},
     errorHandler = defaultErrorHandler,
     requestActionPayload = {}
-) => (params = {}) => dispatch => {
+) => (params = {}) => (dispatch, state) => {
 
     let url = URI(endpoint);
 
@@ -294,7 +294,7 @@ export const putFile = (
             });
         }
 
-        req.end(responseHandler(dispatch, receiveActionCreator, errorHandler, resolve, reject));
+        req.end(responseHandler(dispatch, state, receiveActionCreator, errorHandler, resolve, reject));
     });
 };
 
@@ -309,13 +309,13 @@ export const defaultErrorHandler = (err, res) => (dispatch) => {
 }
 
 const responseHandler =
-    ( dispatch, receiveActionCreator, errorHandler, resolve, reject ) =>
+    ( dispatch, state, receiveActionCreator, errorHandler, resolve, reject ) =>
     (err, res) => {
     if (err || !res.ok) {
         if(errorHandler) {
-            errorHandler(err, res)(dispatch);
+            errorHandler(err, res)(dispatch, state);
         }
-        return reject({ err, res, dispatch })
+        return reject({ err, res, dispatch, state })
     }
     let json = res.body;
     if(typeof receiveActionCreator === 'function') {
