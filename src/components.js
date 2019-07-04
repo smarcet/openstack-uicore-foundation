@@ -35,6 +35,7 @@ import LanguageInput from './components/inputs/language-input'
 import FreeMultiTextInput from "./components/inputs/free-multi-text-input";
 import OPSessionChecker from "./components/security/session-checker/op-session-checker";
 import AbstractAuthorizationCallbackRoute from  "./components/security/abstract-auth-callback-route";
+import Exclusive from "./components/exclusive-wrapper";
 
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
 
@@ -87,5 +88,6 @@ export {
     ActionDropdown,
     FreeMultiTextInput,
     OPSessionChecker,
-    AbstractAuthorizationCallbackRoute
+    AbstractAuthorizationCallbackRoute,
+    Exclusive
 };

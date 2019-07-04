@@ -54,10 +54,6 @@ export const getAuthUrl = (backUrl = null, prompt = null, tokenIdHint = null) =>
         query['prompt'] = prompt;
     }
 
-    if(prompt){
-        query['prompt'] = prompt;
-    }
-
     url = url.query(query);
 
     return url;
