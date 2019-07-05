@@ -15,13 +15,15 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import T from 'i18n-react/dist/i18n-react';
 import './upload.less';
+import file_icon from './file.png';
+import pdf_icon from './pdf.png';
 
 export default class UploadInput extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            show_veil: false
+            show_remove: false
         }
     }
 
@@ -30,15 +32,27 @@ export default class UploadInput extends React.Component {
     }
 
     showVeil() {
-        this.setState({show_veil:true});
+        this.setState({show_remove:true});
     }
 
     hideVeil() {
-        this.setState({show_veil:false});
+        this.setState({show_remove:false});
     }
 
     render() {
-        let {value, handleRemove, handleUpload, ...rest} = this.props;
+        let {value, file, handleRemove, handleUpload, ...rest} = this.props;
+        let icon = '';
+        let name = '';
+
+        if (value) {
+            icon = (value.endsWith('jpg') || value.endsWith('png')) ? value : (value.endsWith('pdf') ? pdf_icon: file_icon);
+            name = value.slice(value.lastIndexOf("/") + 1);
+        }
+
+        if (file && file.name) {
+            name = file.name;
+            icon = (name.endsWith('jpg') || name.endsWith('png')) ? value : (name.endsWith('pdf') ? pdf_icon: file_icon);
+        }
 
         return (
             <div className="file-upload">
@@ -53,11 +67,11 @@ export default class UploadInput extends React.Component {
                     <div className="selected-files">
                         {value &&
                         <div className="file-box" onMouseEnter={this.showVeil.bind(this)} onMouseLeave={this.hideVeil.bind(this)}>
-                            <img src={value} />
-                            <a href={value} target="_blank">link</a>
-                            {this.state.show_veil &&
-                            <div className="veil">
-                                <p onClick={handleRemove}>{T.translate("general.remove")}</p>
+                            <img src={icon} />
+                            <a href={value} target="_blank">{name}</a>
+                            {this.state.show_remove &&
+                            <div className="remove" onClick={handleRemove}>
+                                <i className="fa fa-times"></i>
                             </div>
                             }
                         </div>

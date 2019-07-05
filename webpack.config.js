@@ -86,7 +86,7 @@ module.exports = {
             },
             {
                 test: /\.jpg|\.png|\.gif$/,
-                use: "file-loader?name=images/[name].[ext]"
+                use: "url-loader?name=images/[name].[ext]"
             },
             {
                 test: /\.svg/,
