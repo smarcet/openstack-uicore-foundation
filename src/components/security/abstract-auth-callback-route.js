@@ -11,7 +11,6 @@
  * limitations under the License.
  **/
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
 import URI from "urijs"
 import IdTokenVerifier from 'idtoken-verifier'
 
@@ -92,14 +91,19 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
         }
     }
 
+    /**
+     * Abstract
+     * @param error
+     * @private
+     */
     _callback(backUrl){}
 
+    /**
+     * Abstract
+     * @param error
+     * @private
+     */
     _redirect2Error(error){
-        return (
-            <Route render={ props => {
-                return <Redirect to={`/error?error=${error}`} />
-            }} />
-        )
     }
 
     render() {

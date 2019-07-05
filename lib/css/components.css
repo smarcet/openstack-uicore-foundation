@@ -953,11 +953,8 @@ table.editableTable .actions a .fa:hover {
   margin-left: -20px;
   border-radius: 50%;
   background-color: #495057;
-  -webkit-transform: scale(0, 0);
-          transform: scale(0, 0);
-  transition: -webkit-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
-  transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
-  transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33), -webkit-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33); }
+  transform: scale(0, 0);
+  transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33); }
 .abc-radio input[type="radio"] {
   position: static;
   margin-left: 0;
@@ -969,8 +966,7 @@ table.editableTable .actions a .fa:hover {
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px; }
 .abc-radio input[type="radio"]:checked + label::after {
-  -webkit-transform: scale(1, 1);
-          transform: scale(1, 1); }
+  transform: scale(1, 1); }
 .abc-radio input[type="radio"]:disabled + label {
   opacity: 0.65; }
 .abc-radio input[type="radio"]:disabled + label::before {
