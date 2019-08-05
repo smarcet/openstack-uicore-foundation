@@ -26,6 +26,7 @@ export default class DateTimePicker extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.isValidDate = this.isValidDate.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -53,19 +54,18 @@ export default class DateTimePicker extends React.Component {
 
     }
 
-    isValidDate(compareDateAfter, compareDateBefore, selectedDate, currentDate) {
-        let { timezone } = this.props;
-        currentDate = (typeof currentDate == 'string') ? moment(currentDate) : currentDate;
-        if (compareDateAfter == '<')
-            return (selectedDate < moment(compareDateBefore));
-        else if(compareDateAfter == '>')
-            return (selectedDate > moment(compareDateBefore));
-        else {
-            selectedDate   = moment.tz(selectedDate.valueOf(), timezone);
-            let beforeDate = moment.tz(compareDateBefore * 1000, timezone);
-            let afterDate  = moment.tz(compareDateAfter * 1000, timezone);
+    isValidDate(currentDate, selectedDate) {
+        let { timezone, validation } = this.props;
+        let {after, before} = validation;
 
-            return ( selectedDate.isAfter(afterDate) || selectedDate.isSame(afterDate) )  && ( selectedDate.isBefore(beforeDate) || selectedDate.isSame(beforeDate));
+        if (after == '<')
+            return (currentDate.isBefore(moment.tz(before * 1000, timezone)));
+        else if(after == '>')
+            return (currentDate.isAfter(moment.tz(before * 1000, timezone)));
+        else {
+            let afterDate = moment.tz(after * 1000, timezone).subtract(1, 'day');
+            let beforeDate = moment.tz(before * 1000, timezone);
+            return currentDate.isAfter(afterDate) && currentDate.isBefore(beforeDate);
         }
     }
 
@@ -80,7 +80,7 @@ export default class DateTimePicker extends React.Component {
             <div>
                 {validate ? (
                     <Datetime
-                        isValidDate={this.isValidDate.bind(this, this.props.validation.after, this.props.validation.before)}
+                        isValidDate={this.isValidDate}
                         onChange={this.handleChange}
                         dateFormat={format.date}
                         timeFormat={format.time}
