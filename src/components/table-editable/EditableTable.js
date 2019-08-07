@@ -97,7 +97,7 @@ export default class EditableTable extends React.Component {
     deleteClick(id) {
         let onDelete = this.props.options.actions.delete.onClick;
 
-        swal({
+        Swal.fire({
             title: T.translate("general.are_you_sure"),
             text: T.translate("general.remove_warning"),
             type: "warning",
@@ -108,7 +108,7 @@ export default class EditableTable extends React.Component {
             if (result.value) {
                 onDelete(id);
             }
-        }).catch(swal.noop);
+        });
     }
 
     editRow(id, ev) {

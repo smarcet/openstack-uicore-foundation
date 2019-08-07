@@ -14,7 +14,7 @@
 import request from 'superagent';
 import URI from "urijs";
 let http = request;
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 import T from "i18n-react/dist/i18n-react";
 import {objectToQueryString} from './methods';
 import {doLogin, initLogOut, CLEAR_SESSION_STATE, LOGOUT_USER} from '../components/security/actions';
@@ -91,7 +91,7 @@ export const authErrorHandler = (err, res) => (dispatch, state) => {
             else if (err.response.error && err.response.error.message) msg = err.response.error.message;
             else msg = err.message;
 
-            swal("Not Found", msg, "warning");
+            Swal.fire("Not Found", msg, "warning");
 
             break;
         case 412:
@@ -102,14 +102,14 @@ export const authErrorHandler = (err, res) => (dispatch, state) => {
 
                 msg += value + '<br>';
             }
-            swal("Validation error", msg, "warning");
+            Swal.fire("Validation error", msg, "warning");
             dispatch({
                 type: VALIDATE,
                 payload: {errors: err.response.body.errors}
             });
             break;
         default:
-            swal("ERROR", T.translate("errors.server_error"), "error");
+            Swal.fire("ERROR", T.translate("errors.server_error"), "error");
     }
 }
 
@@ -305,7 +305,7 @@ export const defaultErrorHandler = (err, res) => (dispatch) => {
         if(body.hasOwnProperty('message'))
             text = body.message;
     }
-    swal(res.statusText, text, "error");
+    Swal.fire(res.statusText, text, "error");
 }
 
 const responseHandler =
@@ -333,15 +333,15 @@ export const fetchErrorHandler = (response) => {
 
     switch (code) {
         case 403:
-            swal("ERROR", T.translate("errors.user_not_authz"), "warning");
+            Swal.fire("ERROR", T.translate("errors.user_not_authz"), "warning");
             break;
         case 401:
-            swal("ERROR", T.translate("errors.session_expired"), "error");
+            Swal.fire("ERROR", T.translate("errors.session_expired"), "error");
             break;
         case 412:
-            swal("ERROR", msg, "warning");
+            Swal.fire("ERROR", msg, "warning");
         case 500:
-            swal("ERROR", T.translate("errors.server_error"), "error");
+            Swal.fire("ERROR", T.translate("errors.server_error"), "error");
     }
 }
 
@@ -356,7 +356,7 @@ export const fetchResponseHandler = (response) => {
 export const showMessage = (settings, callback = {}) => (dispatch) => {
     dispatch(stopLoading());
 
-    swal(settings).then((result) => {
+    Swal.fire(settings).then((result) => {
         if (result.value && typeof callback === 'function') {
             callback();
         }
@@ -365,7 +365,7 @@ export const showMessage = (settings, callback = {}) => (dispatch) => {
 
 export const showSuccessMessage = (html) => (dispatch) => {
     dispatch(stopLoading());
-    swal({
+    Swal.fire({
         title: T.translate("general.done"),
         html: html,
         type: 'success'
