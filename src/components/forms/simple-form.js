@@ -51,6 +51,10 @@ class SimpleForm extends React.Component {
         let errors = {...this.state.errors};
         let {value, id} = ev.target;
 
+        if (ev.target.type == 'checkbox') {
+            value = ev.target.checked;
+        }
+
         errors[id] = '';
         entity[id] = value;
         this.setState({entity: entity, errors: errors});
@@ -103,6 +107,21 @@ class SimpleForm extends React.Component {
                                 onChange={this.handleChange}
                                 className="form-control"
                             />
+                        </div>
+                    </div>
+                );
+            break;
+            case 'checkbox':
+                return (
+                    <div key={"field_"+field.name} className="row form-group">
+                        <div className="col-md-6">
+                            <div className="form-check abc-checkbox">
+                                <input type="checkbox" id={field.name} checked={entity[field.name]}
+                                       onChange={this.handleChange} className="form-check-input" />
+                                <label className="form-check-label" htmlFor={field.name}>
+                                    {field.label}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 );
