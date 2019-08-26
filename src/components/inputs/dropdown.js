@@ -24,12 +24,18 @@ export default class Dropdown extends React.Component {
 
     handleChange(selection) {
 
-        let value = selection ? selection.value : null;
+        let value = null;
+        if (this.props.isMulti) {
+            value = selection ? selection.map(val => val.value) : null;
+        } else {
+            value = selection.value || null;
+        }
+
         let ev = {target: {
-            id: this.props.id,
-            value: value,
-            type: 'dropdown'
-        }};
+                id: this.props.id,
+                value: value,
+                type: 'dropdown'
+            }};
 
         this.props.onChange(ev);
     }
@@ -48,6 +54,8 @@ export default class Dropdown extends React.Component {
             theValue = (value instanceof Object || value == null) ? value : this.props.options.find(opt => opt.value == value);
         }
 
+        const selectStyles = { menu: styles => ({ ...styles, zIndex: 999 }) };
+
         return (
             <div>
                 <Select
@@ -56,6 +64,7 @@ export default class Dropdown extends React.Component {
                     onChange={this.handleChange}
                     isClearable={isClearable}
                     isDisabled={isDisabled}
+                    styles={selectStyles}
                     {...rest}
                 />
                 {has_error &&

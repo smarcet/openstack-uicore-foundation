@@ -3,7 +3,7 @@ import EditableTableHeading from './EditableTableHeading';
 import EditableTableCell from './EditableTableCell';
 import EditableActionsTableCell from './EditableActionsTableCell';
 import EditableTableRow from './EditableTableRow';
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import T from "i18n-react/dist/i18n-react";
 import './editable-table.css';
 
