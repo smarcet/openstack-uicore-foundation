@@ -12,6 +12,7 @@
  **/
 
 import React from 'react';
+import RawHTML from '../raw-html';
 
 export default class RadioList extends React.Component {
 
@@ -45,15 +46,15 @@ export default class RadioList extends React.Component {
     getLabel(option, inline) {
         if (inline) {
             return (
-                <label className="form-check-label" htmlFor={"radio_" + option.value} style={{float: 'left'}}>
+                <label className="form-check-label" htmlFor={"radio_" + option.value} style={{display: 'inline-block'}}>
                     {option.label}
                 </label>
             );
         } else {
             return (
-                <label className="form-check-label" htmlFor={"radio_" + option.value} style={{float: 'left'}}>
+                <label className="form-check-label" htmlFor={"radio_" + option.value} style={{display: 'inline-block'}}>
                     <h4 style={{marginTop: '0px'}}>{option.label}</h4>
-                    <p>{option.description}</p>
+                    <RawHTML>{option.description}</RawHTML>
                 </label>
             );
         }

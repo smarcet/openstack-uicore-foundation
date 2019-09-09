@@ -20,8 +20,7 @@ const callDelay = 500; //miliseconds
 export const queryMembers = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
-    input       = encodeURIComponent(input);
-    let filters = `first_name=@${input},last_name=@${input},email=@${input}`;
+    let filters = encodeURIComponent(`first_name=@${input},last_name=@${input},email=@${input}`);
     let expand = `tickets,rsvp,schedule_summit_events,all_affiliations`
 
     fetch(`${window.API_BASE_URL}/api/v1/members?filter=${filters}&expand=${expand}&access_token=${accessToken}`)
@@ -39,7 +38,7 @@ export const queryMembers = _.debounce((input, callback) => {
 export const querySpeakers = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
-    let filters = `first_name=@${input},last_name=@${input},email=@${input}`;
+    let filters = encodeURIComponent(`first_name=@${input},last_name=@${input},email=@${input}`);
     let apiUrl = `${window.API_BASE_URL}/api/v1`;
 
     if (summitId) {
@@ -64,11 +63,12 @@ export const queryTags = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
     let apiUrl = `${window.API_BASE_URL}/api/v1`;
+    let filter = encodeURIComponent(`tag=@${input}`);
 
     if (summitId) {
-        apiUrl += `/summits/${summitId}/track-tag-groups/all/allowed-tags?filter=tag=@${input}&expand=tag,track_tag_group`;
+        apiUrl += `/summits/${summitId}/track-tag-groups/all/allowed-tags?filter=${filter}&expand=tag,track_tag_group`;
     } else {
-        apiUrl += `/tags?filter=tag=@${input}`;
+        apiUrl += `/tags?filter=${filter}`;
     }
 
     apiUrl += `&order=tag&page=1&per_page=50&access_token=${accessToken}`;
@@ -92,8 +92,9 @@ export const queryTags = _.debounce((summitId, input, callback) => {
 export const queryTracks = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
+    let filter = encodeURIComponent(`name=@${input}`);
 
-    fetch(`${window.API_BASE_URL}/api/v1/summits/${summitId}/tracks?filter=name=@${input}&order=name&access_token=${accessToken}`)
+    fetch(`${window.API_BASE_URL}/api/v1/summits/${summitId}/tracks?filter=${filter}&order=name&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
@@ -108,8 +109,9 @@ export const queryTracks = _.debounce((summitId, input, callback) => {
 export const queryTrackGroups = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
+    let filter = encodeURIComponent(`name=@${input}`);
 
-    fetch(`${window.API_BASE_URL}/api/v1/summits/${summitId}/track-groups?filter=name=@${input}&order=name&access_token=${accessToken}`)
+    fetch(`${window.API_BASE_URL}/api/v1/summits/${summitId}/track-groups?filter=${filter}&order=name&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
@@ -125,8 +127,9 @@ export const queryEvents = _.debounce((summitId, input, onlyPublished = false, c
 
     let accessToken = window.accessToken;
     let baseUrl = `${window.API_BASE_URL}/api/v1/summits/${summitId}/events` + (onlyPublished ? '/published' : '');
+    let filter = encodeURIComponent(`title=@${input}`);
 
-    fetch(`${baseUrl}?filter=title=@${input}&order=title&access_token=${accessToken}`)
+    fetch(`${baseUrl}?filter=${filter}&order=title&access_token=${accessToken}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
@@ -141,7 +144,7 @@ export const queryEvents = _.debounce((summitId, input, onlyPublished = false, c
 export const queryGroups = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
-    let filters = `title=@${input},code=@${input}`;
+    let filters = encodeURIComponent(`title=@${input},code=@${input}`);
 
     fetch(`${window.API_BASE_URL}/api/v1/groups?filter=${filters}&access_token=${accessToken}`)
         .then(fetchResponseHandler)
@@ -158,7 +161,7 @@ export const queryGroups = _.debounce((input, callback) => {
 export const queryCompanies = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
-    let filters = `name=@${input}`;
+    let filters = encodeURIComponent(`name=@${input}`);
 
     fetch(`${window.API_BASE_URL}/api/v1/companies?filter=${filters}&access_token=${accessToken}`)
         .then(fetchResponseHandler)
@@ -175,7 +178,7 @@ export const queryCompanies = _.debounce((input, callback) => {
 export const queryOrganizations = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
-    let filters = `name=@${input}`;
+    let filters = encodeURIComponent(`name=@${input}`);
 
     fetch(`${window.API_BASE_URL}/api/v1/organizations?filter=${filters}&access_token=${accessToken}`)
         .then(fetchResponseHandler)
