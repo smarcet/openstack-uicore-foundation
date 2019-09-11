@@ -75,9 +75,7 @@ export default class EditableTable extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.data.length !== this.state.rows.length) {
-            this.setState({ rows: nextProps.data });
-        }
+        this.setState({ rows: nextProps.data });
     }
 
     saveRow(id, ev) {

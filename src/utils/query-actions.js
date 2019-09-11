@@ -38,7 +38,7 @@ export const queryMembers = _.debounce((input, callback) => {
 export const querySpeakers = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
-    let filters = encodeURIComponent(`first_name=@${input},last_name=@${input},email=@${input}`);
+    let filters = encodeURIComponent(`full_name=@${input},first_name=@${input},last_name=@${input},email=@${input}`);
     let apiUrl = `${window.API_BASE_URL}/api/v1`;
 
     if (summitId) {
