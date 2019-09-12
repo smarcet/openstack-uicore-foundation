@@ -20,7 +20,7 @@ const callDelay = 500; //miliseconds
 export const queryMembers = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
-    let filters = encodeURIComponent(`first_name=@${input},last_name=@${input},email=@${input}`);
+    let filters = encodeURIComponent(`full_name=@${input},first_name=@${input},last_name=@${input},email=@${input}`);
     let expand = `tickets,rsvp,schedule_summit_events,all_affiliations`
 
     fetch(`${window.API_BASE_URL}/api/v1/members?filter=${filters}&expand=${expand}&access_token=${accessToken}`)
