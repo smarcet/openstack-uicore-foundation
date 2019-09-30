@@ -39,7 +39,10 @@ class SimpleLinkList extends React.Component {
     }
 
     getOptions(input, callback) {
-        if (!input) {
+        let {options} = this.props;
+        let defaultOptions = options.hasOwnProperty('defaultOptions') ? options.defaultOptions : undefined;
+
+        if (!input && !defaultOptions) {
             return Promise.resolve({ options: [] });
         }
 
@@ -93,6 +96,7 @@ class SimpleLinkList extends React.Component {
         let valueKey = options.hasOwnProperty('valueKey') ? options.valueKey : 'value';
         let labelKey = options.hasOwnProperty('labelKey') ? options.labelKey : 'label';
         let allowCreate = options.hasOwnProperty('onCreateTag');
+        let defaultOptions = options.hasOwnProperty('defaultOptions') ? options.defaultOptions : undefined;
 
         let tableOptions = {
             className: 'dataTable',
@@ -119,9 +123,36 @@ class SimpleLinkList extends React.Component {
             );
         }
 
-        const AsyncComponent = allowCreate
-            ? AsyncCreatableSelect
-            : AsyncSelect;
+
+        let AsyncComponent = null;
+
+        if (allowCreate) {
+            AsyncComponent =
+                <AsyncCreatableSelect
+                    className="link-select btn-group text-left"
+                    value={this.state.value}
+                    getOptionValue={option => option[valueKey]}
+                    getOptionLabel={option => option[labelKey]}
+                    onChange={this.handleChange}
+                    loadOptions={this.getOptions}
+                    filterOption={this.filterOption}
+                    onCreateOption={this.handleNew}
+                    getNewOptionData={this.getNewOptionData}
+                    isValidNewOption={this.isValidNewOption}
+                />;
+        } else {
+            AsyncComponent =
+                <AsyncSelect
+                    className="link-select btn-group text-left"
+                    value={this.state.value}
+                    getOptionValue={option => option[valueKey]}
+                    getOptionLabel={option => option[labelKey]}
+                    onChange={this.handleChange}
+                    loadOptions={this.getOptions}
+                    filterOption={this.filterOption}
+                    defaultOptions={defaultOptions}
+                />;
+        }
 
         return (
             <div className="row simple-link-list">
@@ -129,18 +160,7 @@ class SimpleLinkList extends React.Component {
                     <h4>{title}</h4>
                 </div>
                 <div className="col-md pull-right btn-group">
-                    <AsyncComponent
-                        className="link-select btn-group text-left"
-                        value={this.state.value}
-                        getOptionValue={option => option[valueKey]}
-                        getOptionLabel={option => option[labelKey]}
-                        onChange={this.handleChange}
-                        loadOptions={this.getOptions}
-                        filterOption={this.filterOption}
-                        onCreateOption={this.handleNew}
-                        getNewOptionData={this.getNewOptionData}
-                        isValidNewOption={this.isValidNewOption}
-                    />
+                    {AsyncComponent}
                     <button type="button" className="btn btn-default add-button" onClick={this.handleLink} disabled={disabledAdd}>
                         {T.translate("general.add")}
                     </button>
