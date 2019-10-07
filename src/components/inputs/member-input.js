@@ -67,6 +67,7 @@ export default class MemberInput extends React.Component {
                     getOptionValue={op => op.id}
                     getOptionLabel={op => (`${op.first_name} ${op.last_name} (${op.id})`)}
                     isMulti={isMulti}
+                    {...rest}
                 />
                 {has_error &&
                 <p className="error-label">{error}</p>
