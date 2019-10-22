@@ -12,8 +12,8 @@
  **/
 
 import React from 'react';
-import AsyncSelect from 'react-select/async';
-import { components } from 'react-select'
+import AsyncSelect from 'react-select/lib/Async';
+import { components } from 'react-select/lib/components'
 import { querySpeakers } from '../../utils/query-actions';
 
 export default class SpeakerInput extends React.Component {

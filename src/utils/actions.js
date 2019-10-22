@@ -73,7 +73,7 @@ export const authErrorHandler = (err, res) => (dispatch, state) => {
             dispatch(showMessage( error_message, initLogOut ));
             break;
         case 401:
-            let currentLocation = window.location;
+            let currentLocation = window.location.pathname;
             let clearing_session_state = window.clearing_session_state || false;
 
             dispatch({
@@ -84,9 +84,7 @@ export const authErrorHandler = (err, res) => (dispatch, state) => {
             if(!clearing_session_state) {
                 window.clearing_session_state = true;
                 console.log('authErrorHandler 401 - re login');
-                console.log(currentLocation);
-
-                // doLogin(window.location.pathname);
+                doLogin(currentLocation);
             }
             break;
         case 404:

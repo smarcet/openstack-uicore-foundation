@@ -13,7 +13,7 @@
 
 import React from 'react';
 import './summit-dropdown.less';
-import Select from 'react-select';
+import Select from 'react-select/lib/Select';
 import T from 'i18n-react/dist/i18n-react';
 
 export default class SummitDropdown extends React.Component {

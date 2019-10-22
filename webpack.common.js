@@ -18,7 +18,7 @@ module.exports = {
     node: {fs: 'empty'},
     plugins: [
         new MiniCssExtractPlugin({
-            filename: '[name].css',
+            filename: 'css/[name].css',
         }),
     ],
     module: {
@@ -77,39 +77,14 @@ module.exports = {
         ]
     },
     externals: [
-        "awesome-bootstrap-checkbox",
-        "awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css",
         "font-awesome",
-        "moment",
-        "moment-timezone",
         "react",
         "prop-types",
+        "sweetalert2",
         "react-bootstrap",
-        "react-datetime",
-        "react-dnd",
-        "react-dnd-html5-backend",
-        "react-dom",
-        "react-dropzone",
-        "react-google-maps",
-        "react-google-maps/lib/components/addons/MarkerClusterer",
-        "react-hot-loader",
         "react-redux",
-        "react-router",
-        "react-router-dom",
-        "react-rte-ref-fix",
-        "react-scroll",
-        "react-select",
-        "react-select/creatable",
-        "react-select/async",
-        "react-select/async-creatable",
-        "react-star-ratings",
-        "react-tooltip",
         "redux",
         "redux-persist",
-        "redux-thunk",
-        "sweetalert2",
-        "urijs",
-        "url-loader",
-        "validator"
+        "redux-thunk"
     ]
 };

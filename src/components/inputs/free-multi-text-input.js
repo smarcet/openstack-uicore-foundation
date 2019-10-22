@@ -1,5 +1,5 @@
 import React from 'react';
-import CreatableSelect from 'react-select/creatable';
+import CreatableSelect from 'react-select/lib/Creatable';
 import T from 'i18n-react/dist/i18n-react';
 
 

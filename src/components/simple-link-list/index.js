@@ -14,10 +14,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './simple-link-list.less';
-import AsyncSelect from 'react-select/async';
+import AsyncSelect from 'react-select/lib/Async';
 import Table from "../table/Table";
 import T from 'i18n-react/dist/i18n-react';
-import AsyncCreatableSelect from "react-select/async-creatable";
+import AsyncCreatableSelect from "react-select/lib/AsyncCreatable";
 
 
 class SimpleLinkList extends React.Component {

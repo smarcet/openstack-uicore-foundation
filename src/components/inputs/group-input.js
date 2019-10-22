@@ -12,7 +12,7 @@
  **/
 
 import React from 'react';
-import AsyncSelect from 'react-select/async';
+import AsyncSelect from 'react-select/lib/Async';
 import {queryGroups} from '../../utils/query-actions';
 
 export default class GroupInput extends React.Component {
