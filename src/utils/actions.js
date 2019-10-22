@@ -20,11 +20,13 @@ import {objectToQueryString} from './methods';
 import {doLogin, initLogOut, CLEAR_SESSION_STATE, LOGOUT_USER} from '../components/security/actions';
 
 
-export const GENERIC_ERROR = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
-export const RESET_LOADING = 'RESET_LOADING';
-export const START_LOADING = 'START_LOADING';
-export const STOP_LOADING  = 'STOP_LOADING';
-export const VALIDATE      = 'VALIDATE';
+export const GENERIC_ERROR  = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
+export const RESET_LOADING  = 'RESET_LOADING';
+export const START_LOADING  = 'START_LOADING';
+export const STOP_LOADING   = 'STOP_LOADING';
+export const VALIDATE       = 'VALIDATE';
+export const CLEAR_MESSAGE  = 'CLEAR_MESSAGE';
+export const SHOW_MESSAGE   = 'SHOW_MESSAGE';
 
 export const createAction = type => payload => ({
     type,
@@ -71,6 +73,7 @@ export const authErrorHandler = (err, res) => (dispatch, state) => {
             dispatch(showMessage( error_message, initLogOut ));
             break;
         case 401:
+            let currentLocation = window.location;
             let clearing_session_state = window.clearing_session_state || false;
 
             dispatch({
@@ -81,7 +84,9 @@ export const authErrorHandler = (err, res) => (dispatch, state) => {
             if(!clearing_session_state) {
                 window.clearing_session_state = true;
                 console.log('authErrorHandler 401 - re login');
-                doLogin(window.location.pathname);
+                console.log(currentLocation);
+
+                // doLogin(window.location.pathname);
             }
             break;
         case 404:
@@ -308,7 +313,7 @@ export const defaultErrorHandler = (err, res) => (dispatch) => {
     Swal.fire(res.statusText, text, "error");
 }
 
-const responseHandler =
+export const responseHandler =
     ( dispatch, state, receiveActionCreator, errorHandler, resolve, reject ) =>
     (err, res) => {
     if (err || !res.ok) {

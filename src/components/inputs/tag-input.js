@@ -12,7 +12,7 @@
  **/
 
 import React from 'react';
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async';
 import {queryTags} from '../../utils/query-actions';
 
 export default class TagInput extends React.Component {

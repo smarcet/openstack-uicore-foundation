@@ -12,8 +12,8 @@
  **/
 
 import React from 'react';
-import AsyncSelect from 'react-select/lib/Async';
-import AsyncCreatableSelect from 'react-select/lib/AsyncCreatable';
+import AsyncSelect from 'react-select/async';
+import AsyncCreatableSelect from 'react-select/async-creatable';
 import {queryOrganizations} from '../../utils/query-actions';
 
 export default class OrganizationInput extends React.Component {

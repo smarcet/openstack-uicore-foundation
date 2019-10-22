@@ -12,7 +12,7 @@
  **/
 
 import React from 'react';
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async';
 import {queryCompanies} from '../../utils/query-actions';
 
 export default class CompanyInput extends React.Component {
