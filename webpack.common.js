@@ -21,6 +21,19 @@ module.exports = {
             filename: 'css/[name].css',
         }),
     ],
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /node_modules/,
+                    chunks: "initial",
+                    name: "vendor",
+                    priority: 10,
+                    enforce: true
+                }
+            }
+        }
+    },
     module: {
         rules: [
             {
@@ -77,10 +90,8 @@ module.exports = {
         ]
     },
     externals: [
-        "font-awesome",
         "react",
         "prop-types",
-        "sweetalert2",
         "react-bootstrap",
         "react-redux",
         "redux",
