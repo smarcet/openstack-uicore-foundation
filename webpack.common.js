@@ -26,7 +26,7 @@ module.exports = {
             cacheGroups: {
                 vendor: {
                     test: /node_modules/,
-                    chunks: "initial",
+                    chunks: "async",
                     name: "vendor",
                     priority: 10,
                     enforce: true
