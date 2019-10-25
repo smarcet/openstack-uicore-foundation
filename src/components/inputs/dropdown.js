@@ -12,7 +12,7 @@
  **/
 
 import React from 'react';
-import Select from 'react-select/lib/Select';
+import Select from 'react-select';
 
 export default class Dropdown extends React.Component {
 
