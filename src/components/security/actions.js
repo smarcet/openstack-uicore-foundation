@@ -12,8 +12,7 @@
  **/
 
 import T from "i18n-react/dist/i18n-react";
-import { createAction, getRequest, startLoading, stopLoading, showMessage, authErrorHandler}
-from "../../utils/actions";
+import { createAction, getRequest, startLoading, stopLoading, showMessage, authErrorHandler} from "../../utils/actions";
 import URI from "urijs";
 
 export const SET_LOGGED_USER           = 'SET_LOGGED_USER';

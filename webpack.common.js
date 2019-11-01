@@ -1,5 +1,6 @@
 const MiniCssExtractPlugin      = require("mini-css-extract-plugin");
 const path                      = require('path');
+const nodeExternals             = require('webpack-node-externals');
 
 module.exports = {
     entry: {
@@ -89,13 +90,6 @@ module.exports = {
             }
         ]
     },
-    externals: [
-        "react",
-        "prop-types",
-        "react-bootstrap",
-        "react-redux",
-        "redux",
-        "redux-persist",
-        "redux-thunk"
-    ]
+    target: 'node',
+    externals: [nodeExternals()]
 };
