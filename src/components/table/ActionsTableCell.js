@@ -6,6 +6,7 @@ export default class ActionsTableCell extends React.Component {
         super(props);
 
         this.handleAction = this.handleAction.bind(this);
+        this.shouldDisplayAction = this.shouldDisplayAction.bind(this);
 
     }
 
@@ -35,8 +36,8 @@ export default class ActionsTableCell extends React.Component {
                         <i className="fa fa-trash-o delete-icon"></i>
                     </a>
                 }
-                {'custom' in actions && actions.custom.map(a =>
-                    this.shouldDisplayAction(a, id) &&
+                {actions.hasOwnProperty('custom') && actions.custom.map(a =>
+                    this.shouldDisplayAction(a) &&
                     <a href="" data-tip={a.tooltip} key={'custom_' + a.name} onClick={this.handleAction.bind(this, a.onClick, id)}>
                         {a.icon}
                     </a>
