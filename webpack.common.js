@@ -22,7 +22,7 @@ module.exports = {
             filename: 'css/[name].css',
         }),
     ],
-    optimization: {
+    /*optimization: {
         splitChunks: {
             cacheGroups: {
                 vendor: {
@@ -34,7 +34,7 @@ module.exports = {
                 }
             }
         }
-    },
+    },*/
     module: {
         rules: [
             {
