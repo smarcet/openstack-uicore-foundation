@@ -375,7 +375,7 @@ export const showSuccessMessage = (html) => (dispatch) => {
     });
 }
 
-export const getCSV = (url, params, filename) => (dispatch) => {
+export const getCSV = (url, params, filename, header = null) => (dispatch) => {
 
     let queryString = objectToQueryString(params);
     let apiUrl = `${url}?${queryString}`;
@@ -392,6 +392,10 @@ export const getCSV = (url, params, filename) => (dispatch) => {
         })
         .then((csv) => {
             dispatch(stopLoading());
+
+            if (header) {
+                csv = header + '\r\r' + csv;
+            }
 
             let link = document.createElement('a');
             link.textContent = 'download';
