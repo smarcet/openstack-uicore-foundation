@@ -136,19 +136,28 @@ class OPSessionChecker extends React.Component {
         //console.log("OPSessionChecker::receiveMessage - status "+ status);
         //console.log("OPSessionChecker::receiveMessage - this.props.checkingSessionState "+ this.props.checkingSessionState);
         //console.log("OPSessionChecker::receiveMessage - this.props.isLoggedUser "+ this.props.isLoggedUser);
-        if(status == "changed" && !this.props.checkingSessionState && this.props.isLoggedUser){
-            //console.log("OPSessionChecker::receiveMessage - session state has changed on OP");
-            // signal session start check
-            this.props.onStartSessionStateCheck();
-            // kill timer
-            window.clearInterval(this.interval);
-            this.interval = null;
+        if(!this.props.checkingSessionState && this.props.isLoggedUser){
+            if(status == 'changed') {
+                //console.log("OPSessionChecker::receiveMessage - session state has changed on OP");
+                // signal session start check
+                this.props.onStartSessionStateCheck();
+                // kill timer
+                window.clearInterval(this.interval);
+                this.interval = null;
 
-            let url =  getAuthUrl(null, 'none', this.props.idToken);
-            // https://openid.net/specs/openid-connect-session-1_0.html#RPiframe
-            // set the frame to idp
-            // doing a promt to check if session is still alive, if so
-            this.rpCheckSessionStateFrame.src = url.toString();
+                let url = getAuthUrl(null, 'none', this.props.idToken);
+                // https://openid.net/specs/openid-connect-session-1_0.html#RPiframe
+                // set the frame to idp
+                // doing a promt to check if session is still alive, if so
+                this.rpCheckSessionStateFrame.src = url.toString();
+            }
+            if(status == 'error'){
+                // kill timer
+                window.clearInterval(this.interval);
+                this.interval = null;
+                // do logout
+                this.props.doLogout();
+            }
         }
     }
 
