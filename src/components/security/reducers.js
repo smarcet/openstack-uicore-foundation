@@ -15,6 +15,7 @@ import {
     LOGOUT_USER, SET_LOGGED_USER, RECEIVE_USER_INFO, START_SESSION_STATE_CHECK,
     END_SESSION_STATE_CHECK, CLEAR_SESSION_STATE
 } from './actions';
+import IdTokenVerifier from 'idtoken-verifier';
 
 const DEFAULT_STATE = {
     isLoggedUser: false,
@@ -28,6 +29,8 @@ const DEFAULT_STATE = {
 
 export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
     const { type, payload } = action
+    let issuer              = window.IDP_BASE_URL || '';
+    let audience            = window.OAUTH2_CLIENT_ID || '';
 
     switch(type) {
         case SET_LOGGED_USER: {
@@ -52,6 +55,29 @@ export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
         }
         case RECEIVE_USER_INFO: {
             let { response } = action.payload;
+
+            if(issuer != '' && audience != '') {
+                // check on idp groups
+                let verifier = new IdTokenVerifier({
+                    issuer: issuer,
+                    audience: audience
+                });
+
+                let jwt       = verifier.decode(idToken);
+                let idpGroups = jwt.payload.groups || [];
+                // merge
+
+                idpGroups = idpGroups.map((idpGroup) => { return {
+                    id:idpGroup.id,
+                    title: idpGroup.name,
+                    description:  idpGroup.name,
+                    code:idpGroup.slug,
+                    created: idpGroup.created_at,
+                    last_edited: idpGroup.updated_at
+                }});
+
+                response = {...response, groups: [...response.groups, ...idpGroups]};
+            }
             return {...state, member: response};
         }
         case START_SESSION_STATE_CHECK:{
