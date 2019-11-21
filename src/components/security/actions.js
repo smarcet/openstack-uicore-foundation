@@ -14,6 +14,7 @@
 import T from "i18n-react/dist/i18n-react";
 import { createAction, getRequest, startLoading, stopLoading, showMessage, authErrorHandler} from "../../utils/actions";
 import URI from "urijs";
+import IdTokenVerifier from 'idtoken-verifier';
 
 export const SET_LOGGED_USER           = 'SET_LOGGED_USER';
 export const LOGOUT_USER               = 'LOGOUT_USER';
@@ -121,10 +122,14 @@ export const doLogout = (backUrl) => (dispatch, getState) => {
 
 export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
 
-    let AllowedUserGroups       = window.ALLOWED_USER_GROUPS || '';
+    let AllowedUserGroups = window.ALLOWED_USER_GROUPS || '';
+    let issuer            = window.IDP_BASE_URL || '';
+    let audience          = window.OAUTH2_CLIENT_ID || '';
+
     AllowedUserGroups           = AllowedUserGroups != '' ? AllowedUserGroups.split(' ') : [];
     let { loggedUserState }     = getState();
-    let { accessToken, member } = loggedUserState;
+    let { accessToken, idToken, member } = loggedUserState;
+
     if(member != null){
         console.log(`redirecting to ${backUrl}`);
         history.push(backUrl);
@@ -155,18 +160,37 @@ export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
 
             // check user groups ( if defined )
             if(AllowedUserGroups.length > 0 ) {
-                let allowedGroups = member.groups.filter((group, idx) => {
+
+                let idpAllowedGroups = [];
+                let allowedGroups    = member.groups.filter((group, idx) => {
                     return AllowedUserGroups.includes(group.code);
                 })
 
-                if (allowedGroups.length == 0) {
+                if(issuer != '' && audience != '') {
+                    // check on idp groups
+                    let verifier = new IdTokenVerifier({
+                        issuer: issuer,
+                        audience: audience
+                    });
+
+                    let jwt       = verifier.decode(idToken);
+                    let idpGroups = jwt.payload.groups || [];
+
+                    idpAllowedGroups = idpGroups.filter((group, idx) => {
+                        return AllowedUserGroups.includes(group.slug);
+                    })
+                }
+
+                if (allowedGroups.length == 0 && idpAllowedGroups.length == 0) {
+
                     let error_message = {
-                        title: 'ERROR',
-                        html: T.translate("errors.user_not_authz"),
-                        type: 'error'
+                            title: 'ERROR',
+                            html: T.translate("errors.user_not_authz"),
+                            type: 'error'
                     };
 
                     dispatch(showMessage(error_message, initLogOut));
+                    return;
                 }
             }
 
