@@ -6,6 +6,7 @@ import EditableTableRow from './EditableTableRow';
 import Swal from "sweetalert2";
 import T from "i18n-react/dist/i18n-react";
 import './editable-table.css';
+import ReactTooltip from "react-tooltip";
 
 const defaults = {
     colWidth: ''
@@ -214,6 +215,7 @@ export default class EditableTable extends React.Component {
                         </EditableTableRow>
                     </tbody>
                 </table>
+                <ReactTooltip delayShow={10} />
             </div>
         );
     }
