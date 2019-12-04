@@ -65,6 +65,7 @@ export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
 
                 let jwt       = verifier.decode(idToken);
                 let idpGroups = jwt.payload.groups || [];
+                let address   = jwt.payload.address || {};
                 // merge
 
                 idpGroups = idpGroups.map((idpGroup) => { return {
@@ -76,7 +77,7 @@ export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
                     last_edited: idpGroup.updated_at
                 }});
 
-                response = {...response, groups: [...response.groups, ...idpGroups]};
+                response = {...response, groups: [...response.groups, ...idpGroups], address};
             }
             return {...state, member: response};
         }
