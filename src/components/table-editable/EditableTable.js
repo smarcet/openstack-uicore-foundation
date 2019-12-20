@@ -95,19 +95,24 @@ export default class EditableTable extends React.Component {
 
     deleteClick(id) {
         let onDelete = this.props.options.actions.delete.onClick;
+        let noAlert = this.props.options.hasOwnProperty('noAlert');
 
-        Swal.fire({
-            title: T.translate("general.are_you_sure"),
-            text: T.translate("general.remove_warning"),
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: T.translate("general.yes_delete")
-        }).then(function(result){
-            if (result.value) {
-                onDelete(id);
-            }
-        });
+        if (noAlert) {
+            onDelete(id);
+        } else {
+            Swal.fire({
+                title: T.translate("general.are_you_sure"),
+                text: T.translate("general.remove_warning"),
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: T.translate("general.yes_delete")
+            }).then(function(result){
+                if (result.value) {
+                    onDelete(id);
+                }
+            });
+        }
     }
 
     editRow(id, ev) {
