@@ -13,6 +13,7 @@
 import React from 'react'
 import URI from "urijs"
 import IdTokenVerifier from 'idtoken-verifier'
+import {doLogin} from "../actions";
 
 class AbstractAuthorizationCallbackRoute extends React.Component {
 
@@ -53,6 +54,11 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
     componentWillMount() {
         //console.log("AuthorizationCallbackRoute::componentWillMount");
         let { access_token , id_token, session_state, error, error_description } = this.extractHashParams();
+        if(!access_token){
+            // re start flow
+            doLogin(window.location.pathname);
+            return;
+        }
         let id_token_is_valid = id_token ? this.validateIdToken(id_token) : false;
         this.setState({...this.state, id_token_is_valid, error ,error_description});
         if(access_token && id_token_is_valid) {
@@ -105,6 +111,7 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
      */
     _redirect2Error(error){
     }
+
 
     render() {
         let {id_token_is_valid, error, error_description } = this.state;

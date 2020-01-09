@@ -15,7 +15,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import {doLogout, onStartSessionStateCheck, onFinishSessionStateCheck, getAuthUrl, initLogOut} from "../actions";
 import URI from "urijs"
-const CHECK_SESSION_INTERVAL = 1000 * 10;
+const CHECK_SESSION_INTERVAL = 1000 * 120;
 
 class OPSessionChecker extends React.Component {
 
