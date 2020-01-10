@@ -13,14 +13,14 @@
 import React from 'react'
 import URI from "urijs"
 import IdTokenVerifier from 'idtoken-verifier'
-import {doLogin} from "../actions";
+import {doLogin} from "./actions";
 
 class AbstractAuthorizationCallbackRoute extends React.Component {
 
     constructor(issuer, audience, props){
         super(props);
         this.state = {
-            id_token_is_valid: null,
+            id_token_is_valid: true,
             error: null,
             error_description: null,
             issuer: issuer,
