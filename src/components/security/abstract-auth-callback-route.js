@@ -60,22 +60,29 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
             return;
         }
         let id_token_is_valid = id_token ? this.validateIdToken(id_token) : false;
+        //console.log("AuthorizationCallbackRoute::componentWillMount id_token_is_valid "+id_token_is_valid);
         this.setState({...this.state, id_token_is_valid, error ,error_description});
         if(access_token && id_token_is_valid) {
+            //console.log("AuthorizationCallbackRoute::componentWillMount onUserAuth");
             this.props.onUserAuth(access_token, id_token, session_state);
         }
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
+        //console.log("AuthorizationCallbackRoute::shouldComponentUpdate");
         if(nextProps.accessToken !== this.props.accessToken){
+            //console.log("AuthorizationCallbackRoute::shouldComponentUpdate true");
             return true;
         }
-        return true;
+        //console.log("AuthorizationCallbackRoute::shouldComponentUpdate false");
+        return false;
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         // if we have an access token refresh ...
+        //console.log("AuthorizationCallbackRoute::componentDidUpdate");
         if(prevProps.accessToken !== this.props.accessToken){
+            //console.log("AuthorizationCallbackRoute::componentDidUpdate accessToken changed!");
             let url = URI(window.location.href);
             let query = url.search(true);
             let fragment = URI.parseQuery(url.fragment());
@@ -114,6 +121,7 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
 
 
     render() {
+        //console.log("AuthorizationCallbackRoute::render");
         let {id_token_is_valid, error, error_description } = this.state;
 
         if(error != null){
