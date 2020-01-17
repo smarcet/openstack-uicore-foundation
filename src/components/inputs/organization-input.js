@@ -61,7 +61,7 @@ export default class OrganizationInput extends React.Component {
         const translateOptions = (options) => {
             let newOptions = options.map(org => ({value: org.id.toString(), label: org.name}));
             callback(newOptions);
-        }
+        };
 
         queryOrganizations(input, translateOptions);
     }

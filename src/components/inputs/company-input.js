@@ -14,6 +14,7 @@
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 import {queryCompanies} from '../../utils/query-actions';
+import AsyncCreatableSelect from "react-select/lib/AsyncCreatable";
 
 export default class CompanyInput extends React.Component {
 
@@ -21,17 +22,29 @@ export default class CompanyInput extends React.Component {
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleNew = this.handleNew.bind(this);
         this.getCompanies = this.getCompanies.bind(this);
     }
 
     handleChange(value) {
         let ev = {target: {
             id: this.props.id,
-            value: value,
+            value: {id: value.value, name: value.label},
             type: 'companyinput'
         }};
 
         this.props.onChange(ev);
+    }
+
+    handleNew(value) {
+        // we need to map into value/label because of a bug in react-select 2
+        // https://github.com/JedWatson/react-select/issues/2998
+
+        const translateValue = (newValue) => {
+            this.handleChange({value: newValue.id, label: newValue.name});
+        }
+
+        this.props.onCreate(value, translateValue);
     }
 
     getCompanies (input, callback) {
@@ -39,22 +52,38 @@ export default class CompanyInput extends React.Component {
             return Promise.resolve({ options: [] });
         }
 
-        queryCompanies(input, callback);
+        // we need to map into value/label because of a bug in react-select 2
+        // https://github.com/JedWatson/react-select/issues/2998
+
+        const translateOptions = (options) => {
+            let newOptions = options.map(c => ({value: c.id.toString(), label: c.name}));
+            callback(newOptions);
+        };
+
+        queryCompanies(input, translateOptions);
     }
 
     render() {
         let {error, value, onChange, id, multi, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
         let isMulti = (this.props.hasOwnProperty('multi'));
+        let allowCreate = this.props.hasOwnProperty('allowCreate');
+
+        // we need to map into value/label because of a bug in react-select 2
+        // https://github.com/JedWatson/react-select/issues/2998
+        let theValue = value ? {value: value.id.toString(), label: value.name} : null;
+
+        const AsyncComponent = allowCreate
+            ? AsyncCreatableSelect
+            : AsyncSelect;
 
         return (
             <div>
-                <AsyncSelect
-                    value={value}
+                <AsyncComponent
+                    value={theValue}
                     onChange={this.handleChange}
                     loadOptions={this.getCompanies}
-                    getOptionValue={option => option.id}
-                    getOptionLabel={option => option.name}
+                    onCreateOption={this.handleNew}
                     isMulti={isMulti}
                     {...rest}
                 />
