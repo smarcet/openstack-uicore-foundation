@@ -83,7 +83,7 @@ class SimpleLinkList extends React.Component {
 
         let optionFound = values.find(val => val[labelKey] === candidate.label);
 
-        return (inputValue && optionFound) ? false : true;
+        return !optionFound;
     }
 
 

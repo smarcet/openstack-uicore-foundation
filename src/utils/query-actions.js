@@ -109,9 +109,9 @@ export const queryTracks = _.debounce((summitId, input, callback) => {
 export const queryTrackGroups = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
-    let filter = encodeURIComponent(`name=@${input}`);
+    let filter = input ? encodeURIComponent(`filter=name=@${input}`) : '';
 
-    fetch(`${window.API_BASE_URL}/api/v1/summits/${summitId}/track-groups?filter=${filter}&order=name&access_token=${accessToken}`)
+    fetch(`${window.API_BASE_URL}/api/v1/summits/${summitId}/track-groups?order=name&access_token=${accessToken}&${filter}`)
         .then(fetchResponseHandler)
         .then((json) => {
             let options = [...json.data];
