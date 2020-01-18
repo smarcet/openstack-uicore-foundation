@@ -19,7 +19,6 @@ import T from "i18n-react/dist/i18n-react";
 import {objectToQueryString} from './methods';
 import {doLogin, initLogOut, CLEAR_SESSION_STATE, LOGOUT_USER} from '../components/security/actions';
 
-
 export const GENERIC_ERROR  = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
 export const RESET_LOADING  = 'RESET_LOADING';
 export const START_LOADING  = 'START_LOADING';
@@ -406,4 +405,11 @@ export const getCSV = (url, params, filename, header = null) => (dispatch) => {
             document.body.removeChild(link);
         })
         .catch(fetchErrorHandler);
+};
+
+
+export const escapeFilterValue = (value) => {
+    value = value.replace('/,/g', "\,");
+    value = value.replace('/;/g', "\;");
+    return value;
 };

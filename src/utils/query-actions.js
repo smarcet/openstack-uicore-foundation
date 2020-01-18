@@ -11,15 +11,15 @@
  * limitations under the License.
  **/
 
-import {fetchErrorHandler, fetchResponseHandler} from "./actions";
+import {fetchErrorHandler, fetchResponseHandler, escapeFilterValue } from "./actions";
 import _ from 'lodash';
 export const RECEIVE_COUNTRIES  = 'RECEIVE_COUNTRIES';
 const callDelay = 500; //miliseconds
 
-
 export const queryMembers = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
+    input = escapeFilterValue(input);
     let filters = encodeURIComponent(`full_name=@${input},first_name=@${input},last_name=@${input},email=@${input}`);
     let expand = `tickets,rsvp,schedule_summit_events,all_affiliations`
 
@@ -38,6 +38,7 @@ export const queryMembers = _.debounce((input, callback) => {
 export const querySpeakers = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
+    input = escapeFilterValue(input);
     let filters = encodeURIComponent(`full_name=@${input},first_name=@${input},last_name=@${input},email=@${input}`);
     let apiUrl = `${window.API_BASE_URL}/api/v1`;
 
@@ -62,6 +63,7 @@ export const querySpeakers = _.debounce((summitId, input, callback) => {
 export const queryTags = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
+    input = escapeFilterValue(input);
     let apiUrl = `${window.API_BASE_URL}/api/v1`;
     let filter = encodeURIComponent(`tag=@${input}`);
 
@@ -92,6 +94,7 @@ export const queryTags = _.debounce((summitId, input, callback) => {
 export const queryTracks = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
+    input = escapeFilterValue(input);
     let filter = encodeURIComponent(`name=@${input}`);
 
     fetch(`${window.API_BASE_URL}/api/v1/summits/${summitId}/tracks?filter=${filter}&order=name&access_token=${accessToken}`)
@@ -109,6 +112,7 @@ export const queryTracks = _.debounce((summitId, input, callback) => {
 export const queryTrackGroups = _.debounce((summitId, input, callback) => {
 
     let accessToken = window.accessToken;
+    input = escapeFilterValue(input);
     let filter = input ? encodeURIComponent(`filter=name=@${input}`) : '';
 
     fetch(`${window.API_BASE_URL}/api/v1/summits/${summitId}/track-groups?order=name&access_token=${accessToken}&${filter}`)
@@ -126,6 +130,7 @@ export const queryTrackGroups = _.debounce((summitId, input, callback) => {
 export const queryEvents = _.debounce((summitId, input, onlyPublished = false, callback) => {
 
     let accessToken = window.accessToken;
+    input = escapeFilterValue(input);
     let baseUrl = `${window.API_BASE_URL}/api/v1/summits/${summitId}/events` + (onlyPublished ? '/published' : '');
     let filter = encodeURIComponent(`title=@${input}`);
 
@@ -161,6 +166,7 @@ export const queryGroups = _.debounce((input, callback) => {
 export const queryCompanies = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
+    input = escapeFilterValue(input);
     let filters = encodeURIComponent(`name=@${input}`);
 
     fetch(`${window.API_BASE_URL}/api/v1/companies?filter=${filters}&access_token=${accessToken}`)
@@ -178,6 +184,7 @@ export const queryCompanies = _.debounce((input, callback) => {
 export const queryOrganizations = _.debounce((input, callback) => {
 
     let accessToken = window.accessToken;
+    input = escapeFilterValue(input);
     let filters = encodeURIComponent(`name=@${input}`);
 
     fetch(`${window.API_BASE_URL}/api/v1/organizations?filter=${filters}&access_token=${accessToken}`)
