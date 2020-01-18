@@ -409,7 +409,7 @@ export const getCSV = (url, params, filename, header = null) => (dispatch) => {
 
 
 export const escapeFilterValue = (value) => {
-    value = value.replace('/,/g', "\,");
-    value = value.replace('/;/g', "\;");
+    value = value.replace(/,/g, "\\,");
+    value = value.replace(/;/g, "\\;");
     return value;
 };
