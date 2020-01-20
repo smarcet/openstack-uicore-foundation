@@ -32,6 +32,7 @@ import {
     queryEvents,
     queryGroups,
     queryCompanies,
+    querySponsors,
     getLanguageList,
     queryOrganizations,
     getCountryList,
@@ -105,6 +106,7 @@ export {
     queryEvents,
     queryGroups,
     queryCompanies,
+    querySponsors,
     getLanguageList,
     queryOrganizations,
     getCountryList,
@@ -126,4 +128,5 @@ export {
     onStartSessionStateCheck,
     onFinishSessionStateCheck,
     authErrorHandler,
+    escapeFilterValue
 };

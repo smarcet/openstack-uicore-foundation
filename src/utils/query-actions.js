@@ -180,6 +180,22 @@ export const queryCompanies = _.debounce((input, callback) => {
 }, callDelay);
 
 
+export const querySponsors = _.debounce((summitId, input, callback) => {
+
+    let accessToken = window.accessToken;
+    input = escapeFilterValue(input);
+    let filters = encodeURIComponent(`company_name=@${input}`);
+
+    fetch(`${window.API_BASE_URL}/api/v1/summits/${summitId}/sponsors?filter=${filters}&expand=company,sponsorship&access_token=${accessToken}`)
+        .then(fetchResponseHandler)
+        .then((json) => {
+            let options = [...json.data];
+
+            callback(options);
+        })
+        .catch(fetchErrorHandler);
+}, callDelay);
+
 
 export const queryOrganizations = _.debounce((input, callback) => {
 

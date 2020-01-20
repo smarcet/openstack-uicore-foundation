@@ -9,6 +9,7 @@ import DateTimePicker from './components/inputs/datetimepicker/index'
 import GroupedDropdown from './components/inputs/grouped-dropdown/index'
 import UploadInput from './components/inputs/upload-input/index'
 import CompanyInput from './components/inputs/company-input'
+import SponsorInput from './components/inputs/sponsor-input'
 import OrganizationInput from './components/inputs/organization-input'
 import CountryDropdown from './components/inputs/country-dropdown'
 import Dropdown from './components/inputs/dropdown'
@@ -63,6 +64,7 @@ export {
     GroupedDropdown,
     UploadInput,
     CompanyInput,
+    SponsorInput,
     CountryInput,
     LanguageInput,
     OrganizationInput,
