@@ -52,7 +52,7 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
     }
 
     componentWillMount() {
-        //console.log("AuthorizationCallbackRoute::componentWillMount");
+        console.log("AuthorizationCallbackRoute::componentWillMount");
         let { access_token , id_token, session_state, error, error_description } = this.extractHashParams();
         if(!access_token){
             // re start flow
@@ -60,10 +60,10 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
             return;
         }
         let id_token_is_valid = id_token ? this.validateIdToken(id_token) : false;
-        //console.log("AuthorizationCallbackRoute::componentWillMount id_token_is_valid "+id_token_is_valid);
+        console.log("AuthorizationCallbackRoute::componentWillMount id_token_is_valid "+id_token_is_valid);
         this.setState({...this.state, id_token_is_valid, error ,error_description});
         if(access_token && id_token_is_valid) {
-            //console.log("AuthorizationCallbackRoute::componentWillMount onUserAuth");
+            console.log(`AuthorizationCallbackRoute::componentWillMount onUserAuth ${access_token} ${id_token} ${session_state}`);
             this.props.onUserAuth(access_token, id_token, session_state);
         }
     }
@@ -118,7 +118,6 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
      */
     _redirect2Error(error){
     }
-
 
     render() {
         //console.log("AuthorizationCallbackRoute::render");

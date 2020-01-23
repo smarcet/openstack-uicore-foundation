@@ -15,7 +15,8 @@ import React from 'react';
 import {connect} from "react-redux";
 import {doLogout, onStartSessionStateCheck, onFinishSessionStateCheck, getAuthUrl, initLogOut} from "../actions";
 import URI from "urijs"
-const CHECK_SESSION_INTERVAL = 1000 * 120;
+
+const CHECK_SESSION_INTERVAL = 1000 * 600;
 
 class OPSessionChecker extends React.Component {
 
@@ -42,6 +43,7 @@ class OPSessionChecker extends React.Component {
     }
 
     componentDidMount() {
+        //console.log("OPSessionChecker::componentDidMount");
         // add event listener to receive messages from idp through OP frame
         window.addEventListener("message", this.receiveMessage, false);
         // set up op frame
@@ -54,10 +56,10 @@ class OPSessionChecker extends React.Component {
         this.props.onFinishSessionStateCheck();
         let resultUrl = new URI(event.target.baseURI);
         // test the result Url
-        //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - resultUrl "+resultUrl);
+        //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - resultUrl " + resultUrl);
         if(resultUrl.hasQuery("error")){
             let error = resultUrl.query(true).error;
-            //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - error "+error);
+            console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - error " + error);
             // check session state with prompt none failed do logoutdebugger;
             //console.log('OPSessionChecker::rpCheckSessionStateFrameOnLoad - initiating logout');
             initLogOut();
@@ -127,7 +129,7 @@ class OPSessionChecker extends React.Component {
     receiveMessage(e)
     {
         //console.log("OPSessionChecker::receiveMessage");
-        //console.log("OPSessionChecker::receiveMessage - e.origin "+e.origin);
+        //console.log("OPSessionChecker::receiveMessage - e.origin " + e.origin);
         if (e.origin !== this.props.idpBaseUrl ) {
             //console.log("OPSessionChecker::receiveMessage - e.origin !== this.props.idpBaseUrl");
             return;
@@ -137,8 +139,9 @@ class OPSessionChecker extends React.Component {
         //console.log("OPSessionChecker::receiveMessage - this.props.checkingSessionState "+ this.props.checkingSessionState);
         //console.log("OPSessionChecker::receiveMessage - this.props.isLoggedUser "+ this.props.isLoggedUser);
         if(!this.props.checkingSessionState && this.props.isLoggedUser){
+
             if(status == 'changed') {
-                //console.log("OPSessionChecker::receiveMessage - session state has changed on OP");
+                console.log("OPSessionChecker::receiveMessage - session state has changed on OP");
                 // signal session start check
                 this.props.onStartSessionStateCheck();
                 // kill timer
@@ -148,10 +151,10 @@ class OPSessionChecker extends React.Component {
                 let url = getAuthUrl(null, 'none', this.props.idToken);
                 // https://openid.net/specs/openid-connect-session-1_0.html#RPiframe
                 // set the frame to idp
-                // doing a promt to check if session is still alive, if so
                 this.rpCheckSessionStateFrame.src = url.toString();
             }
             if(status == 'error'){
+                console.log("OPSessionChecker::receiveMessage - error , init log out");
                 // kill timer
                 window.clearInterval(this.interval);
                 this.interval = null;

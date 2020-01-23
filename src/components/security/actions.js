@@ -22,8 +22,7 @@ export const RECEIVE_USER_INFO         = 'RECEIVE_USER_INFO';
 export const START_SESSION_STATE_CHECK = 'START_SESSION_STATE_CHECK';
 export const END_SESSION_STATE_CHECK   = 'END_SESSION_STATE_CHECK';
 export const CLEAR_SESSION_STATE       = 'CLEAR_SESSION_STATE';
-
-const NONCE_LEN         = 16;
+const NONCE_LEN                       = 16;
 
 export const getAuthUrl = (backUrl = null, prompt = null, tokenIdHint = null) => {
 
@@ -53,8 +52,12 @@ export const getAuthUrl = (backUrl = null, prompt = null, tokenIdHint = null) =>
         query['prompt'] = prompt;
     }
 
-    url = url.query(query);
+    if(tokenIdHint){
+        query['id_token_hint'] = tokenIdHint;
+    }
 
+    url = url.query(query);
+    console.log(`getAuthUrl ${url.toString()}`);
     return url;
 }
 
