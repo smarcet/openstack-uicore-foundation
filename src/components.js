@@ -37,6 +37,7 @@ import FreeMultiTextInput from "./components/inputs/free-multi-text-input";
 import OPSessionChecker from "./components/security/session-checker/op-session-checker";
 import AbstractAuthorizationCallbackRoute from  "./components/security/abstract-auth-callback-route";
 import Exclusive from "./components/exclusive-wrapper";
+import FragmentParser from "./components/fragmen-parser";
 
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
 
@@ -91,5 +92,6 @@ export {
     FreeMultiTextInput,
     OPSessionChecker,
     AbstractAuthorizationCallbackRoute,
-    Exclusive
+    Exclusive,
+    FragmentParser
 };
