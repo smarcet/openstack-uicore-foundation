@@ -28,6 +28,7 @@ import Table from './components/table/Table'
 import SortableTable from './components/table-sortable/SortableTable'
 import EditableTable from './components/table-editable/EditableTable'
 import SimpleForm from './components/forms/simple-form'
+import RsvpForm from './components/forms/rsvp-form';
 import RadioList from './components/inputs/radio-list'
 import CheckboxList from './components/inputs/checkbox-list'
 import ActionDropdown from './components/inputs/action-dropdown'
@@ -86,6 +87,7 @@ export {
     SortableTable,
     EditableTable,
     SimpleForm,
+    RsvpForm,
     RadioList,
     CheckboxList,
     ActionDropdown,

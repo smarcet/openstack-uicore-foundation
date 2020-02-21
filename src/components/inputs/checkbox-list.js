@@ -19,7 +19,7 @@ export default class CheckboxList extends React.Component {
     constructor(props) {
         super(props);
 
-        let otherValue = props.value.find( v => !props.options.map(op => op.value).includes(v) ) ;
+        let otherValue = props.value ? props.value.find( v => !props.options.map(op => op.value).includes(v) ) : false;
 
         this.state = {
             otherChecked: !!otherValue
@@ -31,11 +31,11 @@ export default class CheckboxList extends React.Component {
 
     handleChange(event) {
         let optionValues = this.props.options.map(op => op.value);
-        let value = [...this.props.value];
+        let value = this.props.value ? [...this.props.value] : [];
 
         if (event.target.type == 'checkbox') {
             if (event.target.checked) {
-                value.push(parseInt(event.target.value));
+                value.push(event.target.value); //use string not int
             } else {
                 value = value.filter( v => v != event.target.value )
             }
@@ -64,7 +64,7 @@ export default class CheckboxList extends React.Component {
 
         let inline = ( this.props.hasOwnProperty('inline') );
         let allowOther = ( this.props.hasOwnProperty('allowOther') );
-        let otherValue = value.find( v => !options.map(op => op.value).includes(v) ) ;
+        let otherValue = value ? value.find( v => !options.map(op => op.value).includes(v) ) : false ;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
 
 
@@ -89,7 +89,7 @@ export default class CheckboxList extends React.Component {
             <div>
                 <div className={"checkboxes-div" + (has_error ? ' error' : '') }>
                     { options.map(op => {
-                        let checked = value.includes(op.value);
+                        let checked = value ? value.includes(op.value) : false;
                         return (
                             <div className="form-check abc-checkbox" key={"radio_key_" + op.value} style={style}>
                                 <input type="checkbox" id={"cb_" + op.value} checked={checked}

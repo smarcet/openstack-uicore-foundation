@@ -28,7 +28,7 @@ export default class Dropdown extends React.Component {
         if (this.props.isMulti) {
             value = selection ? selection.map(val => val.value) : null;
         } else {
-            value = selection.value || null;
+            value = selection ? selection.value : null;
         }
 
         let ev = {target: {

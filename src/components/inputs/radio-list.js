@@ -43,10 +43,16 @@ export default class RadioList extends React.Component {
         this.props.onChange(ev);
     }
 
-    getLabel(option, inline) {
+    getLabel(option, inline, simple) {
         if (inline) {
             return (
                 <label className="form-check-label" htmlFor={"radio_" + option.value} style={{display: 'inline-block'}}>
+                    {option.label}
+                </label>
+            );
+        } else if (simple) {
+            return (
+                <label className="form-check-label" htmlFor={"radio_" + option.value} >
                     {option.label}
                 </label>
             );
@@ -65,6 +71,7 @@ export default class RadioList extends React.Component {
         let {onChange, value, className, error, options, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
         let inline = ( this.props.hasOwnProperty('inline') );
+        let simple = ( this.props.hasOwnProperty('simple') );
 
         let style, label;
 
@@ -96,7 +103,7 @@ export default class RadioList extends React.Component {
                                 checked={checked}
                                 onChange={this.handleChange}
                             />
-                            {this.getLabel(op, inline)}
+                            {this.getLabel(op, inline, simple)}
                         </div>
                     )
                 })}
