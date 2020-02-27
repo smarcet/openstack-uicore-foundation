@@ -59,6 +59,15 @@ class FragmentParser {
         }
     }
 
+    deleteParams(params){
+        var hash    = this.getParams();
+        this.clearParams();
+        for(let key in hash) {
+            if(params.includes(key)) continue;
+            this.hash[key] = hash[key];
+        }
+    }
+
     setParam(key, value){
         if(this.originalHash !==  window.location.hash){
             this.originalHash = window.location.hash;
