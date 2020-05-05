@@ -72,8 +72,8 @@ class OPSessionChecker extends React.Component {
 
     checkSession()
     {
-        let now = new Date().format('m-d-Y h:i:s')
-        console.log(`OPSessionChecker::checkSession now ${now}`);
+        let now = new Date();
+        console.log(`OPSessionChecker::checkSession now ${now.toLocaleString()}`);
 
         if(this.opFrame == null ){
             //console.log("OPSessionChecker::checkSession - this.opFrame == null ");
