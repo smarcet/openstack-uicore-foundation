@@ -72,7 +72,8 @@ class OPSessionChecker extends React.Component {
 
     checkSession()
     {
-        //console.log("OPSessionChecker::checkSession");
+        let now = new Date().format('m-d-Y h:i:s')
+        console.log(`OPSessionChecker::checkSession now ${now}`);
 
         if(this.opFrame == null ){
             //console.log("OPSessionChecker::checkSession - this.opFrame == null ");
@@ -98,19 +99,20 @@ class OPSessionChecker extends React.Component {
 
     setTimer()
     {
-        //console.log("OPSessionChecker::setTimer");
+        console.log("OPSessionChecker::setTimer");
 
         if(!this.props.isLoggedUser){
-            //console.log("OPSessionChecker::setTimer - !this.props.isLoggedUser");
+            console.log("OPSessionChecker::setTimer - !this.props.isLoggedUser");
             return;
         }
 
         if(this.props.checkingSessionState){
-            //console.log("OPSessionChecker::setTimer - this.props.checkingSessionState");
+            console.log("OPSessionChecker::setTimer - this.props.checkingSessionState");
             return;
         }
 
         this.checkSession();
+        console.log(`OPSessionChecker::setTimer setting interval ${CHECK_SESSION_INTERVAL}`);
         this.interval = window.setInterval(this.checkSession, CHECK_SESSION_INTERVAL);
     }
 
