@@ -17,6 +17,8 @@ import {
 } from './actions';
 import IdTokenVerifier from 'idtoken-verifier';
 
+import {storeAuthInfo, clearAuthInfo} from '../../utils/methods';
+
 const DEFAULT_STATE = {
     isLoggedUser: false,
     accessToken: null,
@@ -35,22 +37,16 @@ export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
     switch(type) {
         case SET_LOGGED_USER: {
             let { accessToken, idToken, sessionState } = action.payload;
-            window.accessToken = accessToken;
-            window.idToken = idToken;
-            window.sessionState = sessionState;
+            storeAuthInfo(accessToken, idToken, sessionState);
             return {...state, isLoggedUser:true, accessToken, idToken, sessionState, backUrl : null };
         }
         case CLEAR_SESSION_STATE:
         {
-            window.accessToken = null;
-            window.idToken = null;
-            window.sessionState = null;
+            clearAuthInfo();
             return {...state, isLoggedUser:false, accessToken:null, idToken:null, sessionState:null, backUrl : null };
         }
         case LOGOUT_USER : {
-            window.accessToken = null;
-            window.idToken = null;
-            window.sessionState = null;
+            clearAuthInfo();
             return {...DEFAULT_STATE, backUrl: payload.backUrl};
         }
         case RECEIVE_USER_INFO: {

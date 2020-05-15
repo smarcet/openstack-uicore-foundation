@@ -13,6 +13,7 @@
 
 import T from "i18n-react/dist/i18n-react";
 import { createAction, getRequest, startLoading, stopLoading, showMessage, authErrorHandler} from "../../utils/actions";
+import {buildAPIBaseUrl} from '../../utils/methods';
 import URI from "urijs";
 
 export const SET_LOGGED_USER           = 'SET_LOGGED_USER';
@@ -140,7 +141,7 @@ export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
     return getRequest(
         createAction(REQUEST_USER_INFO),
         createAction(RECEIVE_USER_INFO),
-        `${window.API_BASE_URL}/api/v1/members/me?expand=groups&access_token=${accessToken}`,
+        buildAPIBaseUrl(`/api/v1/members/me?expand=groups&access_token=${accessToken}`),
         authErrorHandler
     )({})(dispatch, getState).then(() => {
             dispatch(stopLoading());

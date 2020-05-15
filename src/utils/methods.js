@@ -63,3 +63,38 @@ export const getBackURL = () => {
     }
     return backUrl;
 }
+
+export const getAccessToken = () => {
+    return (typeof window !== 'undefined') ? window.accessToken : process.env.accessToken;
+}
+
+export const buildAPIBaseUrl = (relativeUrl) => {
+    if(typeof window !== 'undefined'){
+        return `${window.API_BASE_URL}${relativeUrl}`;
+    }
+    return `${process.env.API_BASE_URL}${relativeUrl}`;
+}
+
+export const storeAuthInfo = (accessToken, idToken, sessionState) => {
+    if(typeof window !== 'undefined'){
+        window.accessToken = accessToken;
+        window.idToken = idToken;
+        window.sessionState = sessionState;
+        return;
+    }
+    process.env.accessToken = accessToken;
+    process.env.idToken = idToken;
+    process.env.sessionState = sessionState;
+}
+
+export const clearAuthInfo = () => {
+    if(typeof window !== 'undefined'){
+        window.accessToken = null;
+        window.idToken = null;
+        window.sessionState = null;
+        return;
+    }
+    process.env.accessToken = null;
+    process.env.idToken = null;
+    process.env.sessionState = null;
+}
