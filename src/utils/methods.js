@@ -69,29 +69,46 @@ export const getBackURL = () => {
  * Auth Utils
  */
 
-
 export const getAccessToken = () => {
-    return (typeof window !== 'undefined') ? window.accessToken : process.env.accessToken;
+    if(typeof window !== 'undefined') {
+        return window.accessToken;
+    }
+    return null;
 }
 
 export const getIdToken = () => {
-    return (typeof window !== 'undefined') ? window.idToken : process.env.idToken;
+    if(typeof window !== 'undefined') {
+        return window.idToken;
+    }
+    return null;
 }
 
 export const getOAuth2ClientId = () => {
-    return (typeof window !== 'undefined') ? window.OAUTH2_CLIENT_ID : process.env.OAUTH2_CLIENT_ID;
+    if(typeof window !== 'undefined') {
+        return window.OAUTH2_CLIENT_ID;
+    }
+    return null;
 }
 
 export const getOAuth2IDPBaseUrl = () => {
-    return (typeof window !== 'undefined') ? window.IDP_BASE_URL : process.env.IDP_BASE_URL;
+    if(typeof window !== 'undefined') {
+        return window.IDP_BASE_URL;
+    }
+    return null;
 }
 
 export const getOAuth2Scopes = () => {
-    return (typeof window !== 'undefined') ? window.SCOPES : process.env.SCOPES;
+    if(typeof window !== 'undefined') {
+        return window.SCOPES;
+    }
+    return null;
 }
 
 export const getAuthCallback = () => {
-    return (typeof window !== 'undefined') ? `${window.location.origin}/auth/callback`: null;
+    if(typeof window !== 'undefined') {
+        `${window.location.origin}/auth/callback`;
+    }
+    return null;
 }
 
 export const getCurrentLocation = () => {
@@ -114,14 +131,17 @@ export const getOrigin = () => {
 }
 
 export const getAllowedUserGroups = () => {
-    return (typeof window !== 'undefined') ? (window.ALLOWED_USER_GROUPS || '') :  (process.env.ALLOWED_USER_GROUPS || '');
+    if(typeof window !== 'undefined') {
+        return window.ALLOWED_USER_GROUPS || '';
+    }
+    return null;
 }
 
 export const buildAPIBaseUrl = (relativeUrl) => {
     if(typeof window !== 'undefined'){
         return `${window.API_BASE_URL}${relativeUrl}`;
     }
-    return `${process.env.API_BASE_URL}${relativeUrl}`;
+    return null``;
 }
 
 export const storeAuthInfo = (accessToken, idToken, sessionState) => {
@@ -131,9 +151,6 @@ export const storeAuthInfo = (accessToken, idToken, sessionState) => {
         window.sessionState = sessionState;
         return;
     }
-    process.env.accessToken = accessToken;
-    process.env.idToken = idToken;
-    process.env.sessionState = sessionState;
 }
 
 export const clearAuthInfo = () => {
@@ -143,9 +160,6 @@ export const clearAuthInfo = () => {
         window.sessionState = null;
         return;
     }
-    process.env.accessToken = null;
-    process.env.idToken = null;
-    process.env.sessionState = null;
 }
 
 export const putOnLocalStorage = (key, value) => {
