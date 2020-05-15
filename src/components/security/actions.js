@@ -13,7 +13,9 @@
 
 import T from "i18n-react/dist/i18n-react";
 import { createAction, getRequest, startLoading, stopLoading, showMessage, authErrorHandler} from "../../utils/actions";
-import {buildAPIBaseUrl} from '../../utils/methods';
+import { buildAPIBaseUrl, getOAuth2ClientId, getOAuth2IDPBaseUrl,
+    getOAuth2Scopes, getAuthCallback, putOnLocalStorage, getAllowedUserGroups,
+    getCurrentLocation, getOrigin, getIdToken } from '../../utils/methods';
 import URI from "urijs";
 
 export const SET_LOGGED_USER           = 'SET_LOGGED_USER';
@@ -27,10 +29,10 @@ const NONCE_LEN                       = 16;
 
 export const getAuthUrl = (backUrl = null, prompt = null, tokenIdHint = null) => {
 
-    let oauth2ClientId = window.OAUTH2_CLIENT_ID;
-    let baseUrl        = window.IDP_BASE_URL;
-    let scopes         = window.SCOPES;
-    let redirectUri    =`${window.location.origin}/auth/callback`;
+    let oauth2ClientId = getOAuth2ClientId();
+    let baseUrl        = getOAuth2IDPBaseUrl();
+    let scopes         = getOAuth2Scopes();
+    let redirectUri    = getAuthCallback();
 
     if(backUrl != null)
         redirectUri += `?BackUrl=${encodeURI(backUrl)}`;
@@ -38,7 +40,7 @@ export const getAuthUrl = (backUrl = null, prompt = null, tokenIdHint = null) =>
     let nonce = createNonce(NONCE_LEN);
     console.log(`created nonce ${nonce}`);
     // store nonce to check it later
-    window.localStorage.setItem('nonce', nonce);
+    putOnLocalStorage('nonce', nonce);
     let url   = URI(`${baseUrl}/oauth2/auth`);
 
     let query = {
@@ -63,12 +65,12 @@ export const getAuthUrl = (backUrl = null, prompt = null, tokenIdHint = null) =>
 }
 
 export const getLogoutUrl = (idToken) => {
-    let baseUrl       = window.IDP_BASE_URL;
+    let baseUrl       = getOAuth2IDPBaseUrl();
     let url           = URI(`${baseUrl}/oauth2/end-session`);
     let state         = createNonce(NONCE_LEN);
-    let postLogOutUri = window.location.origin + '/auth/logout';
+    let postLogOutUri = getOrigin() + '/auth/logout';
     // store nonce to check it later
-    window.localStorage.setItem('post_logout_state', state);
+    putOnLocalStorage('post_logout_state', state);
     /**
      * post_logout_redirect_uri should be listed on oauth2 client settings
      * on IDP
@@ -94,10 +96,7 @@ export const doLogin = (backUrl = null) => {
     if(backUrl)
         console.log(`doLogin - backUrl ${backUrl} `);
     let url = getAuthUrl(backUrl);
-    let location =  window.location;
-    // check if we are on iframe
-    if(window.top)
-        location = window.top.location;
+    let location = getCurrentLocation()
     location.replace(url.toString());
 }
 
@@ -109,11 +108,8 @@ export const onUserAuth = (accessToken, idToken, sessionState) => (dispatch) => 
 }
 
 export const initLogOut = () => {
-    let location =  window.location;
-    // check if we are on iframe
-    if(window.top)
-        location = window.top.location;
-    location.replace(getLogoutUrl(window.idToken).toString());
+    let location = getCurrentLocation();
+    location.replace(getLogoutUrl(getIdToken()).toString());
 }
 
 export const doLogout = (backUrl) => (dispatch, getState) => {
@@ -125,7 +121,7 @@ export const doLogout = (backUrl) => (dispatch, getState) => {
 
 export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
 
-    let AllowedUserGroups = window.ALLOWED_USER_GROUPS || '';
+    let AllowedUserGroups = getAllowedUserGroups();
     AllowedUserGroups           = AllowedUserGroups != '' ? AllowedUserGroups.split(' ') : [];
     let { loggedUserState }     = getState();
     let { accessToken, idToken, member } = loggedUserState;

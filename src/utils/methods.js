@@ -64,8 +64,57 @@ export const getBackURL = () => {
     return backUrl;
 }
 
+/**
+ *
+ * Auth Utils
+ */
+
+
 export const getAccessToken = () => {
     return (typeof window !== 'undefined') ? window.accessToken : process.env.accessToken;
+}
+
+export const getIdToken = () => {
+    return (typeof window !== 'undefined') ? window.idToken : process.env.idToken;
+}
+
+export const getOAuth2ClientId = () => {
+    return (typeof window !== 'undefined') ? window.OAUTH2_CLIENT_ID : process.env.OAUTH2_CLIENT_ID;
+}
+
+export const getOAuth2IDPBaseUrl = () => {
+    return (typeof window !== 'undefined') ? window.IDP_BASE_URL : process.env.IDP_BASE_URL;
+}
+
+export const getOAuth2Scopes = () => {
+    return (typeof window !== 'undefined') ? window.SCOPES : process.env.SCOPES;
+}
+
+export const getAuthCallback = () => {
+    return (typeof window !== 'undefined') ? `${window.location.origin}/auth/callback`: null;
+}
+
+export const getCurrentLocation = () => {
+    let location = '';
+    if(typeof window !== 'undefined') {
+        location = window.location;
+        // check if we are on iframe
+        if (window.top)
+            location = window.top.location;
+    }
+    return location;
+}
+
+export const getOrigin = () => {
+    let origin = '';
+    if(typeof window !== 'undefined') {
+        origin = window.location.origin;
+    }
+    return origin;
+}
+
+export const getAllowedUserGroups = () => {
+    return (typeof window !== 'undefined') ? (window.ALLOWED_USER_GROUPS || '') :  (process.env.ALLOWED_USER_GROUPS || '');
 }
 
 export const buildAPIBaseUrl = (relativeUrl) => {
@@ -97,4 +146,10 @@ export const clearAuthInfo = () => {
     process.env.accessToken = null;
     process.env.idToken = null;
     process.env.sessionState = null;
+}
+
+export const putOnLocalStorage = (key, value) => {
+    if(typeof window !== 'undefined') {
+        window.localStorage.setItem(key, value);
+    }
 }
