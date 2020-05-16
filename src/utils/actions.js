@@ -16,7 +16,7 @@ import URI from "urijs";
 let http = request;
 import Swal from 'sweetalert2';
 import T from "i18n-react/dist/i18n-react";
-import {objectToQueryString} from './methods';
+import {objectToQueryString, isClearingSessionState, setSessionClearingState, getCurrentPathName} from './methods';
 import {doLogin, initLogOut, CLEAR_SESSION_STATE, LOGOUT_USER} from '../components/security/actions';
 
 export const GENERIC_ERROR  = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
@@ -72,8 +72,8 @@ export const authErrorHandler = (err, res) => (dispatch, state) => {
             dispatch(showMessage( error_message, initLogOut ));
             break;
         case 401:
-            let currentLocation = window.location.pathname;
-            let clearing_session_state = window.clearing_session_state || false;
+            let currentLocation = getCurrentPathName();
+            let clearing_session_state = isClearingSessionState();
 
             dispatch({
                 type: CLEAR_SESSION_STATE,
@@ -81,7 +81,7 @@ export const authErrorHandler = (err, res) => (dispatch, state) => {
             });
 
             if(!clearing_session_state) {
-                window.clearing_session_state = true;
+                setSessionClearingState(true);
                 console.log('authErrorHandler 401 - re login');
                 doLogin(currentLocation);
             }

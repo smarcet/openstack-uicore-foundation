@@ -130,6 +130,20 @@ export const getOrigin = () => {
     return origin;
 }
 
+export const getCurrentPathName = () => {
+    if(typeof window !== 'undefined') {
+       return window.location.pathname;
+    }
+    return '';
+}
+
+export const getCurrentHref = () => {
+    if(typeof window !== 'undefined') {
+        return window.location.href;
+    }
+    return '';
+}
+
 export const getAllowedUserGroups = () => {
     if(typeof window !== 'undefined') {
         return window.ALLOWED_USER_GROUPS || '';
@@ -165,5 +179,27 @@ export const clearAuthInfo = () => {
 export const putOnLocalStorage = (key, value) => {
     if(typeof window !== 'undefined') {
         window.localStorage.setItem(key, value);
+    }
+}
+
+export const getFromLocalStorage = (key, removeIt) => {
+    if(typeof window !== 'undefined') {
+        window.localStorage.getItem(key);
+        if(removeIt){
+            window.localStorage.removeItem(key);
+        }
+    }
+}
+
+export const isClearingSessionState = () => {
+    if(typeof window !== 'undefined') {
+        return window.clearing_session_state;
+    }
+    return false;
+}
+
+export const setSessionClearingState = (val) => {
+    if(typeof window !== 'undefined') {
+        window.clearing_session_state = val;
     }
 }

@@ -10,10 +10,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-import React from 'react'
-import URI from "urijs"
-import IdTokenVerifier from 'idtoken-verifier'
+import React from 'react';
+import URI from "urijs";
+import IdTokenVerifier from 'idtoken-verifier';
 import {doLogin} from "./actions";
+import {getFromLocalStorage, getCurrentPathName, getCurrentHref} from '../../utils/methods';
 
 class AbstractAuthorizationCallbackRoute extends React.Component {
 
@@ -38,8 +39,7 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
             issuer:   issuer,
             audience: audience
         });
-        let storedNonce = window.localStorage.getItem('nonce');
-        window.localStorage.removeItem('nonce');
+        let storedNonce = getFromLocalStorage('nonce', true);
         let jwt    = verifier.decode(idToken);
         let alg    = jwt.header.alg;
         let kid    = jwt.header.kid;
@@ -56,7 +56,7 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
         let { access_token , id_token, session_state, error, error_description } = this.extractHashParams();
         if(!access_token){
             // re start flow
-            doLogin(window.location.pathname);
+            doLogin(getCurrentPathName());
             return;
         }
         let id_token_is_valid = id_token ? this.validateIdToken(id_token) : false;
@@ -83,7 +83,7 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
         //console.log("AuthorizationCallbackRoute::componentDidUpdate");
         if(prevProps.accessToken !== this.props.accessToken){
             //console.log("AuthorizationCallbackRoute::componentDidUpdate accessToken changed!");
-            let url = URI(window.location.href);
+            let url = URI(getCurrentHref());
             let query = url.search(true);
             let fragment = URI.parseQuery(url.fragment());
 

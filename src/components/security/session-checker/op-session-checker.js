@@ -45,7 +45,8 @@ class OPSessionChecker extends React.Component {
     componentDidMount() {
         //console.log("OPSessionChecker::componentDidMount");
         // add event listener to receive messages from idp through OP frame
-        window.addEventListener("message", this.receiveMessage, false);
+        if(typeof window !== 'undefined')
+            window.addEventListener("message", this.receiveMessage, false);
         // set up op frame
         this.onSetupCheckSessionRP();
     }
@@ -113,7 +114,8 @@ class OPSessionChecker extends React.Component {
 
         this.checkSession();
         console.log(`OPSessionChecker::setTimer setting interval ${CHECK_SESSION_INTERVAL}`);
-        this.interval = window.setInterval(this.checkSession, CHECK_SESSION_INTERVAL);
+        if(typeof window !== 'undefined')
+            this.interval = window.setInterval(this.checkSession, CHECK_SESSION_INTERVAL);
     }
 
     onSetupCheckSessionRP(){
@@ -147,7 +149,8 @@ class OPSessionChecker extends React.Component {
                 // signal session start check
                 this.props.onStartSessionStateCheck();
                 // kill timer
-                window.clearInterval(this.interval);
+                if(typeof window !== 'undefined')
+                    window.clearInterval(this.interval);
                 this.interval = null;
 
                 let url = getAuthUrl(null, 'none', this.props.idToken);
@@ -158,7 +161,8 @@ class OPSessionChecker extends React.Component {
             if(status == 'error'){
                 console.log("OPSessionChecker::receiveMessage - error , init log out");
                 // kill timer
-                window.clearInterval(this.interval);
+                if(typeof window !== 'undefined')
+                    window.clearInterval(this.interval);
                 this.interval = null;
                 // do logout
                 this.props.doLogout();

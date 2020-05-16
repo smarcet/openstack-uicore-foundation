@@ -17,7 +17,7 @@ import {
 } from './actions';
 import IdTokenVerifier from 'idtoken-verifier';
 
-import {storeAuthInfo, clearAuthInfo} from '../../utils/methods';
+import {storeAuthInfo, clearAuthInfo, getOAuth2IDPBaseUrl, getOAuth2ClientId} from '../../utils/methods';
 
 const DEFAULT_STATE = {
     isLoggedUser: false,
@@ -31,8 +31,8 @@ const DEFAULT_STATE = {
 
 export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
     const { type, payload } = action
-    let issuer              = window.IDP_BASE_URL || '';
-    let audience            = window.OAUTH2_CLIENT_ID || '';
+    let issuer              = getOAuth2IDPBaseUrl();
+    let audience            = getOAuth2ClientId();
 
     switch(type) {
         case SET_LOGGED_USER: {
