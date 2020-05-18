@@ -62,7 +62,9 @@ import {
     onFinishSessionStateCheck,
 } from './components/security/actions';
 
-let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
+import {getCurrentUserLanguage} from './utils/methods';
+
+let language = getCurrentUserLanguage();
 
 // language would be something like es-ES or es_ES
 // However we store our files with format es.json or en.json

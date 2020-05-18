@@ -14,7 +14,8 @@ module.exports = {
         filename: '[name].js',
         library: 'openstack-uicore-foundation',
         libraryTarget: 'umd',
-        umdNamedDefine: true
+        umdNamedDefine: true,
+        globalObject: 'this'
     },
     node: {fs: 'empty'},
     plugins: [

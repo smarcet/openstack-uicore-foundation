@@ -39,8 +39,9 @@ import OPSessionChecker from "./components/security/session-checker/op-session-c
 import AbstractAuthorizationCallbackRoute from  "./components/security/abstract-auth-callback-route";
 import Exclusive from "./components/exclusive-wrapper";
 import FragmentParser from "./components/fragmen-parser";
+import {getCurrentUserLanguage} from './utils/methods';
 
-let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
+let language = getCurrentUserLanguage();
 
 // language would be something like es-ES or es_ES
 // However we store our files with format es.json or en.json

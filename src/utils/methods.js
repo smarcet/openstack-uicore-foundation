@@ -203,3 +203,11 @@ export const setSessionClearingState = (val) => {
         window.clearing_session_state = val;
     }
 }
+
+export const getCurrentUserLanguage = () => {
+    let language = 'en';
+    if(typeof navigator !== 'undefined') {
+        language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
+    }
+    return language;
+}
