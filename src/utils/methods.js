@@ -106,7 +106,7 @@ export const getOAuth2Scopes = () => {
 
 export const getAuthCallback = () => {
     if(typeof window !== 'undefined') {
-        `${window.location.origin}/auth/callback`;
+        return `${window.location.origin}/auth/callback`;
     }
     return null;
 }
@@ -123,25 +123,24 @@ export const getCurrentLocation = () => {
 }
 
 export const getOrigin = () => {
-    let origin = '';
     if(typeof window !== 'undefined') {
-        origin = window.location.origin;
+        return window.location.origin;
     }
-    return origin;
+    return null;
 }
 
 export const getCurrentPathName = () => {
     if(typeof window !== 'undefined') {
        return window.location.pathname;
     }
-    return '';
+    return null;
 }
 
 export const getCurrentHref = () => {
     if(typeof window !== 'undefined') {
         return window.location.href;
     }
-    return '';
+    return null;
 }
 
 export const getAllowedUserGroups = () => {
