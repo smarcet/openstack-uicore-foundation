@@ -183,11 +183,13 @@ export const putOnLocalStorage = (key, value) => {
 
 export const getFromLocalStorage = (key, removeIt) => {
     if(typeof window !== 'undefined') {
-        window.localStorage.getItem(key);
+        let val = window.localStorage.getItem(key);
         if(removeIt){
             window.localStorage.removeItem(key);
         }
+        return val;
     }
+    return null;
 }
 
 export const isClearingSessionState = () => {
