@@ -27,11 +27,14 @@ export default class CompanyInput extends React.Component {
     }
 
     handleChange(value) {
+        const isMulti = (this.props.hasOwnProperty('multi') || this.props.hasOwnProperty('isMulti'));
+        const theValue = isMulti ? value.map(v => ({id: v.value, name: v.label})) : {id: value.value, name: value.label};
+
         let ev = {target: {
-            id: this.props.id,
-            value: {id: value.value, name: value.label},
-            type: 'companyinput'
-        }};
+                id: this.props.id,
+                value: theValue,
+                type: 'companyinput'
+            }};
 
         this.props.onChange(ev);
     }
@@ -66,12 +69,20 @@ export default class CompanyInput extends React.Component {
     render() {
         let {error, value, onChange, id, multi, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
-        let isMulti = (this.props.hasOwnProperty('multi'));
+        let isMulti = (this.props.hasOwnProperty('multi') || this.props.hasOwnProperty('isMulti'));
         let allowCreate = this.props.hasOwnProperty('allowCreate');
 
         // we need to map into value/label because of a bug in react-select 2
         // https://github.com/JedWatson/react-select/issues/2998
-        let theValue = value ? {value: value.id.toString(), label: value.name} : null;
+
+        let theValue = null;
+
+        if (isMulti && value.length > 0) {
+            theValue = value.map(v => ({value: v.id.toString(), label: v.name} ));
+        } else if (!isMulti && value) {
+            theValue = {value: value.id.toString(), label: value.name};
+        }
+
 
         const AsyncComponent = allowCreate
             ? AsyncCreatableSelect
@@ -95,4 +106,3 @@ export default class CompanyInput extends React.Component {
 
     }
 }
-
