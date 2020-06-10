@@ -12,8 +12,12 @@
  **/
 
 import {
-    LOGOUT_USER, SET_LOGGED_USER, RECEIVE_USER_INFO, START_SESSION_STATE_CHECK,
-    END_SESSION_STATE_CHECK, CLEAR_SESSION_STATE
+    LOGOUT_USER,
+    SET_LOGGED_USER,
+    RECEIVE_USER_INFO,
+    CLEAR_SESSION_STATE,
+    SESSION_STATE_STATUS_UNCHANGED,
+    UPDATE_SESSION_STATE_STATUS
 } from './actions';
 import IdTokenVerifier from 'idtoken-verifier';
 
@@ -26,8 +30,8 @@ const DEFAULT_STATE = {
     idToken: null,
     sessionState: null,
     backUrl : null,
-    checkingSessionState: false,
-}
+    sessionStateStatus: SESSION_STATE_STATUS_UNCHANGED,
+};
 
 export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
     const { type, payload } = action
@@ -40,6 +44,11 @@ export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
             storeAuthInfo(accessToken, idToken, sessionState);
             return {...state, isLoggedUser:true, accessToken, idToken, sessionState, backUrl : null };
         }
+        case UPDATE_SESSION_STATE_STATUS:{
+            let { sessionStateStatus } = action.payload;
+            return {...state, sessionStateStatus:sessionStateStatus};
+        }
+
         case CLEAR_SESSION_STATE:
         {
             clearAuthInfo();
@@ -76,12 +85,6 @@ export const loggedUserReducer = (state = DEFAULT_STATE, action) => {
                 response = {...response, groups: [...response.groups, ...idpGroups], address};
             }
             return {...state, member: response};
-        }
-        case START_SESSION_STATE_CHECK:{
-            return {...state, checkingSessionState: true };
-        }
-        case END_SESSION_STATE_CHECK:{
-            return {...state, checkingSessionState: false };
         }
         default:
             return state;

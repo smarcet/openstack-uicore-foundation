@@ -14,8 +14,6 @@ import {
     LOGOUT_USER,
     REQUEST_USER_INFO,
     RECEIVE_USER_INFO,
-    START_SESSION_STATE_CHECK,
-    END_SESSION_STATE_CHECK,
 } from './components/security/actions';
 
 export {
@@ -27,7 +25,5 @@ export {
     LOGOUT_USER,
     REQUEST_USER_INFO,
     RECEIVE_USER_INFO,
-    START_SESSION_STATE_CHECK,
-    END_SESSION_STATE_CHECK,
-    VALIDATE
+    VALIDATE,
 };

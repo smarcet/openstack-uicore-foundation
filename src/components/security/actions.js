@@ -18,14 +18,16 @@ import { buildAPIBaseUrl, getOAuth2ClientId, getOAuth2IDPBaseUrl,
     getCurrentLocation, getOrigin, getIdToken } from '../../utils/methods';
 import URI from "urijs";
 
-export const SET_LOGGED_USER           = 'SET_LOGGED_USER';
-export const LOGOUT_USER               = 'LOGOUT_USER';
-export const REQUEST_USER_INFO         = 'REQUEST_USER_INFO';
-export const RECEIVE_USER_INFO         = 'RECEIVE_USER_INFO';
-export const START_SESSION_STATE_CHECK = 'START_SESSION_STATE_CHECK';
-export const END_SESSION_STATE_CHECK   = 'END_SESSION_STATE_CHECK';
-export const CLEAR_SESSION_STATE       = 'CLEAR_SESSION_STATE';
-const NONCE_LEN                       = 16;
+export const SET_LOGGED_USER             = 'SET_LOGGED_USER';
+export const LOGOUT_USER                 = 'LOGOUT_USER';
+export const REQUEST_USER_INFO           = 'REQUEST_USER_INFO';
+export const RECEIVE_USER_INFO           = 'RECEIVE_USER_INFO';
+export const CLEAR_SESSION_STATE         = 'CLEAR_SESSION_STATE';
+export const UPDATE_SESSION_STATE_STATUS = 'UPDATE_SESSION_STATE_STATUS';
+const NONCE_LEN                          = 16;
+export const SESSION_STATE_STATUS_UNCHANGED = 'unchanged';
+export const SESSION_STATE_STATUS_CHANGED = 'changed';
+export const SESSION_STATE_STATUS_ERROR = 'error';
 
 export const getAuthUrl = (backUrl = null, prompt = null, tokenIdHint = null) => {
 
@@ -177,18 +179,11 @@ export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
             history.push(backUrl);
         }
     );
-}
+};
 
-export const onStartSessionStateCheck = () => (dispatch) => {
+export const updateSessionStateStatus = (newStatus) => (dispatch, getState) => {
     dispatch({
-        type: START_SESSION_STATE_CHECK,
-        payload: {}
-    });
-}
-
-export const onFinishSessionStateCheck = () => (dispatch) => {
-    dispatch({
-        type: END_SESSION_STATE_CHECK,
-        payload: {}
+        type: UPDATE_SESSION_STATE_STATUS,
+        payload: {sessionStateStatus:newStatus}
     });
 }

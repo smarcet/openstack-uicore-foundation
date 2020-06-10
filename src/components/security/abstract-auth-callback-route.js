@@ -63,7 +63,9 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
         console.log("AuthorizationCallbackRoute::componentWillMount id_token_is_valid "+id_token_is_valid);
         this.setState({...this.state, id_token_is_valid, error ,error_description});
         if(access_token && id_token_is_valid) {
-            console.log(`AuthorizationCallbackRoute::componentWillMount onUserAuth ${access_token} ${id_token} ${session_state}`);
+            //console.log(`AuthorizationCallbackRoute::componentWillMount onUserAuth new access token ${access_token}`);
+            //console.log(`AuthorizationCallbackRoute::componentWillMount onUserAuth new id token ${id_token}`);
+            console.log(`AuthorizationCallbackRoute::componentWillMount onUserAuth new session state ${session_state}`);
             this.props.onUserAuth(access_token, id_token, session_state);
         }
     }

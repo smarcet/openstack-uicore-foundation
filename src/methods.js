@@ -58,8 +58,6 @@ import {
     initLogOut,
     doLogout,
     getUserInfo,
-    onStartSessionStateCheck,
-    onFinishSessionStateCheck,
 } from './components/security/actions';
 
 import {getCurrentUserLanguage} from './utils/methods';
@@ -127,8 +125,6 @@ export {
     initLogOut,
     doLogout,
     getUserInfo,
-    onStartSessionStateCheck,
-    onFinishSessionStateCheck,
     authErrorHandler,
     escapeFilterValue
 };
