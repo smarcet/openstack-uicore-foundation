@@ -54,6 +54,11 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
     componentWillMount() {
         console.log("AuthorizationCallbackRoute::componentWillMount");
         let { access_token , id_token, session_state, error, error_description } = this.extractHashParams();
+        if(error){
+            // if error condition short cut...
+            this.setState({...this.state, error ,error_description});
+            return;
+        }
         if(!access_token){
             // re start flow
             doLogin(getCurrentPathName());
