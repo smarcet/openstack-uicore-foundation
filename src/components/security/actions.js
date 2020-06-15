@@ -12,19 +12,21 @@
  **/
 
 import T from "i18n-react/dist/i18n-react";
-import { createAction, getRequest, startLoading, stopLoading, showMessage, authErrorHandler} from "../../utils/actions";
-import { buildAPIBaseUrl, getOAuth2ClientId, getOAuth2IDPBaseUrl,
+import {createAction, getRequest, startLoading, stopLoading, showMessage, authErrorHandler} from "../../utils/actions";
+import {
+    buildAPIBaseUrl, getOAuth2ClientId, getOAuth2IDPBaseUrl,
     getOAuth2Scopes, getAuthCallback, putOnLocalStorage, getAllowedUserGroups,
-    getCurrentLocation, getOrigin, getIdToken } from '../../utils/methods';
+    getCurrentLocation, getOrigin, getIdToken
+} from '../../utils/methods';
 import URI from "urijs";
 
-export const SET_LOGGED_USER             = 'SET_LOGGED_USER';
-export const LOGOUT_USER                 = 'LOGOUT_USER';
-export const REQUEST_USER_INFO           = 'REQUEST_USER_INFO';
-export const RECEIVE_USER_INFO           = 'RECEIVE_USER_INFO';
-export const CLEAR_SESSION_STATE         = 'CLEAR_SESSION_STATE';
+export const SET_LOGGED_USER = 'SET_LOGGED_USER';
+export const LOGOUT_USER = 'LOGOUT_USER';
+export const REQUEST_USER_INFO = 'REQUEST_USER_INFO';
+export const RECEIVE_USER_INFO = 'RECEIVE_USER_INFO';
+export const CLEAR_SESSION_STATE = 'CLEAR_SESSION_STATE';
 export const UPDATE_SESSION_STATE_STATUS = 'UPDATE_SESSION_STATE_STATUS';
-const NONCE_LEN                          = 16;
+const NONCE_LEN = 16;
 export const SESSION_STATE_STATUS_UNCHANGED = 'unchanged';
 export const SESSION_STATE_STATUS_CHANGED = 'changed';
 export const SESSION_STATE_STATUS_ERROR = 'error';
@@ -32,32 +34,32 @@ export const SESSION_STATE_STATUS_ERROR = 'error';
 export const getAuthUrl = (backUrl = null, prompt = null, tokenIdHint = null) => {
 
     let oauth2ClientId = getOAuth2ClientId();
-    let baseUrl        = getOAuth2IDPBaseUrl();
-    let scopes         = getOAuth2Scopes();
-    let redirectUri    = getAuthCallback();
+    let baseUrl = getOAuth2IDPBaseUrl();
+    let scopes = getOAuth2Scopes();
+    let redirectUri = getAuthCallback();
 
-    if(backUrl != null)
+    if (backUrl != null)
         redirectUri += `?BackUrl=${encodeURI(backUrl)}`;
 
     let nonce = createNonce(NONCE_LEN);
     console.log(`created nonce ${nonce}`);
     // store nonce to check it later
     putOnLocalStorage('nonce', nonce);
-    let url   = URI(`${baseUrl}/oauth2/auth`);
+    let url = URI(`${baseUrl}/oauth2/auth`);
 
     let query = {
-        "response_type"   : encodeURI("token id_token"),
-        "scope"           : encodeURI(scopes),
-        "nonce"           : nonce,
-        "client_id"       : encodeURI(oauth2ClientId),
-        "redirect_uri"    : encodeURI(redirectUri)
+        "response_type": encodeURI("token id_token"),
+        "scope": encodeURI(scopes),
+        "nonce": nonce,
+        "client_id": encodeURI(oauth2ClientId),
+        "redirect_uri": encodeURI(redirectUri)
     };
 
-    if(prompt){
+    if (prompt) {
         query['prompt'] = prompt;
     }
 
-    if(tokenIdHint){
+    if (tokenIdHint) {
         query['id_token_hint'] = tokenIdHint;
     }
 
@@ -67,9 +69,10 @@ export const getAuthUrl = (backUrl = null, prompt = null, tokenIdHint = null) =>
 }
 
 export const getLogoutUrl = (idToken) => {
-    let baseUrl       = getOAuth2IDPBaseUrl();
-    let url           = URI(`${baseUrl}/oauth2/end-session`);
-    let state         = createNonce(NONCE_LEN);
+    let baseUrl = getOAuth2IDPBaseUrl();
+    let oauth2ClientId = getOAuth2ClientId();
+    let url = URI(`${baseUrl}/oauth2/end-session`);
+    let state = createNonce(NONCE_LEN);
     let postLogOutUri = getOrigin() + '/auth/logout';
     // store nonce to check it later
     putOnLocalStorage('post_logout_state', state);
@@ -79,23 +82,24 @@ export const getLogoutUrl = (idToken) => {
      * "Security Settings" Tab -> Logout Options -> Post Logout Uris
      */
     return url.query({
-        "id_token_hint"             : idToken,
-        "post_logout_redirect_uri"  : encodeURI(postLogOutUri),
-        "state"                     : state,
+        "id_token_hint": idToken,
+        "post_logout_redirect_uri": encodeURI(postLogOutUri),
+        "client_id": encodeURI(oauth2ClientId),
+        "state": state,
     });
 }
 
 const createNonce = (len) => {
     let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let nonce = '';
-    for(let i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) {
         nonce += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return nonce;
 }
 
 export const doLogin = (backUrl = null) => {
-    if(backUrl)
+    if (backUrl)
         console.log(`doLogin - backUrl ${backUrl} `);
     let url = getAuthUrl(backUrl);
     let location = getCurrentLocation()
@@ -117,18 +121,18 @@ export const initLogOut = () => {
 export const doLogout = (backUrl) => (dispatch, getState) => {
     dispatch({
         type: LOGOUT_USER,
-        payload: {backUrl:backUrl}
+        payload: {backUrl: backUrl}
     });
 }
 
 export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
 
     let AllowedUserGroups = getAllowedUserGroups();
-    AllowedUserGroups           = AllowedUserGroups != '' ? AllowedUserGroups.split(' ') : [];
-    let { loggedUserState }     = getState();
-    let { accessToken, idToken, member } = loggedUserState;
+    AllowedUserGroups = AllowedUserGroups != '' ? AllowedUserGroups.split(' ') : [];
+    let {loggedUserState} = getState();
+    let {accessToken, idToken, member} = loggedUserState;
 
-    if(member != null){
+    if (member != null) {
         console.log(`redirecting to ${backUrl}`);
         history.push(backUrl);
         return;
@@ -144,20 +148,20 @@ export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
     )({})(dispatch, getState).then(() => {
             dispatch(stopLoading());
 
-            let { member } = getState().loggedUserState;
-            if( member == null || member == undefined){
+            let {member} = getState().loggedUserState;
+            if (member == null || member == undefined) {
                 let error_message = {
                     title: 'ERROR',
                     html: T.translate("errors.user_not_set"),
                     type: 'error'
                 };
 
-                dispatch(showMessage( error_message, initLogOut ));
+                dispatch(showMessage(error_message, initLogOut));
 
             }
 
             // check user groups ( if defined )
-            if(AllowedUserGroups.length > 0 ) {
+            if (AllowedUserGroups.length > 0) {
 
                 let allowedGroups = member.groups.filter((group, idx) => {
                     return AllowedUserGroups.includes(group.code);
@@ -166,9 +170,9 @@ export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
                 if (allowedGroups.length == 0) {
 
                     let error_message = {
-                            title: 'ERROR',
-                            html: T.translate("errors.user_not_authz"),
-                            type: 'error'
+                        title: 'ERROR',
+                        html: T.translate("errors.user_not_authz"),
+                        type: 'error'
                     };
 
                     dispatch(showMessage(error_message, initLogOut));
@@ -184,6 +188,6 @@ export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
 export const updateSessionStateStatus = (newStatus) => (dispatch, getState) => {
     dispatch({
         type: UPDATE_SESSION_STATE_STATUS,
-        payload: {sessionStateStatus:newStatus}
+        payload: {sessionStateStatus: newStatus}
     });
 }
