@@ -36,10 +36,13 @@ export default class DateTimePicker extends React.Component {
     }
 
     handleChange(date) {
+
         let { timezone } = this.props;
 
         if (date && moment.isMoment(date)) {
             date = moment.tz(date.format('YYYY-MM-DD HH:mm:ss'), timezone)
+        } else if (date === '') {
+            date = moment(0);
         }
 
         let ev = {target: {
