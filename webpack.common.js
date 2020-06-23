@@ -52,7 +52,7 @@ module.exports = {
                             '@babel/preset-react',
                             '@babel/preset-flow'
                         ],
-                        plugins: ['@babel/plugin-proposal-object-rest-spread']
+                        plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
                     }
                 }
             },
@@ -63,6 +63,25 @@ module.exports = {
             {
                 test: /\.less/,
                 use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"]
+            },
+            {
+                test: /\.module\.scss/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            sourceMap: false
+                        }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: false
+                        }
+                    }
+                ]
             },
             {
                 test: /\.scss/,

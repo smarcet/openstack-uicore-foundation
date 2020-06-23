@@ -35,6 +35,22 @@ export const queryMembers = _.debounce((input, callback) => {
 }, callDelay);
 
 
+export const querySummits = _.debounce((input, callback) => {
+
+    let accessToken = getAccessToken();
+    input = escapeFilterValue(input);
+    let filters = encodeURIComponent(`name=@${input}`);
+
+    fetch(buildAPIBaseUrl(`/api/v1/summits/all?filter=${filters}&access_token=${accessToken}`))
+        .then(fetchResponseHandler)
+        .then((json) => {
+            let options = [...json.data];
+
+            callback(options);
+        })
+        .catch(fetchErrorHandler);
+}, callDelay);
+
 
 export const querySpeakers = _.debounce((summitId, input, callback) => {
 

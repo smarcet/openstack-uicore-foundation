@@ -18,6 +18,7 @@ import TextArea from './components/inputs/textarea-input'
 import EventInput from './components/inputs/event-input'
 import GroupInput from './components/inputs/group-input'
 import MemberInput from './components/inputs/member-input'
+import SummitInput from './components/inputs/summit-input'
 import SpeakerInput from './components/inputs/speaker-input'
 import TagInput from './components/inputs/tag-input'
 import Input from './components/inputs/text-input'
@@ -39,6 +40,10 @@ import OPSessionChecker from "./components/security/session-checker/op-session-c
 import AbstractAuthorizationCallbackRoute from  "./components/security/abstract-auth-callback-route";
 import Exclusive from "./components/exclusive-wrapper";
 import FragmentParser from "./components/fragmen-parser";
+import Clock from "./components/clock";
+import CircleButton from "./components/circle-button";
+import VideoStream from "./components/video-stream";
+
 import {getCurrentUserLanguage} from './utils/methods';
 
 let language = getCurrentUserLanguage();
@@ -75,6 +80,7 @@ export {
     Dropdown,
     EventInput,
     GroupInput,
+    SummitInput,
     MemberInput,
     SpeakerInput,
     TagInput,
@@ -96,5 +102,8 @@ export {
     OPSessionChecker,
     AbstractAuthorizationCallbackRoute,
     Exclusive,
-    FragmentParser
+    FragmentParser,
+    Clock,
+    CircleButton,
+    VideoStream
 };
