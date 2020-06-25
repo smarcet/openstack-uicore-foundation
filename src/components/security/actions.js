@@ -125,12 +125,12 @@ export const doLogout = (backUrl) => (dispatch, getState) => {
     });
 }
 
-export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
+export const getUserInfo = (backUrl, history, errorHandler = null ) => (dispatch, getState) => {
 
     let AllowedUserGroups = getAllowedUserGroups();
-    AllowedUserGroups = AllowedUserGroups != '' ? AllowedUserGroups.split(' ') : [];
+    AllowedUserGroups = AllowedUserGroups !== '' ? AllowedUserGroups.split(' ') : [];
     let {loggedUserState} = getState();
-    let {accessToken, idToken, member} = loggedUserState;
+    let {accessToken, member} = loggedUserState;
 
     if (member != null) {
         console.log(`redirecting to ${backUrl}`);
@@ -138,18 +138,21 @@ export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
         return;
     }
 
+    if(errorHandler == null)
+        errorHandler = authErrorHandler;
+
     dispatch(startLoading());
 
     return getRequest(
         createAction(REQUEST_USER_INFO),
         createAction(RECEIVE_USER_INFO),
         buildAPIBaseUrl(`/api/v1/members/me?expand=groups&access_token=${accessToken}`),
-        authErrorHandler
+        errorHandler
     )({})(dispatch, getState).then(() => {
             dispatch(stopLoading());
 
             let {member} = getState().loggedUserState;
-            if (member == null || member == undefined) {
+            if (member == null) {
                 let error_message = {
                     title: 'ERROR',
                     html: T.translate("errors.user_not_set"),
@@ -165,9 +168,9 @@ export const getUserInfo = (backUrl, history) => (dispatch, getState) => {
 
                 let allowedGroups = member.groups.filter((group, idx) => {
                     return AllowedUserGroups.includes(group.code);
-                })
+                });
 
-                if (allowedGroups.length == 0) {
+                if (allowedGroups.length === 0) {
 
                     let error_message = {
                         title: 'ERROR',
