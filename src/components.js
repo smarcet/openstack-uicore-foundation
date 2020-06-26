@@ -43,6 +43,7 @@ import FragmentParser from "./components/fragmen-parser";
 import Clock from "./components/clock";
 import CircleButton from "./components/circle-button";
 import VideoStream from "./components/video-stream";
+import AttendanceTracker from "./components/attendance-tracker";
 
 import {getCurrentUserLanguage} from './utils/methods';
 
@@ -105,5 +106,6 @@ export {
     FragmentParser,
     Clock,
     CircleButton,
-    VideoStream
+    VideoStream,
+    AttendanceTracker
 };
