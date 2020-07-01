@@ -30,15 +30,15 @@ const CircleButton = ({event, isScheduled, nowUtc, addToSchedule, removeFromSche
     let onClick = null;
 
     if (isLiveNow) {
-        buttonClass = styles.enter;
+        buttonClass = `${styles.enter} enter`;
         iconClass = 'fa-sign-in';
         onClick = () => goToRoom(event.location.id);
     } else if (removeFromSchedule && addToSchedule && isScheduled) {
-        buttonClass = styles.added;
+        buttonClass = `${styles.added} added`;
         iconClass = 'fa-check';
         onClick = () => removeFromSchedule(event);
     } else if (removeFromSchedule && addToSchedule) {
-        buttonClass = styles.add;
+        buttonClass = `${styles.add} add`;
         iconClass = 'fa-plus';
         onClick = () => addToSchedule(event);
     }
