@@ -98,7 +98,6 @@ class OPSessionChecker extends React.Component {
             }
             if(this.props.sessionStateStatus === SESSION_STATE_STATUS_ERROR){
                 //console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === error");
-                let url = getAuthUrl(null, 'none', this.props.idToken);
                 // https://openid.net/specs/openid-connect-session-1_0.html#RPiframe
                 // do logout
                 this.props.doLogout();
@@ -208,7 +207,14 @@ class OPSessionChecker extends React.Component {
     }
 
     render() {
-        //console.log('OPSessionChecker::render');
+
+        if(typeof window !== 'undefined') {
+            if ( window.location !== window.parent.location ) {
+                //console.log("OPSessionChecker::render running inside iframe, skipping");
+                return null
+            }
+        }
+
         return(
             <div style={{height: '0px'}}>
                 <iframe
