@@ -24,7 +24,7 @@ import {
 } from "../actions";
 import URI from "urijs"
 
-const CHECK_SESSION_INTERVAL = 1000 * 60;
+const CHECK_SESSION_INTERVAL = (1000 * 60) * 30;
 
 class OPSessionChecker extends React.Component {
 
