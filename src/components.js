@@ -28,6 +28,7 @@ import SummitDropdown from './components/summit-dropdown/index'
 import Table from './components/table/Table'
 import SortableTable from './components/table-sortable/SortableTable'
 import EditableTable from './components/table-editable/EditableTable'
+import SelectableTable from './components/table-selectable/SelectableTable'
 import SimpleForm from './components/forms/simple-form'
 import RsvpForm from './components/forms/rsvp-form';
 import RadioList from './components/inputs/radio-list'
@@ -107,5 +108,6 @@ export {
     Clock,
     CircleButton,
     VideoStream,
-    AttendanceTracker
+    AttendanceTracker,
+    SelectableTable,
 };
