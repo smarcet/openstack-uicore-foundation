@@ -35,7 +35,8 @@ export default class CheckboxList extends React.Component {
 
         if (event.target.type == 'checkbox') {
             if (event.target.checked) {
-                value.push(event.target.value); //use string not int
+                const theVal = isNaN(event.target.value) ? event.target.value : parseInt(event.target.value);
+                value.push(theVal);
             } else {
                 value = value.filter( v => v != event.target.value )
             }
