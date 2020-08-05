@@ -15,10 +15,15 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import T from 'i18n-react/dist/i18n-react';
 import './upload.less';
+
 import file_icon from './file.png';
 import pdf_icon from './pdf.png';
+import mov_icon from './mov.png';
+import mp4_icon from './mp4.png';
+import jpg_icon from './jpg.png';
 
 export default class UploadInput extends React.Component {
+
     constructor(props) {
         super(props);
 
@@ -27,8 +32,15 @@ export default class UploadInput extends React.Component {
         }
     }
 
-    onImageDrop(files) {
-        this.props.handleUpload(files[0]);
+    onDrop(acceptedFiles, fileRejections, evt) {
+        if(acceptedFiles.length > 0)
+            this.props.handleUpload(acceptedFiles[0], this.props);
+        if(fileRejections.length > 0 && this.props.hasOwnProperty("handleError"))
+            this.props.handleError(fileRejections, this.props)
+    }
+
+    onRemove(ev){
+        this.props.handleRemove(ev, this.props);
     }
 
     showVeil() {
@@ -40,27 +52,30 @@ export default class UploadInput extends React.Component {
     }
 
     render() {
-        let {value, file, handleRemove, handleUpload, ...rest} = this.props;
-        let icon = '';
-        let name = '';
+        let {value, file, handleRemove, handleUpload, fileName, error, ...rest} = this.props;
+        let has_error = ( this.props.hasOwnProperty('error') && error != '' );
+        let icon = file_icon;
 
         if (value) {
-            icon = (value.endsWith('jpg') || value.endsWith('png')) ? value : (value.endsWith('pdf') ? pdf_icon: file_icon);
-            name = value.slice(value.lastIndexOf("/") + 1);
+            if(!fileName) fileName = value.slice(value.lastIndexOf("/") + 1);
         }
 
         if (file && file.name) {
-            name = file.name;
-            icon = (name.endsWith('jpg') || name.endsWith('png')) ? value : (name.endsWith('pdf') ? pdf_icon: file_icon);
+            fileName = file.name;
         }
+
+        icon =  (fileName.endsWith('pdf') ? pdf_icon: icon);
+        icon =  (fileName.endsWith('mov') ? mov_icon: icon);
+        icon =  (fileName.endsWith('mp4') ? mp4_icon: icon);
+        icon =  (fileName.endsWith('jpg') ? jpg_icon: icon);
 
         return (
             <div className="file-upload">
                 <Dropzone
-                    onDrop={this.onImageDrop.bind(this)}
+                    onDrop={this.onDrop.bind(this)}
                     {...rest}
                 >
-                    <div>{T.translate("general.drop_files")}</div>
+                <div>{T.translate("general.drop_files")}</div>
                 </Dropzone>
                 <div className="selected-files-box col-md-6">
                     <p>Selected Files</p>
@@ -68,13 +83,16 @@ export default class UploadInput extends React.Component {
                         {value &&
                         <div className="file-box" onMouseEnter={this.showVeil.bind(this)} onMouseLeave={this.hideVeil.bind(this)}>
                             <img src={icon} />
-                            <a href={value} target="_blank">{name}</a>
+                            <a href={value} target="_blank">{fileName}</a>
                             {this.state.show_remove &&
-                            <div className="remove" onClick={handleRemove}>
+                            <div className="remove" onClick={this.onRemove.bind(this)}>
                                 <i className="fa fa-times"></i>
                             </div>
                             }
                         </div>
+                        }
+                        {has_error &&
+                        <p className="error-label">{error}</p>
                         }
                     </div>
                 </div>

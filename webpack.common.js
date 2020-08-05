@@ -98,7 +98,12 @@ module.exports = {
             },
             {
                 test: /\.jpg|\.png|\.gif$/,
-                use: "file-loader?name=images/[name].[ext]"
+                use: {
+                    loader: "url-loader",
+                    options: {
+                        limit: 25000,
+                    },
+                },
             },
             {
                 test: /\.svg/,
