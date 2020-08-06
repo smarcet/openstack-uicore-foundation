@@ -53,21 +53,21 @@ export default class UploadInput extends React.Component {
 
     render() {
         let {value, file, handleRemove, handleUpload, fileName, error, ...rest} = this.props;
-        let has_error = ( this.props.hasOwnProperty('error') && error != '' );
+        let has_error = ( this.props.hasOwnProperty('error') && error !== '' );
         let icon = file_icon;
 
         if (value) {
             if(!fileName) fileName = value.slice(value.lastIndexOf("/") + 1);
         }
 
-        if (file && file.name) {
+        if (file && file.hasOwnProperty("name") && file.name) {
             fileName = file.name;
         }
 
-        icon =  (fileName.endsWith('pdf') ? pdf_icon: icon);
-        icon =  (fileName.endsWith('mov') ? mov_icon: icon);
-        icon =  (fileName.endsWith('mp4') ? mp4_icon: icon);
-        icon =  (fileName.endsWith('jpg') ? jpg_icon: icon);
+        icon =  (fileName && fileName.endsWith('pdf') ? pdf_icon: icon);
+        icon =  (fileName && fileName.endsWith('mov') ? mov_icon: icon);
+        icon =  (fileName && fileName.endsWith('mp4') ? mp4_icon: icon);
+        icon =  (fileName && fileName.endsWith('jpg') ? jpg_icon: icon);
 
         return (
             <div className="file-upload">
