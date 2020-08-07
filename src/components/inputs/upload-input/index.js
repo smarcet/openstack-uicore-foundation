@@ -52,7 +52,7 @@ export default class UploadInput extends React.Component {
     }
 
     render() {
-        let {value, file, handleRemove, handleUpload, fileName, error, ...rest} = this.props;
+        let {value, file, handleRemove, handleUpload, handleError, fileName, error, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error !== '' );
         let icon = file_icon;
 
