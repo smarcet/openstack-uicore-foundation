@@ -13,6 +13,8 @@
 
 import React from 'react';
 import RawHTML from '../raw-html';
+import CheckboxList from "./checkbox-list";
+import PropTypes from 'prop-types'
 
 export default class RadioList extends React.Component {
 
@@ -27,7 +29,7 @@ export default class RadioList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.hasOwnProperty('value') &&  this.state.value != nextProps.value) {
+        if(nextProps.hasOwnProperty('value') &&  this.state.value !== nextProps.value) {
             this.setState({value: nextProps.value});
         }
     }
@@ -68,7 +70,7 @@ export default class RadioList extends React.Component {
 
     render() {
 
-        let {onChange, value, className, error, options, ...rest} = this.props;
+        let {onChange, value, className, error, options,id, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
         let inline = ( this.props.hasOwnProperty('inline') );
         let simple = ( this.props.hasOwnProperty('simple') );
@@ -90,15 +92,15 @@ export default class RadioList extends React.Component {
         }
 
         return (
-            <div>
+            <div id={id}>
                 { options.map(op => {
-                    let checked = (op.value == value);
+                    let checked = (op.value === value);
                     return (
-                        <div className="form-check abc-radio" key={"radio_key_" + op.value} style={style}>
+                        <div className="form-check abc-radio" key={`radio_key_${id}_${op.value}`} style={style}>
                             <input
                                 className="form-check-input"
                                 type="radio"
-                                id={"radio_" + op.value}
+                                id={`radio_${id}__${op.value}`}
                                 value={op.value}
                                 checked={checked}
                                 onChange={this.handleChange}
@@ -116,3 +118,7 @@ export default class RadioList extends React.Component {
 
     }
 }
+
+RadioList.propTypes = {
+    id: PropTypes.string.isRequired
+};

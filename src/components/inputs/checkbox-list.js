@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-
+import PropTypes from 'prop-types'
 import React from 'react';
 import T from 'i18n-react/dist/i18n-react';
 
@@ -33,12 +33,12 @@ export default class CheckboxList extends React.Component {
         let optionValues = this.props.options.map(op => op.value);
         let value = this.props.value ? [...this.props.value] : [];
 
-        if (event.target.type == 'checkbox') {
+        if (event.target.type === 'checkbox') {
             if (event.target.checked) {
                 const theVal = isNaN(event.target.value) ? event.target.value : parseInt(event.target.value);
                 value.push(theVal);
             } else {
-                value = value.filter( v => v != event.target.value )
+                value = value.filter( v => v !== event.target.value )
             }
         } else {
             value = value.filter(v => optionValues.includes(v));
@@ -66,7 +66,7 @@ export default class CheckboxList extends React.Component {
         let inline = ( this.props.hasOwnProperty('inline') );
         let allowOther = ( this.props.hasOwnProperty('allowOther') );
         let otherValue = value ? value.find( v => !options.map(op => op.value).includes(v) ) : false ;
-        let has_error = ( this.props.hasOwnProperty('error') && error != '' );
+        let has_error = ( this.props.hasOwnProperty('error') && error !== '' );
 
 
         let style, label;
@@ -93,9 +93,9 @@ export default class CheckboxList extends React.Component {
                         let checked = value ? value.includes(op.value) : false;
                         return (
                             <div className="form-check abc-checkbox" key={"radio_key_" + op.value} style={style}>
-                                <input type="checkbox" id={"cb_" + op.value} checked={checked}
+                                <input type="checkbox" id={`cb_${id}_${op.value}`  } checked={checked}
                                        onChange={this.handleChange} className="form-check-input" value={op.value} />
-                                <label className="form-check-label" htmlFor={"cb_" + op.value}>
+                                <label className="form-check-label" htmlFor={`cb_${id}_${op.value}`  } >
                                     {op.label}
                                 </label>
                             </div>
@@ -127,3 +127,8 @@ export default class CheckboxList extends React.Component {
 
     }
 }
+
+
+CheckboxList.propTypes = {
+    id: PropTypes.string.isRequired
+};
