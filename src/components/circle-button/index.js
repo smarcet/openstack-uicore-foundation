@@ -22,7 +22,7 @@ const isLive = (event, nowUtc) => {
     return hasStarted && !hasEnded;
 };
 
-const CircleButton = ({event, isScheduled, nowUtc, addToSchedule, removeFromSchedule, goToRoom}) => {
+const CircleButton = ({event, isScheduled, nowUtc, addToSchedule, removeFromSchedule, enterClick}) => {
 
     const isLiveNow = isLive(event, nowUtc);
     let buttonClass = null;
@@ -32,7 +32,7 @@ const CircleButton = ({event, isScheduled, nowUtc, addToSchedule, removeFromSche
     if (isLiveNow) {
         buttonClass = `${styles.enter} enter`;
         iconClass = 'fa-sign-in';
-        onClick = () => goToRoom(event.location.id);
+        onClick = () => enterClick(event);
     } else if (removeFromSchedule && addToSchedule && isScheduled) {
         buttonClass = `${styles.added} added`;
         iconClass = 'fa-check';
@@ -56,7 +56,15 @@ const CircleButton = ({event, isScheduled, nowUtc, addToSchedule, removeFromSche
 CircleButton.propTypes = {
     event: PropTypes.object.isRequired,
     nowUtc: PropTypes.number.isRequired,
-    isScheduled: PropTypes.bool.isRequired
+    isScheduled: PropTypes.bool.isRequired,
+    enterClick: PropTypes.func.isRequired,
+    addToSchedule: PropTypes.func,
+    removeFromSchedule: PropTypes.func,
+};
+
+CircleButton.defaultProps = {
+    addToSchedule: console.log,
+    removeFromSchedule: console.log,
 };
 
 export default CircleButton;
