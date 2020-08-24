@@ -43,6 +43,7 @@ class FreeTextSearch extends React.Component {
 
     onClearClick(){
         this.doFiltering('');
+        this.setState({value: ''});
     }
 
     doFiltering(term){
