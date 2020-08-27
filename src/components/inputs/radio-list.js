@@ -45,22 +45,22 @@ export default class RadioList extends React.Component {
         this.props.onChange(ev);
     }
 
-    getLabel(option, inline, simple) {
+    getLabel(option, id, inline, simple) {
         if (inline) {
             return (
-                <label className="form-check-label" htmlFor={"radio_" + option.value} style={{display: 'inline-block'}}>
+                <label className="form-check-label" htmlFor={`radio_${id}_${option.value}`} style={{display: 'inline-block'}}>
                     {option.label}
                 </label>
             );
         } else if (simple) {
             return (
-                <label className="form-check-label" htmlFor={"radio_" + option.value} >
+                <label className="form-check-label" htmlFor={`radio_${id}_${option.value}`} >
                     {option.label}
                 </label>
             );
         } else {
             return (
-                <label className="form-check-label" htmlFor={"radio_" + option.value} style={{display: 'inline-block'}}>
+                <label className="form-check-label" htmlFor={`radio_${id}_${option.value}`} style={{display: 'inline-block'}}>
                     <h4 style={{marginTop: '0px'}}>{option.label}</h4>
                     <RawHTML>{option.description}</RawHTML>
                 </label>
@@ -92,9 +92,9 @@ export default class RadioList extends React.Component {
         }
 
         return (
-            <div id={id}>
+            <div id={`rl_wrapper_${id}`}>
                 { options.map(op => {
-                    let checked = (op.value === value);
+                    let checked = (op.value == value);
                     return (
                         <div className="form-check abc-radio" key={`radio_key_${id}_${op.value}`} style={style}>
                             <input
@@ -104,8 +104,9 @@ export default class RadioList extends React.Component {
                                 value={op.value}
                                 checked={checked}
                                 onChange={this.handleChange}
+                                name={`radio_${id}`}
                             />
-                            {this.getLabel(op, inline, simple)}
+                            {this.getLabel(op, id, inline, simple)}
                         </div>
                     )
                 })}

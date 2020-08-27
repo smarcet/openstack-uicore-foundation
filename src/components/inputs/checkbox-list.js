@@ -87,13 +87,13 @@ export default class CheckboxList extends React.Component {
         }
 
         return (
-            <div>
+            <div id={`chl_wrapper_${id}`}>
                 <div className={"checkboxes-div" + (has_error ? ' error' : '') }>
                     { options.map(op => {
                         let checked = value ? value.includes(op.value) : false;
                         return (
                             <div className="form-check abc-checkbox" key={"radio_key_" + op.value} style={style}>
-                                <input type="checkbox" id={`cb_${id}_${op.value}`  } checked={checked}
+                                <input type="checkbox" id={`cb_${id}_${op.value}`} checked={checked}
                                        onChange={this.handleChange} className="form-check-input" value={op.value} />
                                 <label className="form-check-label" htmlFor={`cb_${id}_${op.value}`  } >
                                     {op.label}
