@@ -29,11 +29,13 @@ class Clock extends React.Component {
     async componentDidMount() {
         const {timezone = 'UTC', now} = this.props;
         const nowQS = this.fragmentParser.getParam('now');
-        const nowOverride = nowQS || now;
+        const momentQS = moment.tz(nowQS, 'YYYY-MM-DD,hh:mm:ss', timezone)
         let timestamp;
 
-        if (nowOverride) {
-            timestamp = moment.tz(nowOverride, 'YYYY-MM-DD,hh:mm:ss', timezone).valueOf() / 1000;
+        if (momentQS.isValid()) {
+            timestamp = momentQS.valueOf() / 1000;
+        } else if (now) {
+            timestamp = now
         } else {
             const local = moment().unix();
             const serverTime =  await this.getServerTime();
