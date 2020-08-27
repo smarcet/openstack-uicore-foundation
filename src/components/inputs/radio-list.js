@@ -100,7 +100,7 @@ export default class RadioList extends React.Component {
                             <input
                                 className="form-check-input"
                                 type="radio"
-                                id={`radio_${id}__${op.value}`}
+                                id={`radio_${id}_${op.value}`}
                                 value={op.value}
                                 checked={checked}
                                 onChange={this.handleChange}
