@@ -22,7 +22,7 @@ class Clock extends React.Component {
         this.fragmentParser = new FragmentParser();
         this.interval = null;
         this.state = {
-            timestamp: 0
+            timestamp: null
         }
     }
 
@@ -70,8 +70,10 @@ class Clock extends React.Component {
 
     tick = () => {
         const {timestamp} = this.state;
-        this.props.onTick(timestamp + 1);
-        this.setState({timestamp: timestamp + 1})
+        if (timestamp !== null) {   
+            this.props.onTick(timestamp + 1);
+            this.setState({timestamp: timestamp + 1})
+        }
     };
 
     // epoch utc time in seconds
