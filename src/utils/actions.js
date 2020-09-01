@@ -47,7 +47,7 @@ const cancel = (key) => {
 }
 
 const schedule = (key, req) => {
-    console.log(`scheduling ${key}`);
+    // console.log(`scheduling ${key}`);
     xhrs[key] = req;
 };
 

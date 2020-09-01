@@ -21,18 +21,26 @@ import http from 'superagent';
 
 class AttendanceTracker extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
+        const {trackEnter, onBeforeUnload} = this;
+
         // track enter
-        this.trackEnter();
+        trackEnter();
+
+        if (typeof window !== 'undefined') {
+            window.addEventListener("beforeunload", onBeforeUnload);
+        }
     }
 
     componentWillUnmount() {
+        const {trackLeave, onBeforeUnload} = this;
+
         // track leave
-        this.trackLeave();
+        trackLeave();
+
+        if (typeof window !== 'undefined') {
+            window.removeEventListener("beforeunload", onBeforeUnload);
+        }
     }
 
     trackEnter = () => {
@@ -40,15 +48,21 @@ class AttendanceTracker extends React.Component {
 
         http.put(`${apiBaseUrl}/api/v1/summits/${summitId}/members/me/schedule/${eventId}/enter`)
             .send({access_token: accessToken})
-            .end();
+            .end(() => console.log('ENTER PAGE'));
     };
 
     trackLeave = () => {
         const {apiBaseUrl, summitId, eventId, accessToken} = this.props;
 
-        http.put(`${apiBaseUrl}/api/v1/summits/${summitId}/members/me/schedule/${eventId}/leave`)
+        http.post(`${apiBaseUrl}/api/v1/summits/${summitId}/members/me/schedule/${eventId}/leave`)
             .send({access_token: accessToken})
-            .end();
+            .end(() => console.log('LEFT PAGE'));
+    };
+
+    onBeforeUnload = () => {
+        const {apiBaseUrl, summitId, eventId, accessToken} = this.props;
+        navigator.sendBeacon(`${apiBaseUrl}/api/v1/summits/${summitId}/members/me/schedule/${eventId}/leave?access_token=${accessToken}`, {});
+        return undefined;
     };
 
     render() {

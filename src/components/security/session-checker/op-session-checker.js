@@ -152,7 +152,7 @@ class OPSessionChecker extends React.Component {
         }
 
         this.checkSession();
-        console.log(`OPSessionChecker::setTimer setting interval ${CHECK_SESSION_INTERVAL}`);
+        // console.log(`OPSessionChecker::setTimer setting interval ${CHECK_SESSION_INTERVAL}`);
         if(typeof window !== 'undefined')
             this.interval = window.setInterval(this.checkSession, CHECK_SESSION_INTERVAL);
     }
