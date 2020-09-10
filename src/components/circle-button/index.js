@@ -28,22 +28,29 @@ const CircleButton = ({event, isScheduled, nowUtc, addToSchedule, removeFromSche
     let buttonClass = null;
     let iconClass = null;
     let onClick = null;
+    const handleClick = (ev, action) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        action(event);
+    };
+
 
     if (isLiveNow) {
         buttonClass = `${styles.enter} enter`;
         iconClass = 'fa-sign-in';
-        onClick = () => enterClick(event);
+        onClick = ev => handleClick(ev, enterClick);
     } else if (removeFromSchedule && addToSchedule && isScheduled) {
         buttonClass = `${styles.added} added`;
         iconClass = 'fa-check';
-        onClick = () => removeFromSchedule(event);
+        onClick = ev => handleClick(ev, removeFromSchedule);
     } else if (removeFromSchedule && addToSchedule) {
         buttonClass = `${styles.add} add`;
         iconClass = 'fa-plus';
-        onClick = () => addToSchedule(event);
+        onClick = ev => handleClick(ev, addToSchedule);
     }
 
     if (!onClick) return null;
+
 
     return (
         <button className={`${styles.circleButton} ${buttonClass}`} onClick={onClick}>
