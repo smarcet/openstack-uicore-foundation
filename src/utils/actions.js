@@ -399,7 +399,7 @@ export const getCSV = (url, params, filename, header = null) => (dispatch) => {
             let link = document.createElement('a');
             link.textContent = 'download';
             link.download = filename;
-            link.href = 'data:text/csv;charset=utf-8,'+ encodeURI(csv);
+            link.href = 'data:text/csv;charset=utf-8,'+ encodeURIComponent(csv);
             document.body.appendChild(link); // Required for FF
             link.click();
             document.body.removeChild(link);
