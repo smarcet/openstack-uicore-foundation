@@ -119,7 +119,11 @@ class SimpleLinkList extends React.Component {
 
         if (options.hasOwnProperty('sortCol')) {
             values = values.sort(
-                (a, b) => (a[options.sortCol] > b[options.sortCol] ? 1 : (a[options.sortCol] < b[options.sortCol] ? -1 : 0))
+                (a, b) => {
+                    const itemA = isNaN(a[options.sortCol]) ? a[options.sortCol].toLowerCase() : a[options.sortCol];
+                    const itemB = isNaN(b[options.sortCol]) ? b[options.sortCol].toLowerCase() : b[options.sortCol];
+                    return (itemA > itemB ? 1 : (itemA < itemB ? -1 : 0))
+                }
             );
         }
 
