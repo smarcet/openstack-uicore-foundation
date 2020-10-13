@@ -60,7 +60,7 @@ export default class TagInput extends React.Component {
         let {className, error, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error != '' );
 
-        let orderedTags = this.state.value.sort((a, b) => (a.tag > b.tag ? 1 : (a.tag < b.tag ? -1 : 0)));
+        let orderedTags = this.state.value.sort((a, b) => (a.tag.toLowerCase() > b.tag.toLowerCase() ? 1 : (a.tag.toLowerCase() < b.tag.toLowerCase() ? -1 : 0)));
 
         return (
             <div>

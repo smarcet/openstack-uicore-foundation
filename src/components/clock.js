@@ -29,7 +29,7 @@ class Clock extends React.Component {
     async componentDidMount() {
         const {timezone = 'UTC', now} = this.props;
         const nowQS = this.fragmentParser.getParam('now');
-        const momentQS = moment.tz(nowQS, 'YYYY-MM-DD,hh:mm:ss', timezone)
+        const momentQS = moment.tz(nowQS, 'YYYY-MM-DD,hh:mm:ss', timezone);
         let timestamp;
 
         if (momentQS.isValid()) {
