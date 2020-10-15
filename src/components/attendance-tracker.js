@@ -44,25 +44,38 @@ class AttendanceTracker extends React.Component {
     }
 
     trackEnter = () => {
-        const {apiBaseUrl, summitId, eventId, accessToken} = this.props;
+        const {apiBaseUrl, summitId, sourceId, sourceName, accessToken} = this.props;
+        const location = this.getLocation();
 
-        http.put(`${apiBaseUrl}/api/v1/summits/${summitId}/members/me/schedule/${eventId}/enter`)
-            .send({access_token: accessToken})
+        http.put(`${apiBaseUrl}/api/v1/summits/${summitId}/metrics/enter`)
+            .send({access_token: accessToken, type: sourceName, source_id: sourceId, location: location})
             .end(() => console.log('ENTER PAGE'));
     };
 
     trackLeave = () => {
-        const {apiBaseUrl, summitId, eventId, accessToken} = this.props;
+        const {apiBaseUrl, summitId, sourceId, sourceName, accessToken} = this.props;
+        const location = this.getLocation();
 
-        http.post(`${apiBaseUrl}/api/v1/summits/${summitId}/members/me/schedule/${eventId}/leave`)
-            .send({access_token: accessToken})
+        http.post(`${apiBaseUrl}/api/v1/summits/${summitId}/metrics/leave`)
+            .send({access_token: accessToken, type: sourceName, source_id: sourceId, location: location})
             .end(() => console.log('LEFT PAGE'));
     };
 
     onBeforeUnload = () => {
-        const {apiBaseUrl, summitId, eventId, accessToken} = this.props;
-        navigator.sendBeacon(`${apiBaseUrl}/api/v1/summits/${summitId}/members/me/schedule/${eventId}/leave?access_token=${accessToken}`, {});
+        const {apiBaseUrl, summitId, sourceId, sourceName, accessToken} = this.props;
+        const location = this.getLocation();
+
+        navigator.sendBeacon(
+            `${apiBaseUrl}/api/v1/summits/${summitId}/metrics/leave?access_token=${accessToken}&type=${sourceName}&source_id=${sourceId}&location=${location}`, {});
         return undefined;
+    };
+
+    getLocation = () => {
+      if (typeof window !== 'undefined') {
+          return encodeURIComponent(window.location.href);
+      }
+
+      return '';
     };
 
     render() {
@@ -71,10 +84,16 @@ class AttendanceTracker extends React.Component {
 }
 
 AttendanceTracker.propTypes = {
-    eventId: PropTypes.number.isRequired,
+    sourceName: PropTypes.string,
+    sourceId: PropTypes.number,
     summitId: PropTypes.number.isRequired,
     apiBaseUrl: PropTypes.string.isRequired,
     accessToken: PropTypes.string.isRequired
+};
+
+AttendanceTracker.defaultProps = {
+    sourceId: 0,
+    sourceName: 'GENERAL'
 };
 
 export default AttendanceTracker;
