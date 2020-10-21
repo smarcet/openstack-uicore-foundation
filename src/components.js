@@ -45,7 +45,7 @@ import Clock from "./components/clock";
 import CircleButton from "./components/circle-button";
 import VideoStream from "./components/video-stream";
 import AttendanceTracker from "./components/attendance-tracker";
-
+import DropzoneJS from './components/dropzonejs';
 import {getCurrentUserLanguage} from './utils/methods';
 
 let language = getCurrentUserLanguage();
@@ -110,4 +110,5 @@ export {
     VideoStream,
     AttendanceTracker,
     SelectableTable,
+    DropzoneJS,
 };
