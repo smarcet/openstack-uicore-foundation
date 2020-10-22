@@ -13,6 +13,7 @@
 
 import React from 'react';
 import RichTextEditor from 'react-rte-ref-fix';
+import string from "less/lib/less/functions/string";
 
 
 export default class TextEditor extends React.Component {
@@ -63,6 +64,7 @@ export default class TextEditor extends React.Component {
 
         if (oldContentState !== newContentState) {
             let stringValue = editorValue.toString('html');
+            stringValue = stringValue === '<p><br></p>' ? '' : stringValue;
 
             this._currentValue = stringValue;
 
