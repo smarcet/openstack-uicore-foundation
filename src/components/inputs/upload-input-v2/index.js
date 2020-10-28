@@ -22,7 +22,8 @@ export default class UploadInputV2 extends React.Component {
     }
 
     render() {
-        let {value, onRemove, ...rest} = this.props;
+        let {value, onRemove, error, ...rest} = this.props;
+        let has_error = ( this.props.hasOwnProperty('error') && error !== '' );
 
         const uploaded = value.filter(v => !v.should_upload);
         const savePending = value.filter(v => v.should_upload);
@@ -33,6 +34,9 @@ export default class UploadInputV2 extends React.Component {
                     <DropzoneJS {...rest} uploadCount={value.length} />
                 </div>
                 <div className="col-md-6">
+                    {has_error &&
+                    <p className="error-label">{error}</p>
+                    }
                     {uploaded.length > 0 &&
                         <div>
                             <label>Uploaded</label>
@@ -56,10 +60,9 @@ export default class UploadInputV2 extends React.Component {
                         <div>
                             <label>Ready to Submit:</label>
                             {savePending.map((v,i) => {
-                                const style = v.should_delete ? {textDecoration: 'line-through'} : {};
                                 return (
                                     <div key={`pending-${i}`}>
-                                        <span style={style}>{v.filename}</span>
+                                        <span>{v.filename}</span>
                                     </div>
                                 )
                             })}

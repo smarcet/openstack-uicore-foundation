@@ -42,6 +42,14 @@ export class DropzoneJS extends React.Component {
             options = defaults
         }
 
+        options.accept = (file, done) => {
+            if (options.maxFiles < (this.state.files.length + this.props.uploadCount)) {
+                done('Max files reached');
+            }
+
+            done();
+        };
+
         return options
     }
 
