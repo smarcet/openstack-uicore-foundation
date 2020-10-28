@@ -8,6 +8,7 @@ import GMap from './components/google-map/index';
 import DateTimePicker from './components/inputs/datetimepicker/index'
 import GroupedDropdown from './components/inputs/grouped-dropdown/index'
 import UploadInput from './components/inputs/upload-input/index'
+import UploadInputV2 from './components/inputs/upload-input-v2/index'
 import CompanyInput from './components/inputs/company-input'
 import SponsorInput from './components/inputs/sponsor-input'
 import OrganizationInput from './components/inputs/organization-input'
@@ -45,7 +46,6 @@ import Clock from "./components/clock";
 import CircleButton from "./components/circle-button";
 import VideoStream from "./components/video-stream";
 import AttendanceTracker from "./components/attendance-tracker";
-import DropzoneJS from './components/dropzonejs';
 import {getCurrentUserLanguage} from './utils/methods';
 
 let language = getCurrentUserLanguage();
@@ -73,6 +73,7 @@ export {
     DateTimePicker,
     GroupedDropdown,
     UploadInput,
+    UploadInputV2,
     CompanyInput,
     SponsorInput,
     CountryInput,
@@ -110,5 +111,4 @@ export {
     VideoStream,
     AttendanceTracker,
     SelectableTable,
-    DropzoneJS,
 };

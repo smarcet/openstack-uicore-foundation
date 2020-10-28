@@ -61,9 +61,7 @@ export class DropzoneJS extends React.Component {
 
         var dropzoneNode = this.props.config.dropzoneSelector || ReactDOM.findDOMNode(this)
         this.dropzone = new Dropzone(dropzoneNode, options);
-        if(this.props.value) {
-            this.dropzone.options.addedfile.call(this.dropzone, this.props.value);
-        }
+
         this.setupEvents()
     }
 
@@ -136,7 +134,7 @@ export class DropzoneJS extends React.Component {
         const icons = []
         const { files } = this.state
         const { config } = this.props
-        const className = (this.props.className) ? 'filepicker dropzone ' + this.props.className : 'filepicker dropzone'
+        const className = (this.props.className) ? 'filepicker dropzone ' + this.props.className : 'filepicker dropzone';
 
         if (config.showFiletypeIcon && config.iconFiletypes && (!files || files.length < 1)) {
             for (var i = 0; i < this.props.config.iconFiletypes.length; i = i + 1) {
@@ -150,11 +148,11 @@ export class DropzoneJS extends React.Component {
                     {icons}
                     {this.props.children}
                 </form>
-            )
+            );
         } else {
             return (
                 <div id={this.props.id} className={className}> {icons} {this.props.children} </div>
-            )
+            );
         }
     }
 
