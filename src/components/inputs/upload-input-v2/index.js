@@ -13,6 +13,7 @@
 
 import React from 'react'
 import DropzoneJS from './dropzone'
+import './index.less';
 
 export default class UploadInputV2 extends React.Component {
 
@@ -24,45 +25,32 @@ export default class UploadInputV2 extends React.Component {
     render() {
         let {value, onRemove, error, ...rest} = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error !== '' );
-
-        const uploaded = value.filter(v => !v.should_upload);
-        const savePending = value.filter(v => v.should_upload);
+        const canUpload = rest.djsConfig.maxFiles ? value.length < rest.djsConfig.maxFiles : true;
 
         return (
             <div className="row">
                 <div className="col-md-6"  style={{height: 180}}>
-                    <DropzoneJS {...rest} uploadCount={value.length} />
+                    {canUpload ? (
+                        <DropzoneJS {...rest} uploadCount={value.length} />
+                    ) : (
+                        <div className="filepicker disabled">
+                            Max number of files uploaded for this type - Remove uploaded file to add new file.
+                        </div>
+                    )}
+
                 </div>
                 <div className="col-md-6">
                     {has_error &&
                     <p className="error-label">{error}</p>
                     }
-                    {uploaded.length > 0 &&
+                    {value.length > 0 &&
                         <div>
                             <label>Uploaded</label>
-                            {uploaded.map((v,i) => {
-                                const style = v.should_delete ? {textDecoration: 'line-through'} : {};
+                            {value.map((v,i) => {
                                 return (
-                                <div key={`uploaded-${i}`}>
-                                    <span style={style}>{v.filename}</span>
-                                    {!v.should_delete &&
-                                        <span> - <a onClick={ev => onRemove(v)}>Remove</a></span>
-                                    }
-                                    {v.should_delete &&
-                                    <span> - save to complete delete </span>
-                                    }
-                                </div>
-                                )
-                            })}
-                        </div>
-                    }
-                    {savePending.length > 0 &&
-                        <div>
-                            <label>Ready to Submit:</label>
-                            {savePending.map((v,i) => {
-                                return (
-                                    <div key={`pending-${i}`}>
+                                    <div key={`uploaded-${i}`}>
                                         <span>{v.filename}</span>
+                                        <span> - <a onClick={ev => onRemove(v)}>Remove</a></span>
                                     </div>
                                 )
                             })}

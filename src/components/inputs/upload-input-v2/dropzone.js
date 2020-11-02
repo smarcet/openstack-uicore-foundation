@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import extend from 'extend'
 import 'dropzone/dist/dropzone.css';
-import './index.less';
 import { Icon } from './icon'
 import PropTypes from 'prop-types';
 
