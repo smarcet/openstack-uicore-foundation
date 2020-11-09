@@ -23,15 +23,52 @@ export default class UploadInputV2 extends React.Component {
     }
 
     render() {
-        let {value, onRemove, error, ...rest} = this.props;
+        let {value, onRemove, error, mediaType, postUrl, maxFiles = 1, timeOut, onUploadComplete, djsConfig, id } = this.props;
         let has_error = ( this.props.hasOwnProperty('error') && error !== '' );
-        const canUpload = rest.djsConfig.maxFiles ? value.length < rest.djsConfig.maxFiles : true;
+        const allowedExt = mediaType && mediaType.type ? mediaType.type.allowed_extensions.map((ext) => `.${ext.toLowerCase()}`).join(",") : '';
+        const maxSize = mediaType ? mediaType.max_size / 1024 : 100;
+        const canUpload = value.length < maxFiles;
+
+        const djsConfigSet = {
+            paramName: "file", // The name that will be used to transfer the file,
+            maxFilesize: maxSize, // MB,
+            timeout: timeOut || (1000 * 60 * 10),
+            chunking: true,
+            retryChunks: true,
+            parallelChunkUploads: false,
+            addRemoveLinks: true,
+            maxFiles: maxFiles,
+            acceptedFiles: allowedExt,
+            dropzoneSelector: `media_upload_${mediaType.id}`,
+            ...djsConfig
+        };
+        const componentConfig = {
+            showFiletypeIcon: false,
+            postUrl: postUrl
+        };
+        const data = {
+            media_type: mediaType,
+            media_upload: value,
+        };
+
+        let eventHandlers = {};
+        if (onRemove) {
+            eventHandlers = {removedfile: onRemove};
+        }
 
         return (
             <div className="row">
                 <div className="col-md-6"  style={{height: 180}}>
                     {canUpload ? (
-                        <DropzoneJS {...rest} uploadCount={value.length} />
+                        <DropzoneJS
+                            id={id}
+                            djsConfig={djsConfigSet}
+                            config={componentConfig}
+                            eventHandlers={eventHandlers}
+                            data={data}
+                            uploadCount={value.length}
+                            onUploadComplete={onUploadComplete}
+                        />
                     ) : (
                         <div className="filepicker disabled">
                             Max number of files uploaded for this type - Remove uploaded file to add new file.
@@ -50,7 +87,9 @@ export default class UploadInputV2 extends React.Component {
                                 return (
                                     <div key={`uploaded-${i}`}>
                                         <span>{v.filename}</span>
-                                        <span> - <a onClick={ev => onRemove(v)}>Remove</a></span>
+                                        {onRemove &&
+                                            <span> - <a onClick={ev => onRemove(v)}>Remove</a></span>
+                                        }
                                     </div>
                                 )
                             })}
