@@ -86,7 +86,7 @@ export default class UploadInputV2 extends React.Component {
                             {value.map((v,i) => {
                                 return (
                                     <div key={`uploaded-${i}`}>
-                                        <span>{v.filename}</span>
+                                        <a href={v.private_url || v.public_url} target="_blank">{v.filename}</a>
                                         {onRemove &&
                                             <span> - <a onClick={ev => onRemove(v)}>Remove</a></span>
                                         }
