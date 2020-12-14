@@ -13,7 +13,6 @@
 
 import React from 'react';
 import RichTextEditor from 'react-rte-ref-fix';
-import string from "less/lib/less/functions/string";
 
 
 export default class TextEditor extends React.Component {
@@ -22,37 +21,25 @@ export default class TextEditor extends React.Component {
         super(props);
 
         this.state = {
-            editorValue: RichTextEditor.createEmptyValue()
+            editorValue: RichTextEditor.createEmptyValue(),
+            currentValue: null
         };
-
-        this._currentValue = null;
 
         this.handleChange = this.handleChange.bind(this);
     }
 
-    componentWillMount() {
-        this._updateStateFromProps(this.props);
-    }
+    static getDerivedStateFromProps(props, state) {
+        const {value} = props;
+        const {editorValue, currentValue} = state;
 
-    componentWillReceiveProps(newProps) {
-        this._updateStateFromProps(newProps);
-    }
-
-    _updateStateFromProps(newProps) {
-        let {value} = newProps;
-        if (this._currentValue != null) {
-            let currentValue = this._currentValue;
+        if (currentValue != null) {
             if (value === currentValue) {
-                return;
+                return state;
             }
         }
-        let {editorValue} = this.state;
-        this.setState({
-            editorValue: editorValue.setContentFromString(value, 'html'),
-        });
-        this._currentValue = value;
-    }
 
+        return {...state, editorValue: editorValue.setContentFromString(value, 'html'), currentValue: value}
+    }
 
     handleChange(editorValue) {
 
@@ -66,7 +53,7 @@ export default class TextEditor extends React.Component {
             let stringValue = editorValue.toString('html');
             stringValue = stringValue === '<p><br></p>' ? '' : stringValue;
 
-            this._currentValue = stringValue;
+            this.setState({currentValue: stringValue});
 
             if (stringValue !== this.props.value) {
                 let ev = {target: {
@@ -83,7 +70,7 @@ export default class TextEditor extends React.Component {
     render() {
 
         let {onChange, value, error, className, id, ...rest} = this.props;
-        let has_error = ( this.props.hasOwnProperty('error') && error != '' );
+        let has_error = ( this.props.hasOwnProperty('error') && error !== '' );
         let editor;
 
         return (

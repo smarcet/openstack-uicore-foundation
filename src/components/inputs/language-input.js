@@ -27,14 +27,8 @@ export default class LanguageInput extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.setOptions = this.setOptions.bind(this);
         this.abortController = new AbortController();
-    }
 
-    componentWillMount () {
-        let {options} = this.state;
-
-        if(options.length == 0){
-            getLanguageList(this.setOptions, this.abortController.signal);
-        }
+        getLanguageList(this.setOptions, this.abortController.signal);
     }
 
     componentWillUnmount(){

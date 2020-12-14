@@ -26,14 +26,8 @@ export default class CountryInput extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.setOptions = this.setOptions.bind(this);
-    }
 
-    componentWillMount () {
-        let {options} = this.state;
-
-        if(options.length == 0){
-            getCountryList(this.setOptions);
-        }
+        getCountryList(this.setOptions);
     }
 
     setOptions(response) {

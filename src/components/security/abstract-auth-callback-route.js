@@ -66,28 +66,20 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
         let id_token_is_valid = id_token ? this.validateIdToken(id_token) : false;
         this.setState({...this.state, id_token_is_valid, error ,error_description});
         if(access_token && id_token_is_valid) {
-            //console.log(`AuthorizationCallbackRoute::componentWillMount onUserAuth new access token ${access_token}`);
-            //console.log(`AuthorizationCallbackRoute::componentWillMount onUserAuth new id token ${id_token}`);
-            //console.log(`AuthorizationCallbackRoute::componentWillMount onUserAuth new session state ${session_state}`);
             this.props.onUserAuth(access_token, id_token, session_state);
         }
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        //console.log("AuthorizationCallbackRoute::shouldComponentUpdate");
         if(nextProps.accessToken !== this.props.accessToken){
-            //console.log("AuthorizationCallbackRoute::shouldComponentUpdate true");
             return true;
         }
-        //console.log("AuthorizationCallbackRoute::shouldComponentUpdate false");
         return false;
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         // if we have an access token refresh ...
-        //console.log("AuthorizationCallbackRoute::componentDidUpdate");
         if(prevProps.accessToken !== this.props.accessToken){
-            //console.log("AuthorizationCallbackRoute::componentDidUpdate accessToken changed!");
             let url = URI(getCurrentHref());
             let query = url.search(true);
             let fragment = URI.parseQuery(url.fragment());
