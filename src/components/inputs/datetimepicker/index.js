@@ -29,9 +29,9 @@ export default class DateTimePicker extends React.Component {
         this.isValidDate = this.isValidDate.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.hasOwnProperty('value') && this.state.value != nextProps.value) {
-            this.setState({value: nextProps.value});
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.value !== prevProps.value) {
+            this.setState({value: this.props.value})
         }
     }
 

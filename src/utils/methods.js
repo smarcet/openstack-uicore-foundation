@@ -22,24 +22,24 @@ export const findElementPos = (obj) => {
         } while (obj = obj.offsetParent);
         return [curtop];
     }
-}
+};
 
 export const epochToMoment = (atime) => {
     if(!atime) return atime;
     atime = atime * 1000;
     return moment(atime);
-}
+};
 
 export const epochToMomentTimeZone = (atime, time_zone) => {
     if(!atime) return atime;
     atime = atime * 1000;
     return moment(atime).tz(time_zone);
-}
+};
 
 export const formatEpoch = (atime, format = 'M/D/YYYY h:mm a') => {
     if(!atime) return atime;
     return epochToMoment(atime).format(format);
-}
+};
 
 export const objectToQueryString = (obj) => {
     var str = "";
@@ -51,7 +51,7 @@ export const objectToQueryString = (obj) => {
     }
 
     return str;
-}
+};
 
 export const getBackURL = () => {
     let url      = URI(window.location.href);
@@ -62,7 +62,7 @@ export const getBackURL = () => {
         backUrl += `#${fragment}`;
     }
     return backUrl;
-}
+};
 
 /**
  *
@@ -74,42 +74,42 @@ export const getAccessToken = () => {
         return window.accessToken;
     }
     return null;
-}
+};
 
 export const getIdToken = () => {
     if(typeof window !== 'undefined') {
         return window.idToken;
     }
     return null;
-}
+};
 
 export const getOAuth2ClientId = () => {
     if(typeof window !== 'undefined') {
         return window.OAUTH2_CLIENT_ID;
     }
     return null;
-}
+};
 
 export const getOAuth2IDPBaseUrl = () => {
     if(typeof window !== 'undefined') {
         return window.IDP_BASE_URL;
     }
     return null;
-}
+};
 
 export const getOAuth2Scopes = () => {
     if(typeof window !== 'undefined') {
         return window.SCOPES;
     }
     return null;
-}
+};
 
 export const getAuthCallback = () => {
     if(typeof window !== 'undefined') {
         return `${window.location.origin}/auth/callback`;
     }
     return null;
-}
+};
 
 export const getCurrentLocation = () => {
     let location = '';
@@ -120,42 +120,42 @@ export const getCurrentLocation = () => {
             location = window.top.location;
     }
     return location;
-}
+};
 
 export const getOrigin = () => {
     if(typeof window !== 'undefined') {
         return window.location.origin;
     }
     return null;
-}
+};
 
 export const getCurrentPathName = () => {
     if(typeof window !== 'undefined') {
        return window.location.pathname;
     }
     return null;
-}
+};
 
 export const getCurrentHref = () => {
     if(typeof window !== 'undefined') {
         return window.location.href;
     }
     return null;
-}
+};
 
 export const getAllowedUserGroups = () => {
     if(typeof window !== 'undefined') {
         return window.ALLOWED_USER_GROUPS || '';
     }
     return null;
-}
+};
 
 export const buildAPIBaseUrl = (relativeUrl) => {
     if(typeof window !== 'undefined'){
         return `${window.API_BASE_URL}${relativeUrl}`;
     }
     return null``;
-}
+};
 
 export const storeAuthInfo = (accessToken, idToken, sessionState) => {
     if(typeof window !== 'undefined'){
@@ -164,7 +164,7 @@ export const storeAuthInfo = (accessToken, idToken, sessionState) => {
         window.sessionState = sessionState;
         return;
     }
-}
+};
 
 export const clearAuthInfo = () => {
     if(typeof window !== 'undefined'){
@@ -173,13 +173,13 @@ export const clearAuthInfo = () => {
         window.sessionState = null;
         return;
     }
-}
+};
 
 export const putOnLocalStorage = (key, value) => {
     if(typeof window !== 'undefined') {
         window.localStorage.setItem(key, value);
     }
-}
+};
 
 export const getFromLocalStorage = (key, removeIt) => {
     if(typeof window !== 'undefined') {
@@ -190,20 +190,20 @@ export const getFromLocalStorage = (key, removeIt) => {
         return val;
     }
     return null;
-}
+};
 
 export const isClearingSessionState = () => {
     if(typeof window !== 'undefined') {
         return window.clearing_session_state;
     }
     return false;
-}
+};
 
 export const setSessionClearingState = (val) => {
     if(typeof window !== 'undefined') {
         window.clearing_session_state = val;
     }
-}
+};
 
 export const getCurrentUserLanguage = () => {
     let language = 'en';
@@ -211,4 +211,40 @@ export const getCurrentUserLanguage = () => {
         language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
     }
     return language;
-}
+};
+
+export const scrollToError = (errors) => {
+    if(Object.keys(errors).length > 0) {
+        const firstError = Object.keys(errors)[0];
+        const firstNode = document.getElementById(firstError);
+        if (firstNode) window.scrollTo(0, findElementPos(firstNode));
+    }
+};
+
+export const hasErrors = (field, errors) => {
+    if(field in errors) {
+        return errors[field];
+    }
+    return '';
+};
+
+export const shallowEqual = (object1, object2) => {
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
+
+    for (let key of keys1) {
+        if (object1[key] !== object2[key]) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+export const isEmpty = (obj) => {
+    return Object.keys(obj).length === 0;
+};

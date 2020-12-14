@@ -28,12 +28,6 @@ export default class MemberInput extends React.Component {
         this.getMembers = this.getMembers.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.hasOwnProperty('value') && this.state.value != nextProps.value) {
-            this.setState({value: nextProps.value});
-        }
-    }
-
     handleChange(value) {
         let ev = {target: {
             id: this.props.id,

@@ -49,9 +49,6 @@ class SelectableTable extends React.Component {
         super(props);
     }
 
-    componentWillReceiveProps(nextProps) {
-    }
-
     render() {
         let {options, columns} = this.props;
         let selectedIds = options.hasOwnProperty('selectedIds') ? options.selectedIds : [];

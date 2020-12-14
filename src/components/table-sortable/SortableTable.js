@@ -9,6 +9,7 @@ import SortableActionsTableCell from './SortableActionsTableCell';
 import SortableTableRow from './SortableTableRow';
 import T from 'i18n-react/dist/i18n-react';
 import './table-sortable.css';
+import {shallowEqual} from "../../utils/methods";
 
 const defaults = {
     colWidth: ''
@@ -45,8 +46,10 @@ class SortableTable extends React.Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({ rows: nextProps.data });
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(!shallowEqual(this.props.data, prevProps.data)) {
+            this.setState({rows: this.props.data})
+        }
     }
 
     moveRow(dragIndex, hoverIndex) {

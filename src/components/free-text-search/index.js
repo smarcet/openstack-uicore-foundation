@@ -23,18 +23,8 @@ class FreeTextSearch extends React.Component {
         this.onChange       = this.onChange.bind(this);
 
         this.state = {
-            value: '',
+            value: props.value,
         };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        let value = nextProps.value ? nextProps.value : '';
-
-        if( nextProps.hasOwnProperty('value') && this.state.value != value ) {
-            this.setState({
-                value: value
-            });
-        }
     }
 
     onSearchClick(){
@@ -79,10 +69,10 @@ class FreeTextSearch extends React.Component {
                         />
                         <span className="input-group-btn" style={{width: 5 +'%'}}>
                             <button onClick={this.onSearchClick} className="btn btn-default" title={T.translate("general.search")}>
-                                <i className="fa fa-search"></i>
+                                <i className="fa fa-search" />
                             </button>
                             <button onClick={this.onClearClick} className="btn btn-default" title={T.translate("general.clear")}>
-                                <i className="fa fa-times"></i>
+                                <i className="fa fa-times" />
                             </button>
                         </span>
                     </div>

@@ -7,10 +7,11 @@ import Swal from "sweetalert2";
 import T from "i18n-react/dist/i18n-react";
 import './editable-table.css';
 import ReactTooltip from "react-tooltip";
+import { shallowEqual } from '../../utils/methods'
 
 const defaults = {
     colWidth: ''
-}
+};
 
 const createRow = (row, columns, actions) => {
 
@@ -75,8 +76,10 @@ export default class EditableTable extends React.Component {
         this.handleNewChange = this.onChangeNewCell.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({ rows: nextProps.data });
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(!shallowEqual(this.props.data, prevProps.data)) {
+            this.setState({rows: this.props.data})
+        }
     }
 
     saveRow(id, ev) {

@@ -195,7 +195,7 @@ SimpleLinkList.propTypes = {
             search: PropTypes.func.isRequired,
             delete: PropTypes.shape({onClick:PropTypes.func.isRequired}),
             add: PropTypes.shape({onClick:PropTypes.func.isRequired}),
-            edit: PropTypes.func,
+            edit: PropTypes.shape({onClick:PropTypes.func.isRequired}),
             custom: PropTypes.array,
         }).isRequired
     }).isRequired,

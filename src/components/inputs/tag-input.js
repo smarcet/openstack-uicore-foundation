@@ -14,6 +14,7 @@
 import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 import {queryTags} from '../../utils/query-actions';
+import {shallowEqual} from "../../utils/methods";
 
 export default class TagInput extends React.Component {
 
@@ -21,16 +22,16 @@ export default class TagInput extends React.Component {
         super(props);
 
         this.state = {
-            value: props.value
+            value: props.value.map((t) => ({tag: t.tag}))
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.getTags = this.getTags.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.hasOwnProperty('value') && this.state.value != nextProps.value) {
-            let nextValue = nextProps.value.map((t) => ({tag: t.tag}));
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(!shallowEqual(this.props.value, prevProps.value)) {
+            let nextValue = this.props.value.map((t) => ({tag: t.tag}));
 
             this.setState({value: nextValue});
         }

@@ -25,11 +25,9 @@ export default class Input extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if( nextProps.hasOwnProperty('value') && this.state.value != nextProps.value ) {
-            this.setState({
-                value: nextProps.value
-            });
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.value !== prevProps.value) {
+            this.setState({value: this.props.value})
         }
     }
 

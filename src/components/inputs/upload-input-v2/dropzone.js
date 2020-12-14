@@ -5,15 +5,15 @@ import 'dropzone/dist/dropzone.css';
 import { Icon } from './icon'
 import PropTypes from 'prop-types';
 
-let Dropzone = null
+let Dropzone = null;
 /**
  * class DropzoneJS
  */
 export class DropzoneJS extends React.Component {
 
     constructor(props) {
-        super(props)
-        this.state = {files: []}
+        super(props);
+        this.state = {files: []};
         this.onUploadComplete = this.onUploadComplete.bind(this);
     }
 
@@ -30,10 +30,10 @@ export class DropzoneJS extends React.Component {
      * http://www.dropzonejs.com/#configuration
      */
     getDjsConfig () {
-        let options = null
+        let options = null;
         const defaults = {
             url: this.props.config.postUrl ? this.props.config.postUrl : null
-        }
+        };
 
         if (this.props.djsConfig) {
             options = extend(true, {}, defaults, this.props.djsConfig)
@@ -57,16 +57,16 @@ export class DropzoneJS extends React.Component {
      * Sets up dropzone.js with the component.
      */
     componentDidMount () {
-        const options = this.getDjsConfig()
+        const options = this.getDjsConfig();
 
-        Dropzone = Dropzone || require('dropzone')
-        Dropzone.autoDiscover = false
+        Dropzone = Dropzone || require('dropzone');
+        Dropzone.autoDiscover = false;
 
         if (!this.props.config.postUrl && !this.props.eventHandlers.drop) {
             console.info('Neither postUrl nor a "drop" eventHandler specified, the React-Dropzone component might misbehave.')
         }
 
-        var dropzoneNode = this.props.config.dropzoneSelector || ReactDOM.findDOMNode(this)
+        var dropzoneNode = this.props.config.dropzoneSelector || ReactDOM.findDOMNode(this);
         this.dropzone = new Dropzone(dropzoneNode, options);
 
         this.setupEvents()
@@ -78,13 +78,13 @@ export class DropzoneJS extends React.Component {
      */
     componentWillUnmount () {
         if (this.dropzone) {
-            const files = this.dropzone.getActiveFiles()
+            const files = this.dropzone.getActiveFiles();
 
             if (files.length > 0) {
                 // Well, seems like we still have stuff uploading.
                 // This is dirty, but let's keep trying to get rid
                 // of the dropzone until we're done here.
-                this.queueDestroy = true
+                this.queueDestroy = true;
 
                 const destroyInterval = window.setInterval(() => {
                     if (this.queueDestroy === false) {
@@ -92,7 +92,7 @@ export class DropzoneJS extends React.Component {
                     }
 
                     if (this.dropzone.getActiveFiles().length === 0) {
-                        this.dropzone = this.destroy(this.dropzone)
+                        this.dropzone = this.destroy(this.dropzone);
                         return window.clearInterval(destroyInterval)
                     }
                 }, 500)
@@ -107,40 +107,26 @@ export class DropzoneJS extends React.Component {
      * If the Dropzone hasn't been created, create it
      */
     componentDidUpdate () {
-        this.queueDestroy = false
+        const {config, djsConfig} = this.props;
+        const djsConfigObj = djsConfig ? djsConfig : {};
+        const postUrlConfigObj = config && config.postUrl ? { url: config.postUrl } : {};
+        this.queueDestroy = false;
 
         if (!this.dropzone) {
-            const dropzoneNode = this.props.config.dropzoneSelector || ReactDOM.findDOMNode(this)
-            this.dropzone = new Dropzone(dropzoneNode, this.getDjsConfig())
-        }
-    }
-
-    /**
-     * React 'componentWillUpdate'
-     * Update Dropzone options each time the component updates.
-     */
-    componentWillUpdate () {
-        let djsConfigObj
-        let postUrlConfigObj
-
-        djsConfigObj = this.props.djsConfig ? this.props.djsConfig : {}
-
-        try {
-            postUrlConfigObj = this.props.config.postUrl ? { url: this.props.config.postUrl } : {}
-        } catch (err) {
-            postUrlConfigObj = {}
+            const dropzoneNode = this.props.config.dropzoneSelector || ReactDOM.findDOMNode(this);
+            this.dropzone = new Dropzone(dropzoneNode, this.getDjsConfig());
         }
 
-        this.dropzone.options = extend(true, {}, this.dropzone.options, djsConfigObj, postUrlConfigObj)
+        this.dropzone.options = extend(true, {}, this.dropzone.options, djsConfigObj, postUrlConfigObj);
     }
 
     /**
      * React 'render'
      */
     render () {
-        const icons = []
-        const { files } = this.state
-        const { config } = this.props
+        const icons = [];
+        const { files } = this.state;
+        const { config } = this.props;
         const className = (this.props.className) ? 'filepicker dropzone ' + this.props.className : 'filepicker dropzone';
 
         if (config.showFiletypeIcon && config.iconFiletypes && (!files || files.length < 1)) {
@@ -168,9 +154,9 @@ export class DropzoneJS extends React.Component {
      * and binds them to dropzone.js events
      */
     setupEvents () {
-        const eventHandlers = this.props.eventHandlers
+        const eventHandlers = this.props.eventHandlers;
 
-        if (!this.dropzone || !eventHandlers) return
+        if (!this.dropzone || !eventHandlers) return;
 
         for (var eventHandler in eventHandlers) {
             if (eventHandlers.hasOwnProperty(eventHandler) && eventHandlers[eventHandler]) {
@@ -195,26 +181,26 @@ export class DropzoneJS extends React.Component {
         }
 
         this.dropzone.on('addedfile', (file) => {
-            if (!file) return
+            if (!file) return;
 
-            const files = this.state.files || []
+            const files = this.state.files || [];
 
-            files.push(file)
+            files.push(file);
             this.setState({ files })
-        })
+        });
 
         this.dropzone.on('removedfile', (file) => {
-            if (!file) return
+            if (!file) return;
 
-            const files = this.state.files || []
+            const files = this.state.files || [];
             files.forEach((fileInFiles, i) => {
                 if (fileInFiles.name === file.name && fileInFiles.size === file.size) {
                     files.splice(i, 1)
                 }
-            })
+            });
 
             this.setState({ files })
-        })
+        });
 
         this.dropzone.on('uploadprogress', (file, progress, bytesSent) => {
             progress = bytesSent / file.size * 100;
@@ -229,7 +215,7 @@ export class DropzoneJS extends React.Component {
                 if (elem)
                     elem.style.width = progress + "%";
             }
-        })
+        });
 
         this.dropzone.on('sending' , (file, xhr, formData) => {
             if(this.props.hasOwnProperty('access_token')) {
@@ -256,7 +242,7 @@ export class DropzoneJS extends React.Component {
      * Removes ALL listeners and Destroys dropzone. see https://github.com/enyo/dropzone/issues/1175
      */
     destroy (dropzone) {
-        dropzone.off()
+        dropzone.off();
         return dropzone.destroy()
     }
 }
@@ -266,7 +252,7 @@ DropzoneJS.defaultProps = {
     config: {},
     eventHandlers: {},
     data: {},
-}
+};
 
 DropzoneJS.propTypes = {
     id: PropTypes.string.isRequired

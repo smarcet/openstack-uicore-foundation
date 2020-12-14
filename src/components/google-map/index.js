@@ -74,16 +74,16 @@ export class GMap extends React.Component {
         this.handleMapClick = this.handleMapClick.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        let new_markers = nextProps.markers;
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const new_markers = this.props.markers;
 
         this.setState({ markers: new_markers });
 
-        let old_markers_str = this.props.markers.map( m => m.id ).sort().join();
+        let old_markers_str = prevProps.markers.map( m => m.id ).sort().join();
         let new_markers_str = new_markers.map( m => m.id ).sort().join();
 
-        if (new_markers.length > 1 && old_markers_str != new_markers_str) {
-            let markerBounds = new google.maps.LatLngBounds();
+        if (new_markers.length > 1 && old_markers_str !== new_markers_str) {
+            const markerBounds = new google.maps.LatLngBounds();
             for (let marker of new_markers) {
                 let marker_loc = new google.maps.LatLng(marker.lat, marker.lng);
                 markerBounds.extend(marker_loc);

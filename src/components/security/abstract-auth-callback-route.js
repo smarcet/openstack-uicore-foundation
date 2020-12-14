@@ -18,8 +18,11 @@ import {getFromLocalStorage, getCurrentPathName, getCurrentHref} from '../../uti
 
 class AbstractAuthorizationCallbackRoute extends React.Component {
 
-    constructor(issuer, audience, props){
+    constructor(issuer, audience, props) {
         super(props);
+
+        const { access_token , id_token, session_state, error, error_description } = this.extractHashParams();
+
         this.state = {
             id_token_is_valid: true,
             error: null,
@@ -27,6 +30,27 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
             issuer: issuer,
             audience: audience
         };
+
+        if (error){
+            // if error condition short cut...
+            this.state.error = error;
+            this.state.error_description = error_description;
+        } else {
+            if (!access_token){
+                // re start flow
+                doLogin(getCurrentPathName());
+            } else {
+                const id_token_is_valid = id_token ? this.validateIdToken(id_token) : false;
+                this.state.id_token_is_valid = id_token_is_valid;
+                this.state.error = error;
+                this.state.error_description = error_description;
+
+                if(access_token && id_token_is_valid) {
+                    props.onUserAuth(access_token, id_token, session_state);
+                }
+            }
+
+        }
     }
 
     extractHashParams() {
@@ -49,25 +73,6 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
         let nbf    = jwt.payload.nbf;
         let tnonce = jwt.payload.nonce || null;
         return tnonce == storedNonce && aud == audience && iss == issuer;
-    }
-
-    componentWillMount() {
-        let { access_token , id_token, session_state, error, error_description } = this.extractHashParams();
-        if(error){
-            // if error condition short cut...
-            this.setState({...this.state, error ,error_description});
-            return;
-        }
-        if(!access_token){
-            // re start flow
-            doLogin(getCurrentPathName());
-            return;
-        }
-        let id_token_is_valid = id_token ? this.validateIdToken(id_token) : false;
-        this.setState({...this.state, id_token_is_valid, error ,error_description});
-        if(access_token && id_token_is_valid) {
-            this.props.onUserAuth(access_token, id_token, session_state);
-        }
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {

@@ -28,12 +28,6 @@ export default class RadioList extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.hasOwnProperty('value') &&  this.state.value !== nextProps.value) {
-            this.setState({value: nextProps.value});
-        }
-    }
-
     handleChange(selection) {
 
         let ev = {target: {
