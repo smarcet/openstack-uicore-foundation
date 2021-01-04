@@ -13,15 +13,20 @@
 
 import React from 'react';
 import {connect} from "react-redux";
+
 import {
     doLogout,
-    getAuthUrl,
-    initLogOut,
     SESSION_STATE_STATUS_CHANGED,
     SESSION_STATE_STATUS_ERROR,
     SESSION_STATE_STATUS_UNCHANGED,
     updateSessionStateStatus
 } from "../actions";
+
+import {
+    getAuthUrl,
+    initLogOut
+} from "../methods";
+
 import URI from "urijs"
 // in minutes
 const CHECK_SESSION_INTERVAL = (1000 * 60) * 30;
@@ -87,6 +92,7 @@ class OPSessionChecker extends React.Component {
         let resultUrl = new URI(frame.contentDocument.URL);
         // test the result Url
         //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - resultUrl " + resultUrl);
+
         let query = resultUrl.search(true);
         let fragment = URI.parseQuery(resultUrl.fragment());
         // check if we have some error on query string or fragment
@@ -96,6 +102,7 @@ class OPSessionChecker extends React.Component {
         if(error){
             //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - error " + error);
             // check session state with prompt none failed do logout;
+
             //console.log('OPSessionChecker::rpCheckSessionStateFrameOnLoad - initiating logout');
             initLogOut();
             return;
@@ -266,7 +273,6 @@ class OPSessionChecker extends React.Component {
 const mapStateToProps = ({ loggedUserState }) => ({
     sessionState: loggedUserState.sessionState,
     isLoggedUser: loggedUserState.isLoggedUser,
-    idToken: loggedUserState.idToken,
     sessionStateStatus: loggedUserState.sessionStateStatus,
 })
 
