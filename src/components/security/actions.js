@@ -125,7 +125,7 @@ export const doLogout = (backUrl) => (dispatch, getState) => {
     });
 }
 
-export const getUserInfo = (backUrl, history, errorHandler = null ) => (dispatch, getState) => {
+export const getUserInfo = (expand = 'groups', backUrl = null, history = null, errorHandler = null ) => (dispatch, getState) => {
 
     let AllowedUserGroups = getAllowedUserGroups();
     AllowedUserGroups = AllowedUserGroups !== '' ? AllowedUserGroups.split(' ') : [];
@@ -133,9 +133,9 @@ export const getUserInfo = (backUrl, history, errorHandler = null ) => (dispatch
     let {accessToken, member} = loggedUserState;
 
     if (member != null) {
-        console.log(`redirecting to ${backUrl}`);
-        history.push(backUrl);
-        return;
+        if(history != null && backUrl != null)
+            history.push(backUrl);
+        return Promise.resolve();
     }
 
     if(errorHandler == null)
@@ -146,7 +146,7 @@ export const getUserInfo = (backUrl, history, errorHandler = null ) => (dispatch
     return getRequest(
         createAction(REQUEST_USER_INFO),
         createAction(RECEIVE_USER_INFO),
-        buildAPIBaseUrl(`/api/v1/members/me?expand=groups&access_token=${accessToken}`),
+        buildAPIBaseUrl(`/api/v1/members/me?expand=${expand}&access_token=${accessToken}`),
         errorHandler
     )({})(dispatch, getState).then(() => {
             dispatch(stopLoading());
@@ -158,9 +158,7 @@ export const getUserInfo = (backUrl, history, errorHandler = null ) => (dispatch
                     html: T.translate("errors.user_not_set"),
                     type: 'error'
                 };
-
                 dispatch(showMessage(error_message, initLogOut));
-
             }
 
             // check user groups ( if defined )
@@ -183,7 +181,8 @@ export const getUserInfo = (backUrl, history, errorHandler = null ) => (dispatch
                 }
             }
 
-            history.push(backUrl);
+            if(history != null && backUrl != null)
+                history.push(backUrl);
         }
     );
 };
