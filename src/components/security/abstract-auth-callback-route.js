@@ -97,7 +97,7 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
             delete fragment['id_token'];
             delete fragment['session_state'];
 
-            let backUrl = query.hasOwnProperty('BackUrl') ? query['BackUrl'] : '/app';
+            let backUrl = query.hasOwnProperty('BackUrl') ? query['BackUrl'] : null;
 
             if (fragment.lenght > 0) {
                 backUrl += `#${URI.buildQuery(fragment)}`;

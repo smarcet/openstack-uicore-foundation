@@ -89,7 +89,7 @@ class OPSessionChecker extends React.Component {
         //console.log("OPSessionChecker::componentDidUpdate");
         if (this.props.sessionStateStatus !== prevProps.sessionStateStatus) {
             if(this.props.sessionStateStatus === SESSION_STATE_STATUS_CHANGED){
-                //console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === changed");
+                console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === changed");
                 let url = getAuthUrl(null, 'none');
                 // https://openid.net/specs/openid-connect-session-1_0.html#RPiframe
                 // set the frame to idp
@@ -97,7 +97,7 @@ class OPSessionChecker extends React.Component {
                 return;
             }
             if(this.props.sessionStateStatus === SESSION_STATE_STATUS_ERROR){
-                //console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === error");
+                console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === error");
                 // https://openid.net/specs/openid-connect-session-1_0.html#RPiframe
                 // do logout
                 this.props.doLogout();
