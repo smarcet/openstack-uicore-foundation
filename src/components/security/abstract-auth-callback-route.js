@@ -14,14 +14,16 @@ import React from 'react';
 import URI from "urijs";
 import IdTokenVerifier from 'idtoken-verifier';
 import {doLogin} from "./actions";
-import {getFromLocalStorage, getCurrentPathName, getCurrentHref} from '../../utils/methods';
+import {getCurrentHref, getCurrentPathName, getFromLocalStorage} from '../../utils/methods';
 
 class AbstractAuthorizationCallbackRoute extends React.Component {
 
     constructor(issuer, audience, props) {
         super(props);
 
-        const { access_token , id_token, session_state, error, error_description } = this.extractHashParams();
+        const {access_token, id_token, session_state, error, error_description} = this.extractHashParams();
+
+        console.log(`AbstractAuthorizationCallbackRoute::constructor error ${error} error_description ${error_description}`);
 
         this.state = {
             id_token_is_valid: true,
@@ -31,25 +33,26 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
             audience: audience
         };
 
-        if (error){
+        if (error) {
             // if error condition short cut...
             this.state.error = error;
             this.state.error_description = error_description;
-        } else {
-            if (!access_token){
-                // re start flow
-                doLogin(getCurrentPathName());
-            } else {
-                const id_token_is_valid = id_token ? this.validateIdToken(id_token) : false;
-                this.state.id_token_is_valid = id_token_is_valid;
-                this.state.error = error;
-                this.state.error_description = error_description;
+            return;
+        }
 
-                if(access_token && id_token_is_valid) {
-                    props.onUserAuth(access_token, id_token, session_state);
-                }
-            }
+        if (!access_token) {
+            // re start flow
+            doLogin(getCurrentPathName());
+            return;
+        }
 
+        const id_token_is_valid = id_token ? this.validateIdToken(id_token) : false;
+        this.state.id_token_is_valid = id_token_is_valid;
+        this.state.error = error;
+        this.state.error_description = error_description;
+
+        if (access_token && id_token_is_valid) {
+            props.onUserAuth(access_token, id_token, session_state);
         }
     }
 
@@ -57,26 +60,26 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
         return URI.parseQuery(this.props.location.hash.substr(1));
     }
 
-    validateIdToken(idToken){
-        let {audience , issuer} = this.state;
+    validateIdToken(idToken) {
+        let {audience, issuer} = this.state;
         let verifier = new IdTokenVerifier({
-            issuer:   issuer,
+            issuer: issuer,
             audience: audience
         });
         let storedNonce = getFromLocalStorage('nonce', true);
-        let jwt    = verifier.decode(idToken);
-        let alg    = jwt.header.alg;
-        let kid    = jwt.header.kid;
-        let aud    = jwt.payload.aud;
-        let iss    = jwt.payload.iss;
-        let exp    = jwt.payload.exp;
-        let nbf    = jwt.payload.nbf;
+        let jwt = verifier.decode(idToken);
+        let alg = jwt.header.alg;
+        let kid = jwt.header.kid;
+        let aud = jwt.payload.aud;
+        let iss = jwt.payload.iss;
+        let exp = jwt.payload.exp;
+        let nbf = jwt.payload.nbf;
         let tnonce = jwt.payload.nonce || null;
         return tnonce == storedNonce && aud == audience && iss == issuer;
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        if(nextProps.accessToken !== this.props.accessToken){
+        if (nextProps.accessToken !== this.props.accessToken) {
             return true;
         }
         return false;
@@ -84,7 +87,7 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         // if we have an access token refresh ...
-        if(prevProps.accessToken !== this.props.accessToken){
+        if (prevProps.accessToken !== this.props.accessToken) {
             let url = URI(getCurrentHref());
             let query = url.search(true);
             let fragment = URI.parseQuery(url.fragment());
@@ -111,26 +114,27 @@ class AbstractAuthorizationCallbackRoute extends React.Component {
      * @param error
      * @private
      */
-    _callback(backUrl){}
+    _callback(backUrl) {
+    }
 
     /**
      * Abstract
      * @param error
      * @private
      */
-    _redirect2Error(error){
+    _redirect2Error(error) {
     }
 
     render() {
         //console.log("AuthorizationCallbackRoute::render");
-        let {id_token_is_valid, error, error_description } = this.state;
+        let {id_token_is_valid, error, error_description} = this.state;
 
-        if(error != null){
-           return this._redirect2Error(error);
+        if (error != null) {
+            console.log(`AbstractAuthorizationCallbackRoute::render _redirect2Error error ${error}`)
+            return this._redirect2Error(error);
         }
 
-        if(!id_token_is_valid)
-        {
+        if (!id_token_is_valid) {
             return this._redirect2Error("token_validation_error");
         }
 
