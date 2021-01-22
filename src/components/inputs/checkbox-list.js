@@ -38,7 +38,7 @@ export default class CheckboxList extends React.Component {
                 const theVal = isNaN(event.target.value) ? event.target.value : parseInt(event.target.value);
                 value.push(theVal);
             } else {
-                value = value.filter( v => v !== event.target.value )
+                value = value.filter( v => v != event.target.value )
             }
         } else {
             value = value.filter(v => optionValues.includes(v));
