@@ -245,6 +245,9 @@ export const shallowEqual = (object1, object2) => {
     return true;
 };
 
+export const arraysEqual = (a1, a2) =>
+    a1.length === a2.length && a1.every((o, idx) => shallowEqual(o, a2[idx]));
+
 export const isEmpty = (obj) => {
     return Object.keys(obj).length === 0;
 };

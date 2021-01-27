@@ -14,6 +14,7 @@
 import React from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps";
 import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer";
+import {arraysEqual} from "../../utils/methods";
 
 const MAP = {
     defaultZoom: 2,
@@ -77,7 +78,9 @@ export class GMap extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         const new_markers = this.props.markers;
 
-        this.setState({ markers: new_markers });
+        if (!arraysEqual(new_markers, prevProps.markers)) {
+            this.setState({ markers: new_markers });
+        }
 
         let old_markers_str = prevProps.markers.map( m => m.id ).sort().join();
         let new_markers_str = new_markers.map( m => m.id ).sort().join();
