@@ -232,10 +232,8 @@ export const queryOrganizations = _.debounce(async (input, callback) => {
 }, callDelay);
 
 
-export const getLanguageList = async (callback, signal) => {
-    const accessToken = await getAccessToken();
-
-    return fetch(buildAPIBaseUrl(`/api/public/v1/languages?access_token=${accessToken}`), {signal})
+export const getLanguageList = (callback, signal) => {
+    return fetch(buildAPIBaseUrl(`/api/public/v1/languages`), {signal})
         .then(fetchResponseHandler)
         .then((response) => {
             callback(response.data);
@@ -244,18 +242,15 @@ export const getLanguageList = async (callback, signal) => {
 };
 
 
-export const getCountryList = async (callback, signal) => {
-    const accessToken = await getAccessToken();
+export const getCountryList = (callback, signal) => {
 
-    return fetch(buildAPIBaseUrl(`/api/public/v1/countries?access_token=${accessToken}`), {signal})
+    return fetch(buildAPIBaseUrl(`/api/public/v1/countries`), {signal})
         .then(fetchResponseHandler)
         .then((response) => {
             callback(response.data);
         })
         .catch(fetchErrorHandler);
 };
-
-
 
 var geocoder;
 
