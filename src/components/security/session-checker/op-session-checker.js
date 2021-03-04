@@ -123,33 +123,27 @@ class OPSessionChecker extends React.Component {
                 // https://openid.net/specs/openid-connect-session-1_0.html#RPiframe
                 // set the frame to idp
                 this.rpCheckSessionStateFrame.src = url.toString();
-                //console.log(`OPSessionChecker::componentDidUpdate this.rpCheckSessionStateFrame.src ${this.rpCheckSessionStateFrame.src}`);
+                console.log(`OPSessionChecker::componentDidUpdate this.rpCheckSessionStateFrame.src ${this.rpCheckSessionStateFrame.src}`);
                 this.opFrame.src = "";
                 return;
             }
-            if(this.props.sessionStateStatus === SESSION_STATE_STATUS_ERROR){
-                //console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === error");
-                // https://openid.net/specs/openid-connect-session-1_0.html#RPiframe
-                // recheck
-                this.onSetupCheckSessionRP();
-                return;
-            }
             if(this.props.sessionStateStatus === SESSION_STATE_STATUS_UNCHANGED){
-                //console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === unchanged");
+                console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === unchanged");
                 this.onSetupCheckSessionRP();
                 return;
             }
         }
         if(this.props.sessionState !== prevProps.sessionState){
-            //console.log(`OPSessionChecker::componentDidUpdate updated session state ${this.props.sessionState}`);
+            console.log(`OPSessionChecker::componentDidUpdate updated session state ${this.props.sessionState}`);
             this.onSetupCheckSessionRP();
         }
     }
 
     checkSession()
     {
+
         let now = new Date();
-        //console.log(`OPSessionChecker::checkSession now ${now.toLocaleString()}`);
+        console.log(`OPSessionChecker::checkSession now ${now.toLocaleString()}`);
 
         if(this.opFrame == null ){
             //console.log("OPSessionChecker::checkSession - this.opFrame == null ");
@@ -177,30 +171,30 @@ class OPSessionChecker extends React.Component {
     {
         let frame = event.target;
         if(frame.src === "") return;
-        //console.log("OPSessionChecker::setTimer");
+        console.log("OPSessionChecker::setTimer");
 
         if(!this.props.isLoggedUser){
-            //console.log("OPSessionChecker::setTimer - !this.props.isLoggedUser");
+            console.log("OPSessionChecker::setTimer - !this.props.isLoggedUser");
             return;
         }
 
         if(this.props.sessionStateStatus !== SESSION_STATE_STATUS_UNCHANGED ){
-            //console.log("OPSessionChecker::setTimer - this.props.sessionStateStatus");
+            console.log("OPSessionChecker::setTimer - this.props.sessionStateStatus");
             return;
         }
 
         this.checkSession();
         if(typeof window !== 'undefined') {
-            //console.log(`OPSessionChecker::setTimer setting interval ${CHECK_SESSION_INTERVAL}`);
+            console.log(`OPSessionChecker::setTimer setting interval ${CHECK_SESSION_INTERVAL}`);
             this.interval = window.setInterval(this.checkSession, CHECK_SESSION_INTERVAL);
         }
     }
 
     onSetupCheckSessionRP(){
         // https://openid.net/specs/openid-connect-session-1_0.html#OPiframe
-        //console.log("OPSessionChecker::onSetupCheckSessionRP");
+        console.log("OPSessionChecker::onSetupCheckSessionRP");
         if(this.opFrame == null){
-            //console.log("OPSessionChecker::onSetupCheckSessionRP - opFrame is null");
+            console.log("OPSessionChecker::onSetupCheckSessionRP - opFrame is null");
             return;
         }
         window.addEventListener("message", this.receiveMessage, false);
@@ -212,7 +206,7 @@ class OPSessionChecker extends React.Component {
 
     receiveMessage(e)
     {
-        //console.log("OPSessionChecker::receiveMessage - e.origin " + e.origin);
+        console.log("OPSessionChecker::receiveMessage - e.origin " + e.origin);
         if (e.origin !== this.props.idpBaseUrl ) {
             //console.log("OPSessionChecker::receiveMessage - e.origin !== this.props.idpBaseUrl");
             return;
@@ -223,7 +217,7 @@ class OPSessionChecker extends React.Component {
         //console.log("OPSessionChecker::receiveMessage - this.props.isLoggedUser "+ this.props.isLoggedUser);
         if(this.props.sessionStateStatus === SESSION_STATE_STATUS_UNCHANGED && this.props.isLoggedUser){
             if(status === SESSION_STATE_STATUS_CHANGED) {
-                //console.log("OPSessionChecker::receiveMessage - session state has changed on OP");
+                console.log("OPSessionChecker::receiveMessage - session state has changed on OP");
                 // signal session start check
                 // kill timer
                 window.removeEventListener("message", this.receiveMessage, false);
@@ -231,16 +225,6 @@ class OPSessionChecker extends React.Component {
                     window.clearInterval(this.interval);
                 this.interval = null;
                 this.props.updateSessionStateStatus('changed');
-                return;
-            }
-
-            if(status === SESSION_STATE_STATUS_ERROR){
-                //console.log("OPSessionChecker::receiveMessage - error , init log out");
-                // kill timer
-                if(typeof window !== 'undefined')
-                    window.clearInterval(this.interval);
-                this.interval = null;
-                this.props.updateSessionStateStatus('error');
                 return;
             }
         }
