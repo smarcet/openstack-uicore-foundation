@@ -19,10 +19,10 @@ import {
     SET_LOGGED_USER,
     UPDATE_SESSION_STATE_STATUS,
 } from './actions';
+
 import IdTokenVerifier from 'idtoken-verifier';
 
 import {clearAuthInfo, getIdToken, getOAuth2ClientId, getOAuth2IDPBaseUrl} from './methods';
-
 
 const DEFAULT_STATE = {
     isLoggedUser: false,

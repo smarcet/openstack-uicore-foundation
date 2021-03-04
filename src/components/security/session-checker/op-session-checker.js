@@ -91,7 +91,7 @@ class OPSessionChecker extends React.Component {
         }
         let resultUrl = new URI(frame.contentDocument.URL);
         // test the result Url
-        //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - resultUrl " + resultUrl);
+        console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - resultUrl " + resultUrl);
 
         let query = resultUrl.search(true);
         let fragment = URI.parseQuery(resultUrl.fragment());
@@ -100,9 +100,8 @@ class OPSessionChecker extends React.Component {
         if(query.hasOwnProperty("error")) error = query['error'];
         if(fragment.hasOwnProperty("error")) error = fragment['error'];
         if(error){
-            //console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - error " + error);
+            console.log("OPSessionChecker::rpCheckSessionStateFrameOnLoad - error " + error);
             // check session state with prompt none failed do logout;
-
             //console.log('OPSessionChecker::rpCheckSessionStateFrameOnLoad - initiating logout');
             initLogOut();
             return;
@@ -113,7 +112,6 @@ class OPSessionChecker extends React.Component {
         this.props.updateSessionStateStatus(SESSION_STATE_STATUS_UNCHANGED);
     }
 
-
     componentDidUpdate(prevProps) {
         //console.log("OPSessionChecker::componentDidUpdate");
         if (this.props.sessionStateStatus !== prevProps.sessionStateStatus) {
@@ -123,12 +121,12 @@ class OPSessionChecker extends React.Component {
                 // https://openid.net/specs/openid-connect-session-1_0.html#RPiframe
                 // set the frame to idp
                 this.rpCheckSessionStateFrame.src = url.toString();
-                console.log(`OPSessionChecker::componentDidUpdate this.rpCheckSessionStateFrame.src ${this.rpCheckSessionStateFrame.src}`);
+                //console.log(`OPSessionChecker::componentDidUpdate this.rpCheckSessionStateFrame.src ${this.rpCheckSessionStateFrame.src}`);
                 this.opFrame.src = "";
                 return;
             }
             if(this.props.sessionStateStatus === SESSION_STATE_STATUS_UNCHANGED){
-                console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === unchanged");
+                //console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === unchanged");
                 this.onSetupCheckSessionRP();
                 return;
             }
@@ -171,15 +169,15 @@ class OPSessionChecker extends React.Component {
     {
         let frame = event.target;
         if(frame.src === "") return;
-        console.log("OPSessionChecker::setTimer");
+        //console.log("OPSessionChecker::setTimer");
 
         if(!this.props.isLoggedUser){
-            console.log("OPSessionChecker::setTimer - !this.props.isLoggedUser");
+            //console.log("OPSessionChecker::setTimer - !this.props.isLoggedUser");
             return;
         }
 
         if(this.props.sessionStateStatus !== SESSION_STATE_STATUS_UNCHANGED ){
-            console.log("OPSessionChecker::setTimer - this.props.sessionStateStatus");
+            //console.log("OPSessionChecker::setTimer - this.props.sessionStateStatus");
             return;
         }
 
@@ -194,7 +192,7 @@ class OPSessionChecker extends React.Component {
         // https://openid.net/specs/openid-connect-session-1_0.html#OPiframe
         console.log("OPSessionChecker::onSetupCheckSessionRP");
         if(this.opFrame == null){
-            console.log("OPSessionChecker::onSetupCheckSessionRP - opFrame is null");
+            //console.log("OPSessionChecker::onSetupCheckSessionRP - opFrame is null");
             return;
         }
         window.addEventListener("message", this.receiveMessage, false);
