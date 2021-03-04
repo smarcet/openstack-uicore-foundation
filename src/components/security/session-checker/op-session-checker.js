@@ -206,7 +206,7 @@ class OPSessionChecker extends React.Component {
 
     receiveMessage(e)
     {
-        console.log("OPSessionChecker::receiveMessage - e.origin " + e.origin);
+        //console.log("OPSessionChecker::receiveMessage - e.origin " + e.origin);
         if (e.origin !== this.props.idpBaseUrl ) {
             //console.log("OPSessionChecker::receiveMessage - e.origin !== this.props.idpBaseUrl");
             return;
