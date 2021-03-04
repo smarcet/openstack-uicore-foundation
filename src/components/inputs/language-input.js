@@ -36,7 +36,7 @@ export default class LanguageInput extends React.Component {
     }
 
     setOptions(response) {
-        let languageList = response.map(l => ({label: l.name, value: l.id}));
+        let languageList = response.map(l => ({label: l.name, value: l.iso_code}));
         this.setState({options: languageList});
     }
 
