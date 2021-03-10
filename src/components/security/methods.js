@@ -174,8 +174,11 @@ export const getAccessToken = async () => {
         )
     ) {
         try {
-
-            let {accessToken, expiresIn, accessTokenUpdatedAt, refreshToken} = getAuthInfo();
+            let authInfo =  getAuthInfo();
+            if( !authInfo ) {
+                throw Error("Missing Auth info.");
+            }
+            let { accessToken, expiresIn, accessTokenUpdatedAt, refreshToken } = authInfo;
             let flow = getOAuth2Flow();
             // check life time
             let now = Math.floor(Date.now() / 1000);
