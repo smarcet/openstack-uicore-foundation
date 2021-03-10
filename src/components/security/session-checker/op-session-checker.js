@@ -120,13 +120,6 @@ class OPSessionChecker extends React.Component {
                 this.opFrame.src = "";
                 return;
             }
-            if(this.props.sessionStateStatus === SESSION_STATE_STATUS_ERROR){
-                //console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === error");
-                // https://openid.net/specs/openid-connect-session-1_0.html#RPiframe
-                // recheck
-                this.onSetupCheckSessionRP();
-                return;
-            }
             if(this.props.sessionStateStatus === SESSION_STATE_STATUS_UNCHANGED){
                 //console.log("OPSessionChecker::componentDidUpdate sessionStateStatus === unchanged");
                 this.onSetupCheckSessionRP();
@@ -224,16 +217,6 @@ class OPSessionChecker extends React.Component {
                     window.clearInterval(this.interval);
                 this.interval = null;
                 this.props.updateSessionStateStatus('changed');
-                return;
-            }
-
-            if(status === SESSION_STATE_STATUS_ERROR){
-                //console.log("OPSessionChecker::receiveMessage - error , init log out");
-                // kill timer
-                if(typeof window !== 'undefined')
-                    window.clearInterval(this.interval);
-                this.interval = null;
-                this.props.updateSessionStateStatus('error');
                 return;
             }
         }
