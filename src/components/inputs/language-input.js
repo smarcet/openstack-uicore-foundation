@@ -36,7 +36,8 @@ export default class LanguageInput extends React.Component {
     }
 
     setOptions(response) {
-        this.setState({options: response});
+        let languageList = response.map(l => ({label: l.name, value: l.iso_code}));
+        this.setState({options: languageList});
     }
 
     handleChange(value) {
@@ -44,9 +45,9 @@ export default class LanguageInput extends React.Component {
         let theValue = null;
 
         if (isMulti) {
-            theValue = value.map(v => v.id);
+            theValue = value.map(v => v.value);
         } else {
-            theValue = value.id;
+            theValue = value.value;
         }
 
         let ev = {target: {
@@ -65,9 +66,9 @@ export default class LanguageInput extends React.Component {
         let theValue = null;
 
         if (isMulti) {
-            theValue = options.filter(op => value.includes(op.id));
+            theValue = options.filter(op => value.includes(op.value));
         } else {
-            theValue = (value instanceof Object || value == null) ? value : options.find(opt => opt.id == value);
+            theValue = (value instanceof Object || value == null) ? value : options.find(opt => opt.value == value);
         }
 
         return (
@@ -76,8 +77,6 @@ export default class LanguageInput extends React.Component {
                 onChange={this.handleChange}
                 options={options}
                 value={theValue}
-                getOptionValue={option => option.id}
-                getOptionLabel={option => option.name}
                 isMulti={isMulti}
                 {...rest}
             />
